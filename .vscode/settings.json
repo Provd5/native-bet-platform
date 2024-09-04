@@ -1,0 +1,10 @@
+{
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "cSpell.language": "en,pl",
+  "cSpell.words": ["firestore", "lucide"]
+}
