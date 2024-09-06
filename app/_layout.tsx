@@ -1,9 +1,18 @@
-import * as React from "react";
+import React from "react";
 import { Platform } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import {
+  Rubik_400Regular,
+  Rubik_500Medium,
+  Rubik_600SemiBold,
+  Rubik_700Bold,
+  useFonts,
+} from "@expo-google-fonts/rubik";
+import { PortalHost } from "@rn-primitives/portal";
 
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
@@ -28,6 +37,12 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const [fontsLoaded] = useFonts({
+    "Rubik-Regular": Rubik_400Regular,
+    "Rubik-Medium": Rubik_500Medium,
+    "Rubik-SemiBold": Rubik_600SemiBold,
+    "Rubik-Bold": Rubik_700Bold,
+  });
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
 
@@ -52,18 +67,25 @@ export default function RootLayout() {
       }
       setIsColorSchemeLoaded(true);
     })().finally(() => {
-      SplashScreen.hideAsync();
+      if (fontsLoaded) SplashScreen.hideAsync();
     });
-  }, []);
+  }, [colorScheme, fontsLoaded, setColorScheme]);
 
-  if (!isColorSchemeLoaded) {
+  if (!isColorSchemeLoaded || !fontsLoaded) {
     return null;
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-      <Stack />
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        </Stack>
+        <PortalHost />
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }
