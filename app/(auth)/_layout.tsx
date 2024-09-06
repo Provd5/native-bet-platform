@@ -39,12 +39,6 @@ export default function AuthLayout() {
             ),
           }}
         />
-        <Tabs.Screen
-          name="auth-callback"
-          options={{
-            href: null,
-          }}
-        />
       </Tabs>
     </>
   );

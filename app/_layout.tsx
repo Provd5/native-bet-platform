@@ -3,7 +3,7 @@ import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
-import { SplashScreen, Stack } from "expo-router";
+import { SplashScreen } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   Rubik_400Regular,
@@ -14,6 +14,7 @@ import {
 } from "@expo-google-fonts/rubik";
 import { PortalHost } from "@rn-primitives/portal";
 
+import { Stacks } from "~/components/stacks";
 import { NAV_THEME } from "~/lib/constants";
 import { useColorScheme } from "~/lib/useColorScheme";
 
@@ -79,11 +80,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
         <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <Stacks />
         <PortalHost />
       </ThemeProvider>
     </SafeAreaProvider>

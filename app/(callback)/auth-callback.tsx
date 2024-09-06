@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { P } from "~/components/ui/typography";
 import useUserActions from "~/hooks/actions/useUserActions";
 
-export default function GamesPage() {
+export default function AuthCallbackPage() {
   const { signOutUser } = useUserActions();
 
   return (
@@ -12,6 +12,7 @@ export default function GamesPage() {
       <Button onPress={async () => await signOutUser()}>
         <P>Wyloguj</P>
       </Button>
+      <P>AuthCallbackPage</P>
     </View>
   );
 }
