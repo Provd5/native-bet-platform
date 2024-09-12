@@ -9,7 +9,7 @@ import { ColorSchemeToggler } from "./color-scheme-toggler";
 export const TopBar: FC = () => {
   return (
     <SafeAreaView>
-      <View className="m-3 flex-row items-center justify-end gap-1">
+      <View className="m-2 flex-row items-center justify-end gap-1">
         <ColorSchemeToggler />
         <AccountBadge />
       </View>

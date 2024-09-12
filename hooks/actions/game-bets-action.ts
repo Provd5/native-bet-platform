@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { betGameSchemaType, betSchemaType } from "~/lib/validators/bet-schema";
 import { GameBetsService } from "~/services/game-bets-service";
@@ -11,6 +11,7 @@ export function useGetSessionBets() {
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, "session-bets"],
     queryFn: () => gameBetsService.getSessionBets(),
+    staleTime: Infinity,
   });
 
   return {
@@ -25,6 +26,7 @@ export function useGetGameBets(gameId: string | number) {
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, "game-bets", gameId],
     queryFn: () => gameBetsService.getGameBets(gameId),
+    staleTime: Infinity,
   });
 
   return {
@@ -49,12 +51,17 @@ export function useGetUsersBets() {
 
 export function useBetGame() {
   const gameBetsService = new GameBetsService();
+  const queryClient = useQueryClient();
 
   const { mutateAsync, error } = useMutation({
     mutationFn: (payload: {
       values: betSchemaType;
       gameValues: betGameSchemaType;
     }) => gameBetsService.betGame(payload.values, payload.gameValues),
+    onSuccess: () =>
+      queryClient.refetchQueries({
+        queryKey: [QUERY_KEY, "session-bets"],
+      }),
   });
 
   return {

@@ -11,7 +11,7 @@ export default function GamesPage() {
     <>
       <GamesSwitcher />
       <ScrollView contentContainerClassName="min-h-full">
-        <View className="items-center px-3 pb-6">
+        <View className="items-center py-3">
           <GamesTable />
         </View>
       </ScrollView>

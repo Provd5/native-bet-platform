@@ -1,82 +1,75 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { View } from "react-native";
-import { CircleEqual } from "lucide-react-native";
 
 import { Input } from "~/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { H1, P } from "~/components/ui/typography";
-import Icon from "~/lib/icons/Icon";
+import { P } from "~/components/ui/typography";
+import { cn } from "~/lib/utils";
 import { betSchemaType } from "~/lib/validators/bet-schema";
 
-import { GameTeam } from "../game-team";
+import { BetWrapper } from "./bet-wrapper";
 
 interface BetTeamProps {
   register: UseFormRegister<betSchemaType>;
   setValue: UseFormSetValue<betSchemaType>;
-  homeTeamName: string;
-  homeTeamIcon: string;
-  awayTeamName: string;
-  awayTeamIcon: string;
-  userData: { winner: betSchemaType["winner"] };
+  initWinner: betSchemaType["winner"];
 }
 
 export const BetTeam: FC<BetTeamProps> = ({
   register,
   setValue,
-  homeTeamName,
-  homeTeamIcon,
-  awayTeamName,
-  awayTeamIcon,
-  userData,
+  initWinner,
 }) => {
+  const [toggleValue, setToggleValue] = useState(initWinner);
+
+  const items = [
+    {
+      label: "Gospodarze",
+      value: "HOME_TEAM",
+    },
+    { label: "Remis", value: "DRAW", icon: null, name: "Remis" },
+    {
+      label: "Goście",
+      value: "AWAY_TEAM",
+    },
+  ];
+
   return (
-    <ToggleGroup
-      type="single"
-      className="flex-col justify-between"
-      onValueChange={(value) => {
-        setValue("winner", value as betSchemaType["winner"], {
-          shouldDirty: true,
-        });
-      }}
-      value={userData.winner}
-    >
-      <>
-        <Input
-          {...register("winner")}
-          value={userData.winner}
-          className="hidden"
-        />
-        <H1 className="self-center text-sm text-gray-500 sm:self-end">
-          Wygrany:
-        </H1>
-        <View className="flex flex-col gap-1 max-sm:w-full">
-          <ToggleGroupItem className="w-full" value="HOME_TEAM">
-            <GameTeam
-              teamName={homeTeamName}
-              teamIcon={homeTeamIcon}
-              teamSide={"HOME_TEAM"}
-              secondary
-            />
-          </ToggleGroupItem>
-          <ToggleGroupItem className="w-full" value="AWAY_TEAM">
-            <GameTeam
-              teamName={awayTeamName}
-              teamIcon={awayTeamIcon}
-              teamSide={"AWAY_TEAM"}
-              secondary
-            />
-          </ToggleGroupItem>
+    <BetWrapper title="Zwycięzca:">
+      <View className="hidden">
+        <Input readOnly {...register("winner")} value={toggleValue} />
+      </View>
+      <ToggleGroup
+        variant="outline"
+        size="lg"
+        type="single"
+        onValueChange={(value) => {
+          setToggleValue(value as betSchemaType["winner"]);
+          setValue("winner", value as betSchemaType["winner"], {
+            shouldDirty: true,
+          });
+        }}
+        value={toggleValue}
+      >
+        {items.map((item) => (
           <ToggleGroupItem
-            className="w-full justify-center gap-2 sm:justify-end"
-            value="DRAW"
+            key={`BetTeam-${item.value}`}
+            value={item.value}
+            disabled={toggleValue === item.value}
           >
-            <P>
-              Remis <Icon LucideIcon={CircleEqual} size={30} />
+            <P
+              className={cn(
+                "w-16 truncate text-center text-primary",
+                toggleValue === item.value && "text-success",
+              )}
+              numberOfLines={1}
+            >
+              {item.label}
             </P>
           </ToggleGroupItem>
-        </View>
-      </>
-    </ToggleGroup>
+        ))}
+      </ToggleGroup>
+    </BetWrapper>
   );
 };

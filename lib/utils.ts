@@ -15,7 +15,7 @@ export function dateFormat(timestamp: number): string {
   return formatInTimeZone(
     new Date(timestamp),
     "Europe/Warsaw",
-    "EEEE HH:mm | dd/MM/yyyy",
+    "EEE HH:mm | dd/MM/yyyy",
     { locale: pl },
   );
 }
@@ -50,6 +50,25 @@ export function getMatchWinnerName(
     default:
       return translateConstantsToPolish(matchWinner);
   }
+}
+
+export function sortUsersBets(game: GameInterface, bets: BetInterface[]) {
+  return bets.sort((a, b) => {
+    const ABet = checkGameBetStatus(game, a);
+    const BBet = checkGameBetStatus(game, b);
+
+    if (ABet.accurateScoreHit && !BBet.accurateScoreHit) {
+      return -1;
+    }
+    if (ABet.winnerHit && !BBet.winnerHit) {
+      return -1;
+    }
+    if (ABet.scoreInPlay && !BBet.scoreInPlay) {
+      return -1;
+    }
+
+    return 1;
+  });
 }
 
 export const translateConstantsToPolish = (

@@ -7,7 +7,7 @@ import { Muted, P } from "~/components/ui/typography";
 import { cn, dateFormat, translateConstantsToPolish } from "~/lib/utils";
 
 import { BetMade } from "./Bet/bet-made";
-import { GameCardTeams } from "./game-card-teams";
+import { GameTeams } from "./game-teams";
 
 interface GameCardProps {
   game: GameInterface;
@@ -16,38 +16,40 @@ interface GameCardProps {
 
 export const GameCard: FC<GameCardProps> = ({ game, sessionBet }) => {
   return (
-    <View className="w-full justify-center gap-1 border-y border-border pb-4 pt-3 web:cursor-pointer web:transition-transform web:hover:scale-105 web:hover:bg-gray-500/10">
-      <View className="mx-auto w-full max-w-5xl">
-        <View className="items-center">
+    <View className="w-full justify-center gap-1 border-y border-border py-2 web:cursor-pointer web:select-none web:transition-transform web:hover:scale-105 web:hover:bg-gray-500/10">
+      <View className="relative mx-auto w-full max-w-5xl px-2">
+        {!!sessionBet && <BetMade />}
+        <GameTeams
+          teams={{
+            home: { icon: game.homeTeamIcon, name: game.homeTeamName },
+            away: { icon: game.awayTeamIcon, name: game.awayTeamName },
+          }}
+          scores={{
+            home: game.regularTimeScore?.home || 0,
+            away: game.regularTimeScore?.away || 0,
+          }}
+          gameData={{
+            status: game.status,
+            winner: game.regularTimeScore?.winner,
+          }}
+          sessionBet={sessionBet}
+        />
+        <View className="mt-2 w-full flex-row items-center justify-between">
           <P
             className={cn(
-              "text-sm",
-              (game.status === "IN_PLAY" || game.status === "PAUSED") &&
-                "text-destructive",
-              game.status === "FINISHED" && "text-gray-500",
+              game.stage === "FINAL" && "text-orange-600 dark:text-orange-500",
+              game.stage === "SEMI_FINALS" &&
+                "text-cyan-600 dark:text-cyan-400",
             )}
           >
-            {translateConstantsToPolish(game.status)}
+            {translateConstantsToPolish(game.stage)}
           </P>
-          <GameCardTeams game={game} />
-        </View>
-        <View className="w-full flex-row justify-between">
-          {!!sessionBet && <BetMade game={game} sessionBet={sessionBet} />}
-          <View>
-            <P
-              className={cn(
-                game.stage === "FINAL" &&
-                  "text-orange-600 dark:text-orange-500",
-                game.stage === "SEMI_FINALS" &&
-                  "text-cyan-600 dark:text-cyan-400",
-              )}
-            >
-              {translateConstantsToPolish(game.stage)}
-            </P>
-            <Muted className="whitespace-nowrap first-letter:uppercase">
-              {dateFormat(game.timestamp)}
-            </Muted>
-          </View>
+          <Muted
+            className="whitespace-nowrap"
+            style={{ textTransform: "capitalize" }}
+          >
+            {dateFormat(game.timestamp)}
+          </Muted>
         </View>
       </View>
     </View>

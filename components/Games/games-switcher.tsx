@@ -34,7 +34,7 @@ export const GamesSwitcher: FC = () => {
   };
 
   return (
-    <View className="mx-auto w-full max-w-5xl flex-row items-center justify-end gap-2 p-3">
+    <View className="mx-auto w-full flex-row items-center justify-end gap-2 p-2 pt-0">
       <Button
         variant={show === "open" ? "default" : "outline"}
         onPress={() => handleShowGames("open")}

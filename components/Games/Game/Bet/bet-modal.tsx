@@ -34,7 +34,7 @@ export const BetModal: FC<BetModalProps> = ({ sessionBet, game }) => {
           <View className="w-full max-w-3xl rounded-lg border border-border bg-background p-6 shadow-lg shadow-foreground/10">
             <Bet game={game} sessionBet={sessionBet} />
             <Button
-              className="mx-auto w-full max-w-xs"
+              className="mx-auto mt-2 w-full max-w-sm"
               variant={"secondary"}
               onPress={() => setModalVisible(false)}
             >

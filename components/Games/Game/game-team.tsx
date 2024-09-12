@@ -2,65 +2,74 @@ import type { FC } from "react";
 import React from "react";
 import { Image, View } from "react-native";
 
-import { type GameInterface } from "~/types/games";
+import { BetInterface, type GameInterface } from "~/types/games";
 
-import { H3, Muted } from "~/components/ui/typography";
+import { Muted, P } from "~/components/ui/typography";
 import { cn, translateConstantsToPolish } from "~/lib/utils";
+import { betSchemaType } from "~/lib/validators/bet-schema";
 
 interface GameTeamProps {
-  teamName: string;
-  teamIcon: string;
-  teamSide: "HOME_TEAM" | "AWAY_TEAM";
+  team: {
+    name: string;
+    icon: string;
+  };
+  side: Extract<betSchemaType["winner"], "HOME_TEAM" | "AWAY_TEAM">;
   gameData?: {
     winner: string | undefined;
     status: GameInterface["status"];
   };
-  secondary?: boolean;
+  sessionBet?: BetInterface;
+  size?: "default" | "sm";
 }
 
 export const GameTeam: FC<GameTeamProps> = ({
-  teamName,
-  teamIcon,
-  teamSide,
+  team,
+  side,
   gameData,
-  secondary = false,
+  sessionBet,
+  size = "default",
 }) => {
+  const sizes = {
+    default: { image: 88, text: 100 },
+    sm: { image: 68, text: 80 },
+  };
+
+  const showSessionBet =
+    !!sessionBet &&
+    gameData?.status === "TIMED" &&
+    (sessionBet.winner === side || sessionBet?.winner === "DRAW");
+  const showWinner =
+    gameData?.status === "FINISHED" && gameData?.winner === side;
+
   return (
-    <View
-      className={cn(
-        "w-[50%]",
-        "flex-row-reverse items-center gap-2 text-end",
-        !secondary && teamSide === "AWAY_TEAM" && "flex-row text-start",
-      )}
-    >
-      <Image
-        source={{ uri: teamIcon }}
-        style={{ width: 30, height: 30 }}
-        alt={`${teamName} icon`}
-        resizeMode="contain"
-        className="pointer-events-none"
-      />
-      <View>
-        <Muted
-          className={cn(
-            "-mb-1",
-            !secondary && teamSide === "HOME_TEAM" && "self-end",
-          )}
-        >
-          {translateConstantsToPolish(teamSide)}
-        </Muted>
-        <H3
-          className={cn(
-            "truncate",
-            gameData?.status === "FINISHED" &&
-              gameData?.winner === teamSide &&
-              "text-green-600",
-            !secondary && teamSide === "HOME_TEAM" && "self-end",
-          )}
-        >
-          {teamName}
-        </H3>
+    <View className="items-center gap-0.5">
+      <Muted
+        style={{ width: sizes[size].text }}
+        className="truncate text-center"
+        numberOfLines={1}
+      >
+        {translateConstantsToPolish(side)}
+      </Muted>
+      <View className="rounded-lg bg-secondary p-3">
+        <Image
+          source={{ uri: team.icon }}
+          style={{ width: sizes[size].image, height: sizes[size].image }}
+          alt={`${team.name} icon`}
+          resizeMode="contain"
+          className="pointer-events-none"
+        />
       </View>
+      <P
+        style={{ width: sizes[size].text }}
+        className={cn(
+          "truncate text-center",
+          showSessionBet && "text-warning",
+          showWinner && "text-success font-customSemiBold",
+        )}
+        numberOfLines={1}
+      >
+        {team.name}
+      </P>
     </View>
   );
 };

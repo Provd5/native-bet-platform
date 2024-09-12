@@ -31,6 +31,8 @@ export class GameBetsService {
   // GET
   getSessionBets = async (): Promise<BetInterface[]> => {
     try {
+      console.log("getSessionBets");
+
       if (!this.sessionUser.dbUserData || !this.sessionUser.fsUserData) {
         throw new Error(ERROR_ENUM.UNAUTHORIZED, { cause: "CUSTOM" });
       }
@@ -50,13 +52,15 @@ export class GameBetsService {
       console.error("Error getting session bets:", e);
       throw new Error(
         "Nie udało się pobrać danych o twoich zakładach." +
-          ` ${e instanceof Error && e.cause === "CUSTOM" ? e : ERROR_ENUM.TRY_AGAIN_LATER}.`,
+          ` ${e instanceof Error && e.cause === "CUSTOM" ? e.message : ERROR_ENUM.TRY_AGAIN_LATER}.`,
       );
     }
   };
 
   getGameBets = async (gameId: string | number): Promise<BetInterface[]> => {
     try {
+      console.log("getGameBets");
+
       const q = query(this.getRef(), where("gameId", "==", gameId));
       const bets = await getDocs(q);
 
@@ -76,6 +80,8 @@ export class GameBetsService {
 
   getUsersBets = async (): Promise<BetInterface[]> => {
     try {
+      console.log("getUsersBets");
+
       const bets = await getDocs(this.getRef());
 
       if (bets.empty) return [];
@@ -131,7 +137,7 @@ export class GameBetsService {
       console.error("Error creating new bet:", e);
       throw new Error(
         "Nie udało się utworzyć zakładu." +
-          ` ${e instanceof Error && e.cause === "CUSTOM" ? e : ERROR_ENUM.TRY_AGAIN_LATER}.`,
+          ` ${e instanceof Error && e.cause === "CUSTOM" ? e.message : ERROR_ENUM.TRY_AGAIN_LATER}.`,
       );
     }
   };
