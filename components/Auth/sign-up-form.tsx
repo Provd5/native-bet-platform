@@ -2,12 +2,12 @@ import type { FC } from "react";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "~/firebase.config";
-import useUserActions from "~/hooks/actions/useUserActions";
+import { useCreateUser } from "~/hooks/actions/user-actions";
 import { errorHandler } from "~/lib/error-handler";
 import {
   registerSchema,
@@ -17,7 +17,7 @@ import {
 import { FormField } from "../Form/form-field";
 import { LoadingSpinner } from "../Loaders/spinners";
 import { Button } from "../ui/button";
-import { P } from "../ui/typography";
+import { P, Small } from "../ui/typography";
 
 const formFields = [
   {
@@ -55,9 +55,7 @@ const formFields = [
 ] as const;
 
 export const SignUpForm: FC = () => {
-  const router = useRouter();
-
-  const { createUser } = useUserActions();
+  const { createUserAsync, error } = useCreateUser();
 
   const form = useForm<registerSchemaType>({
     resolver: zodResolver(registerSchema),
@@ -78,13 +76,19 @@ export const SignUpForm: FC = () => {
     }
 
     await createUserWithEmailAndPassword(auth, values.email, values.password)
-      .then((userCredential) => {
-        createUser(userCredential, values.username);
+      .then(async (userCredential) => {
+        if (error) throw new Error(error.message);
+
+        await createUserAsync({
+          userId: userCredential.user.uid,
+          username: values.username,
+        });
       })
       .then(() => router.replace("/auth-callback"))
-      .catch((error: unknown) => {
-        alert(errorHandler(error));
-        console.log(errorHandler(error));
+      .catch((e) => {
+        form.setError("root", {
+          message: errorHandler(e),
+        });
       });
   }
 
@@ -113,6 +117,11 @@ export const SignUpForm: FC = () => {
           name={formField.name}
         />
       ))}
+      {form.formState.errors.root && (
+        <Small className="text-destructive">
+          {form.formState.errors.root.message}
+        </Small>
+      )}
       <Button
         className="mx-auto w-full max-w-xs"
         onPress={form.handleSubmit(onSubmit)}

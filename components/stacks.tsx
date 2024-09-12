@@ -1,36 +1,12 @@
-import { type FC, useEffect, useState } from "react";
+import { type FC } from "react";
 import { Stack } from "expo-router";
-import { onAuthStateChanged, User } from "firebase/auth";
 
-import { auth } from "~/firebase.config";
-import useUserActions from "~/hooks/actions/useUserActions";
+import { useAuthChangesSubscriber } from "~/hooks/actions/user-actions";
 import useRedirectUser from "~/hooks/useRedirectUser";
 
 export const Stacks: FC = () => {
-  const [isUserActive, setIsUserActive] = useState<boolean | null>(null);
-  const { redirectUser } = useRedirectUser();
-
-  const { getUser } = useUserActions();
-
-  useEffect(() => {
-    const subscriber = onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        setIsUserActive(null);
-        return;
-      }
-
-      const checkUser = async (user: User) => {
-        await getUser(user.uid).then((dbUser) => {
-          setIsUserActive(dbUser ? dbUser.isActive : null);
-        });
-      };
-
-      void checkUser(user);
-    });
-
-    redirectUser(isUserActive);
-    return subscriber;
-  }, [getUser, isUserActive, redirectUser]);
+  useAuthChangesSubscriber();
+  useRedirectUser();
 
   return (
     <Stack>

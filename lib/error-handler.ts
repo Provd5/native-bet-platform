@@ -1,6 +1,6 @@
 import { ZodError } from "zod";
 
-import { ERROR_ENUM } from "~/types/errors";
+import { ERROR_ENUM } from "./constants";
 
 export const errorHandler = (error: unknown): string => {
   let errorMsg: string;

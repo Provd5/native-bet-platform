@@ -3,6 +3,7 @@ module.exports = {
   extends: "expo",
   plugins: ["simple-import-sort", "unused-imports"],
   rules: {
+    "require-await": "error",
     "no-console": "warn",
     "react/jsx-key": "error",
     "unused-imports/no-unused-imports": "error",

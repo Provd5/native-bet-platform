@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Platform } from "react-native";
+import { RootSiblingParent } from "react-native-root-siblings";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { Provider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Theme, ThemeProvider } from "@react-navigation/native";
 import { SplashScreen } from "expo-router";
@@ -13,9 +15,11 @@ import {
   useFonts,
 } from "@expo-google-fonts/rubik";
 import { PortalHost } from "@rn-primitives/portal";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { Stacks } from "~/components/stacks";
 import { NAV_THEME } from "~/lib/constants";
+import { store } from "~/lib/store";
 import { useColorScheme } from "~/lib/useColorScheme";
 
 import "~/global.css";
@@ -38,6 +42,8 @@ export {
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
+  const queryClient = new QueryClient();
+
   const [fontsLoaded] = useFonts({
     "Rubik-Regular": Rubik_400Regular,
     "Rubik-Medium": Rubik_500Medium,
@@ -45,9 +51,9 @@ export default function RootLayout() {
     "Rubik-Bold": Rubik_700Bold,
   });
   const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
-  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = React.useState(false);
+  const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const theme = await AsyncStorage.getItem("theme");
       if (Platform.OS === "web") {
@@ -77,12 +83,20 @@ export default function RootLayout() {
   }
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-        <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-        <Stacks />
-        <PortalHost />
-      </ThemeProvider>
-    </SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <Provider store={store}>
+        <SafeAreaProvider>
+          <RootSiblingParent>
+            <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+              <>
+                <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+                <Stacks />
+                <PortalHost />
+              </>
+            </ThemeProvider>
+          </RootSiblingParent>
+        </SafeAreaProvider>
+      </Provider>
+    </QueryClientProvider>
   );
 }

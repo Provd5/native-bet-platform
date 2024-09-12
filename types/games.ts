@@ -1,30 +1,4 @@
-type MatchStatus = (typeof MatchStatusArray)[number];
-export const MatchStatusArray = [
-  "TIMED",
-  "SCHEDULED",
-  "LIVE",
-  "IN_PLAY",
-  "PAUSED",
-  "FINISHED",
-  "POSTPONED",
-  "SUSPENDED",
-  "CANCELLED",
-] as const;
-
-type MatchStage = (typeof MatchStageArray)[number];
-export const MatchStageArray = [
-  "REGULAR_SEASON",
-  "GROUP_STAGE",
-  "LAST_16",
-  "QUARTER_FINALS",
-  "SEMI_FINALS",
-  "FINAL",
-] as const;
-
-export type MatchWinner = (typeof MatchWinnerArray)[number];
-export const MatchWinnerArray = ["HOME_TEAM", "AWAY_TEAM", "DRAW"] as const;
-
-export type constantsToTranslate = MatchStatus | MatchStage | MatchWinner;
+import { MatchStage, MatchStatus, MatchWinner } from "~/lib/constants";
 
 export interface GameInterface {
   id: string | number;

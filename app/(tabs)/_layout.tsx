@@ -1,9 +1,8 @@
 import { Tabs } from "expo-router";
+import { Award, Goal } from "lucide-react-native";
 
 import { TabIcon } from "~/components/tab-icon";
 import { TopBar } from "~/components/top-bar";
-import { Award } from "~/lib/icons/Award";
-import { Goal } from "~/lib/icons/Goal";
 
 export default function TabsLayout() {
   return (
@@ -21,7 +20,7 @@ export default function TabsLayout() {
             title: "Mecze",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon Icon={Goal} name="Mecze" focused={focused} />
+              <TabIcon IconToRender={Goal} name="Mecze" focused={focused} />
             ),
           }}
         />
@@ -31,7 +30,7 @@ export default function TabsLayout() {
             title: "Wyniki",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon Icon={Award} name="Wyniki" focused={focused} />
+              <TabIcon IconToRender={Award} name="Wyniki" focused={focused} />
             ),
           }}
         />

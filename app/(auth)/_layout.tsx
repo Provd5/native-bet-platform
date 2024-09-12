@@ -1,9 +1,8 @@
 import { Tabs } from "expo-router";
+import { LogIn, UserRoundPlus } from "lucide-react-native";
 
 import { TabIcon } from "~/components/tab-icon";
 import { TopBar } from "~/components/top-bar";
-import { LogIn } from "~/lib/icons/LogIn";
-import { UserRoundPlus } from "~/lib/icons/UserRoundPlus";
 
 export default function AuthLayout() {
   return (
@@ -21,7 +20,11 @@ export default function AuthLayout() {
             title: "Logowanie",
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <TabIcon Icon={LogIn} name="Logowanie" focused={focused} />
+              <TabIcon
+                IconToRender={LogIn}
+                name="Logowanie"
+                focused={focused}
+              />
             ),
           }}
         />
@@ -32,7 +35,7 @@ export default function AuthLayout() {
             headerShown: false,
             tabBarIcon: ({ focused }) => (
               <TabIcon
-                Icon={UserRoundPlus}
+                IconToRender={UserRoundPlus}
                 name="Stwórz konto"
                 focused={focused}
               />

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
-import { useRouter } from "expo-router";
+import { router } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -12,7 +12,7 @@ import { loginSchema, loginSchemaType } from "~/lib/validators/auth-schema";
 import { FormField } from "../Form/form-field";
 import { LoadingSpinner } from "../Loaders/spinners";
 import { Button } from "../ui/button";
-import { P } from "../ui/typography";
+import { P, Small } from "../ui/typography";
 
 const formFields = [
   {
@@ -32,8 +32,6 @@ const formFields = [
 ] as const;
 
 export const SignInForm: FC = () => {
-  const router = useRouter();
-
   const form = useForm<loginSchemaType>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -44,12 +42,25 @@ export const SignInForm: FC = () => {
 
   async function onSubmit(values: loginSchemaType) {
     await signInWithEmailAndPassword(auth, values.email, values.password)
-      .then(async (userCredential) => {
+      .then((userCredential) => {
         !!userCredential && router.replace("/games");
       })
-      .catch((error: unknown) => {
-        alert(errorHandler(error));
-        console.log(errorHandler(error));
+      .catch((e) => {
+        form.setError("root", {
+          message: errorHandler(e),
+        });
+      });
+  }
+
+  async function DEMO_LOGIN() {
+    await signInWithEmailAndPassword(auth, "test@test.test", "testtest")
+      .then((userCredential) => {
+        !!userCredential && router.replace("/games");
+      })
+      .catch((e) => {
+        form.setError("root", {
+          message: errorHandler(e),
+        });
       });
   }
 
@@ -76,12 +87,20 @@ export const SignInForm: FC = () => {
           name={formField.name}
         />
       ))}
+      {form.formState.errors.root && (
+        <Small className="text-destructive">
+          {form.formState.errors.root.message}
+        </Small>
+      )}
       <Button
         className="mx-auto w-full max-w-xs"
         onPress={form.handleSubmit(onSubmit)}
         disabled={form.formState.isSubmitting}
       >
         {form.formState.isSubmitting ? <LoadingSpinner /> : <P>Zaloguj</P>}
+      </Button>
+      <Button className="mx-auto" size={"sm"} onPress={() => DEMO_LOGIN()}>
+        {form.formState.isSubmitting ? <LoadingSpinner /> : <P>DEMO</P>}
       </Button>
     </View>
   );

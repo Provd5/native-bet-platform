@@ -1,4 +1,7 @@
-import { useRouter, useSegments } from "expo-router";
+import { useEffect } from "react";
+import { router, useSegments } from "expo-router";
+
+import { useAppSelector } from "./redux";
 
 const routes = {
   auth: "/sign-in",
@@ -8,23 +11,31 @@ const routes = {
 
 export default function useRedirectUser() {
   const segments = useSegments();
-  const router = useRouter();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const isUserActive = sessionUser.dbUserData
+    ? sessionUser.dbUserData.isActive
+    : null;
 
-  const redirectUser = (isUserActive: boolean | null) => {
+  useEffect(() => {
     const inAuthGroup = segments[0] === "(auth)";
     const inAuthCallback = segments[0] === "(callback)";
     const inProtectedGroup = segments[0] === "(tabs)";
 
     if (!inAuthGroup && !inAuthCallback && !inProtectedGroup) return;
 
-    if (!inAuthGroup && isUserActive === null) router.replace(routes.auth);
+    if (isUserActive === null) {
+      !inAuthGroup && router.replace(routes.auth);
+      return;
+    }
 
-    if (!inAuthCallback && isUserActive === false)
-      router.replace(routes.authCallback);
+    if (isUserActive === false) {
+      !inAuthCallback && router.replace(routes.authCallback);
+      return;
+    }
 
-    if (!inProtectedGroup && isUserActive === true)
-      router.replace(routes.protected);
-  };
-
-  return { redirectUser };
+    if (isUserActive === true) {
+      !inProtectedGroup && router.replace(routes.protected);
+      return;
+    }
+  }, [isUserActive, segments]);
 }

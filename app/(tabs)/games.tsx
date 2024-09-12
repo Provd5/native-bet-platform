@@ -1,17 +1,20 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 
-import { Button } from "~/components/ui/button";
-import { P } from "~/components/ui/typography";
-import useUserActions from "~/hooks/actions/useUserActions";
+import { GamesSwitcher } from "~/components/Games/games-switcher";
+import { GamesTable } from "~/components/Games/games-table";
+import { useFetchGamesSubscriber } from "~/hooks/actions/games-actions";
 
 export default function GamesPage() {
-  const { signOutUser } = useUserActions();
+  useFetchGamesSubscriber();
 
   return (
-    <View>
-      <Button onPress={async () => await signOutUser()}>
-        <P>Wyloguj</P>
-      </Button>
-    </View>
+    <>
+      <GamesSwitcher />
+      <ScrollView contentContainerClassName="min-h-full">
+        <View className="items-center px-3 pb-6">
+          <GamesTable />
+        </View>
+      </ScrollView>
+    </>
   );
 }

@@ -8,12 +8,15 @@ import {
   ViewStyle,
 } from "react-native";
 import * as DropdownMenuPrimitive from "@rn-primitives/dropdown-menu";
+import {
+  Check,
+  ChevronDown,
+  ChevronRight,
+  ChevronUp,
+} from "lucide-react-native";
 
 import { TextClassContext } from "~/components/ui/text";
-import { Check } from "~/lib/icons/Check";
-import { ChevronDown } from "~/lib/icons/ChevronDown";
-import { ChevronRight } from "~/lib/icons/ChevronRight";
-import { ChevronUp } from "~/lib/icons/ChevronUp";
+import Icon from "~/lib/icons/Icon";
 import { cn } from "~/lib/utils";
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
@@ -35,7 +38,7 @@ const DropdownMenuSubTrigger = React.forwardRef<
   }
 >(({ className, inset, children, ...props }, ref) => {
   const { open } = DropdownMenuPrimitive.useSubContext();
-  const Icon =
+  const IconToRender =
     Platform.OS === "web" ? ChevronRight : open ? ChevronUp : ChevronDown;
   return (
     <TextClassContext.Provider
@@ -55,7 +58,11 @@ const DropdownMenuSubTrigger = React.forwardRef<
         {...props}
       >
         <>{children}</>
-        <Icon size={18} className="ml-auto text-foreground" />
+        <Icon
+          LucideIcon={IconToRender}
+          size={18}
+          className="ml-auto text-primary"
+        />
       </DropdownMenuPrimitive.SubTrigger>
     </TextClassContext.Provider>
   );
@@ -116,7 +123,7 @@ const DropdownMenuContent = React.forwardRef<
           <DropdownMenuPrimitive.Content
             ref={ref}
             className={cn(
-              "z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 shadow-md shadow-foreground/5 web:data-[side=bottom]:slide-in-from-top-2 web:data-[side=left]:slide-in-from-right-2 web:data-[side=right]:slide-in-from-left-2 web:data-[side=top]:slide-in-from-bottom-2",
+              "z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 shadow-md shadow-foreground/5 web:cursor-default web:data-[side=bottom]:slide-in-from-top-2 web:data-[side=left]:slide-in-from-right-2 web:data-[side=right]:slide-in-from-left-2 web:data-[side=top]:slide-in-from-bottom-2",
               open
                 ? "web:animate-in web:fade-in-0 web:zoom-in-95"
                 : "web:animate-out web:fade-out-0 web:zoom-out-95",
@@ -141,7 +148,7 @@ const DropdownMenuItem = React.forwardRef<
     <DropdownMenuPrimitive.Item
       ref={ref}
       className={cn(
-        "native:py-2 group relative flex flex-row items-center gap-2 rounded-sm px-2 py-1.5 active:bg-accent web:cursor-default web:outline-none web:hover:bg-accent web:focus:bg-accent",
+        "native:py-2 group relative flex flex-row items-center gap-2 rounded-sm px-2 py-1.5 active:bg-accent web:cursor-pointer web:outline-none web:hover:bg-accent web:focus:bg-accent",
         inset && "pl-8",
         props.disabled && "opacity-50 web:pointer-events-none",
         className,
@@ -168,7 +175,12 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   >
     <View className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
       <DropdownMenuPrimitive.ItemIndicator>
-        <Check size={14} strokeWidth={3} className="text-foreground" />
+        <Icon
+          LucideIcon={Check}
+          size={14}
+          strokeWidth={3}
+          className="text-primary"
+        />
       </DropdownMenuPrimitive.ItemIndicator>
     </View>
     <>{children}</>
@@ -209,7 +221,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      "native:text-base font-customSemiBold px-2 py-1.5 text-sm text-foreground web:cursor-default",
+      "native:text-base px-2 py-1.5 font-customSemiBold text-sm web:cursor-default",
       inset && "pl-8",
       className,
     )}

@@ -1,9 +1,8 @@
 import { type FC, useEffect } from "react";
-import { View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { MoonStar, Sun } from "lucide-react-native";
 
-import { MoonStar } from "~/lib/icons/MoonStar";
-import { Sun } from "~/lib/icons/Sun";
+import Icon from "~/lib/icons/Icon";
 import { useColorScheme } from "~/lib/useColorScheme";
 
 import { Button } from "./ui/button";
@@ -20,14 +19,17 @@ export const ColorSchemeToggler: FC = () => {
   }, [colorScheme]);
 
   return (
-    <View className="m-3 ml-auto">
-      <Button size="icon" variant="outline" onPress={toggleColorScheme}>
-        {isDarkColorScheme ? (
-          <MoonStar className="text-foreground" />
-        ) : (
-          <Sun className="text-foreground" />
-        )}
-      </Button>
-    </View>
+    <Button
+      size="icon"
+      variant="outline"
+      onPress={toggleColorScheme}
+      className="mr-auto self-start"
+    >
+      {isDarkColorScheme ? (
+        <Icon LucideIcon={MoonStar} />
+      ) : (
+        <Icon LucideIcon={Sun} />
+      )}
+    </Button>
   );
 };

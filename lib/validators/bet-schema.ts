@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { MatchStageArray, MatchWinnerArray } from "~/types/games";
+import { MatchStageArray, MatchWinnerArray } from "../constants";
 
 export type betSchemaType = z.infer<typeof betSchema>;
 export const betSchema = z.object({
