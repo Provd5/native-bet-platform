@@ -79,9 +79,9 @@ export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
       )}
       <Button
         className={cn(
-          "mx-auto mt-6 w-full max-w-sm",
+          "mx-auto mt-6 w-full max-w-xs",
           form.formState.isSubmitSuccessful &&
-            "bg-success web:hover:bg-success-foreground text-white",
+            "bg-success text-white web:hover:bg-success-foreground",
         )}
         onPress={form.handleSubmit(onSubmit)}
         disabled={form.formState.isSubmitting || !form.formState.isDirty}

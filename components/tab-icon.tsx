@@ -11,19 +11,29 @@ interface TabIconProps {
   IconToRender: LucideIcon;
   name: string;
   focused: boolean;
+  secondary?: boolean;
 }
 
-export const TabIcon: FC<TabIconProps> = ({ IconToRender, name, focused }) => {
+export const TabIcon: FC<TabIconProps> = ({
+  IconToRender,
+  name,
+  focused,
+  secondary = false,
+}) => {
   return (
-    <View>
+    <View className={cn(secondary && "flex-row items-center gap-1")}>
       <Icon
         LucideIcon={IconToRender}
         className={cn(
-          "self-center",
+          "shrink-0",
+          !secondary && "self-center",
           focused ? "text-primary" : "text-muted-foreground",
         )}
+        size={secondary ? 16 : 25}
       />
-      <P className={focused ? "font-customMedium" : "text-muted-foreground"}>
+      <P
+        className={cn(focused ? "font-customMedium" : "text-muted-foreground")}
+      >
         {name}
       </P>
     </View>

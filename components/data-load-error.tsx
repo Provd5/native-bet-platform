@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { ERROR_ENUM } from "~/lib/constants";
 
-import { H2, P } from "./ui/typography";
+import { H3, P } from "./ui/typography";
 
 interface DataLoadErrorProps {
   isEmpty?: boolean;
@@ -17,14 +17,14 @@ export const DataLoadError: FC<DataLoadErrorProps> = ({
   description,
 }) => {
   return (
-    <View className="items-center px-2">
-      <H2>
+    <View className="px-2 py-3">
+      <H3>
         {title
           ? title
           : isEmpty
             ? ERROR_ENUM.NOTHING_FOUND
             : ERROR_ENUM.FETCH_DATA_PROBLEM}
-      </H2>
+      </H3>
       <P>{description ? description : ERROR_ENUM.TRY_AGAIN_LATER}</P>
     </View>
   );

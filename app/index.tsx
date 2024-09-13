@@ -18,12 +18,17 @@ export default function Index() {
         <H4>{CURRENT_EVENT}</H4>
         <Link href="/games" asChild>
           <Button size="lg" className="mt-6 w-9/12 max-w-sm">
-            <P>Rozpocznij obstawianie 👉</P>
+            <P>Obstawiaj 👉</P>
           </Button>
         </Link>
         <Link href="/sign-in" asChild>
           <Button size="lg" className="mt-3 w-9/12 max-w-sm">
             <P>Logowanie 👉</P>
+          </Button>
+        </Link>
+        <Link href="/auth-callback" asChild>
+          <Button size="lg" className="mt-3 w-9/12 max-w-sm">
+            <P>Callback 👉</P>
           </Button>
         </Link>
         {Array.from({ length: 10 }, (_, i) => (

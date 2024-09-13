@@ -1,15 +1,18 @@
 import { type FC } from "react";
-import { View } from "react-native";
+import { FlatList } from "react-native";
 
 import { useGetSessionBets } from "~/hooks/actions/game-bets-action";
 import { useAppSelector } from "~/hooks/redux";
-import { cn } from "~/lib/utils";
 
 import { DataLoadError } from "../data-load-error";
 import { P } from "../ui/typography";
 import { BetModal } from "./Game/Bet/bet-modal";
 
-export const GamesTable: FC = () => {
+interface GamesTableProps {
+  isClosed?: boolean;
+}
+
+export const GamesTable: FC<GamesTableProps> = ({ isClosed = false }) => {
   const games = useAppSelector((state) => state.games);
   const { data: sessionBets, status } = useGetSessionBets();
 
@@ -22,47 +25,19 @@ export const GamesTable: FC = () => {
   )
     return <DataLoadError />;
 
-  return (
-    <View className="w-full">
-      {games.openGames.length > 0
-        ? games.openGames.map((game) => {
-            const sessionBet = sessionBets.find(
-              (bet) => bet.gameId === game.id,
-            );
-
-            return (
-              <View
-                className={cn(games.show !== "open" && "hidden")}
-                key={`GamesTable-BetModal-${game.id}`}
-              >
-                <BetModal game={game} sessionBet={sessionBet} />
-              </View>
-            );
-          })
-        : games.show === "open" && (
-            <DataLoadError isEmpty description="Brak zaplanowanych meczy 🕸️" />
-          )}
-      {games.closedGames.length > 0
-        ? games.closedGames.map((game) => {
-            const sessionBet = sessionBets.find(
-              (bet) => bet.gameId === game.id,
-            );
-
-            return (
-              <View
-                className={cn(games.show !== "closed" && "hidden")}
-                key={`GamesTable-BetModal-${game.id}`}
-              >
-                <BetModal game={game} sessionBet={sessionBet} />
-              </View>
-            );
-          })
-        : games.show === "closed" && (
-            <DataLoadError
-              isEmpty
-              description="Wszystkie mecze są wciąż otwarte 🕸️"
-            />
-          )}
-    </View>
+  return (isClosed ? games.closedGames : games.openGames).length > 0 ? (
+    <FlatList
+      className="w-full"
+      data={isClosed ? games.closedGames : games.openGames}
+      renderItem={({ item }) => {
+        const sessionBet = sessionBets.find((bet) => bet.gameId === item.id);
+        return <BetModal game={item} sessionBet={sessionBet} />;
+      }}
+      keyExtractor={(item) => `GamesTable-${item.id}`}
+    />
+  ) : isClosed ? (
+    <DataLoadError isEmpty description="Brak zaplanowanych meczy 🕸️" />
+  ) : (
+    <DataLoadError isEmpty description="Wszystkie mecze są wciąż otwarte 🕸️" />
   );
 };

@@ -4,13 +4,13 @@ import { User } from "firebase/auth";
 import { UserInterface } from "~/types/users";
 
 interface SessionUserState {
-  fsUserData: Pick<User, "email" | "emailVerified" | "uid"> | null;
-  dbUserData: UserInterface | null;
+  fsUserData: Pick<User, "email" | "emailVerified" | "uid"> | null | undefined;
+  dbUserData: UserInterface | null | undefined;
 }
 
 const initialState: SessionUserState = {
-  fsUserData: null,
-  dbUserData: null,
+  fsUserData: undefined,
+  dbUserData: undefined,
 };
 
 const sessionUserSlice = createSlice({

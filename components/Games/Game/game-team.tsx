@@ -30,7 +30,7 @@ export const GameTeam: FC<GameTeamProps> = ({
   size = "default",
 }) => {
   const sizes = {
-    default: { image: 88, text: 100 },
+    default: { image: 78, text: 90 },
     sm: { image: 68, text: 80 },
   };
 
@@ -53,7 +53,7 @@ export const GameTeam: FC<GameTeamProps> = ({
       >
         {translateConstantsToPolish(side)}
       </Muted>
-      <View className="rounded-lg bg-secondary p-3">
+      <View className="rounded-2xl bg-secondary p-3">
         <Image
           source={{ uri: team.icon }}
           style={{ width: sizes[size].image, height: sizes[size].image }}
@@ -67,7 +67,7 @@ export const GameTeam: FC<GameTeamProps> = ({
         className={cn(
           "truncate text-center",
           showSessionBet && "text-warning",
-          showWinner && "text-success font-customSemiBold",
+          showWinner && "font-customSemiBold text-success",
           showLoser && "text-destructive",
         )}
         numberOfLines={1}

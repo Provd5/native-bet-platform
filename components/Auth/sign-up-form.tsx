@@ -103,7 +103,7 @@ export const SignUpForm: FC = () => {
     <View className="gap-6">
       {formFields.map((formField) => (
         <Controller
-          key={`SignInForm-${formField.name}`}
+          key={`SignUpForm-${formField.name}`}
           control={form.control}
           render={({ field: { onChange, onBlur, value } }) => (
             <FormField

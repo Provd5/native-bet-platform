@@ -56,23 +56,26 @@ export class GamesService {
             throw new Error(`No ${field} field`);
         });
 
-        // IN_PLAY and PAUSED games always on top
-        const sortGames = (games: GameInterface[]) =>
-          games.sort((a) => {
-            if (a.status !== "IN_PLAY" && a.status !== "PAUSED") return -1;
-            return 0;
-          });
-
         const openGames = gamesData
           .filter((game) => game.status === "TIMED")
           .sort((a, b) => a.timestamp - b.timestamp);
 
         const closedGames = gamesData
           .filter((game) => game.status !== "TIMED")
-          .sort((a, b) => b.timestamp - a.timestamp)
-          .sort((a) => {
-            if (a.status === "IN_PLAY" || a.status === "PAUSED") return -1;
-            return 0;
+          .sort((a, b) => {
+            // First, prioritize IN_PLAY and PAUSED statuses
+            const statusPriorityA =
+              a.status === "IN_PLAY" || a.status === "PAUSED" ? -1 : 0;
+            const statusPriorityB =
+              b.status === "IN_PLAY" || b.status === "PAUSED" ? -1 : 0;
+
+            // If both have the same priority, sort by timestamp descending
+            if (statusPriorityA === statusPriorityB) {
+              return b.timestamp - a.timestamp;
+            }
+
+            // Otherwise, sort by the status priority
+            return statusPriorityA - statusPriorityB;
           });
 
         this.dispatch(setGames({ openGames, closedGames, status: "success" }));

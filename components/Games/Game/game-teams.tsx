@@ -55,18 +55,6 @@ export const GameTeams: FC<GameTeamsProps> = ({
         size={size}
       />
       <View className="w-20 self-center">
-        {gameData && (
-          <P
-            className={cn(
-              "truncate text-center text-sm",
-              gameInPlay && "text-info",
-              gameFinished && "text-muted-foreground",
-            )}
-            numberOfLines={1}
-          >
-            {translateConstantsToPolish(gameData.status)}
-          </P>
-        )}
         <View className="mx-auto flex-row">
           <H3
             className={cn(
@@ -94,6 +82,18 @@ export const GameTeams: FC<GameTeamsProps> = ({
             {showSessionBet ? sessionBet.awayGoals : scores.away}
           </H3>
         </View>
+        {gameData && (
+          <P
+            className={cn(
+              "truncate text-center text-sm",
+              gameInPlay && "text-info",
+              gameFinished && "text-muted-foreground",
+            )}
+            numberOfLines={1}
+          >
+            {translateConstantsToPolish(gameData.status)}
+          </P>
+        )}
       </View>
       <GameTeam
         team={teams.away}

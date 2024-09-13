@@ -1,12 +1,13 @@
 import { Tabs } from "expo-router";
 import { LogIn, UserRoundPlus } from "lucide-react-native";
 
+import { RouteRedirect } from "~/components/route-redirect";
 import { TabIcon } from "~/components/tab-icon";
 import { TopBar } from "~/components/top-bar";
 
 export default function AuthLayout() {
   return (
-    <>
+    <RouteRedirect layout="auth">
       <TopBar />
       <Tabs
         screenOptions={{
@@ -43,6 +44,6 @@ export default function AuthLayout() {
           }}
         />
       </Tabs>
-    </>
+    </RouteRedirect>
   );
 }

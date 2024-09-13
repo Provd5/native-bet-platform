@@ -1,5 +1,5 @@
 import React, { type FC } from "react";
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 
 import { type GameInterface } from "~/types/games";
 
@@ -9,14 +9,14 @@ import { useGetGameBets } from "~/hooks/actions/game-bets-action";
 import { sortUsersBets } from "~/lib/utils";
 
 import { GameTeams } from "../game-teams";
-import { BetCarouselItem } from "./bet-carousel-item";
+import { UsersBetsItems } from "./users-bets-items";
 
-interface UsersBetProps {
+interface UsersBetsProps {
   sessionUserId: string;
   game: GameInterface;
 }
 
-export const UsersBet: FC<UsersBetProps> = ({ sessionUserId, game }) => {
+export const UsersBets: FC<UsersBetsProps> = ({ sessionUserId, game }) => {
   const { data: bets, status } = useGetGameBets(game.id);
 
   if (status === "pending") return <P>Ładowanie...</P>;
@@ -30,7 +30,7 @@ export const UsersBet: FC<UsersBetProps> = ({ sessionUserId, game }) => {
   });
 
   return (
-    <View className="gap-3">
+    <View className="max-h-full gap-3">
       <H2 className="text-center">Tak obstawili inni</H2>
       <GameTeams
         teams={{
@@ -47,25 +47,23 @@ export const UsersBet: FC<UsersBetProps> = ({ sessionUserId, game }) => {
         }}
         size="sm"
       />
-      <View className="h-96 py-3">
-        <ScrollView>
-          {bets.length > 0 ? (
-            sortedBets.map((userBet) => (
-              <BetCarouselItem
-                key={`UsersBet-BetCarouselItem-${userBet.userId}-${userBet.id}`}
-                game={game}
-                userBet={userBet}
-                sessionUserId={sessionUserId}
-              />
-            ))
-          ) : (
-            <DataLoadError
-              isEmpty
-              description="Nikt nie obstawił tego meczu 🕸️"
-            />
-          )}
-        </ScrollView>
-      </View>
+      {bets.length > 0 ? (
+        <UsersBetsItems
+          game={game}
+          bets={sortedBets}
+          sessionUserId={sessionUserId}
+        />
+      ) : (
+        // sortedBets.map((userBet) => (
+        //   <BetCarouselItem
+        //     key={`UsersBet-${userBet.userId}-${userBet.id}`}
+        //     game={game}
+        //     userBet={userBet}
+        //     sessionUserId={sessionUserId}
+        //   />
+        // ))
+        <DataLoadError isEmpty description="Nikt nie obstawił tego meczu 🕸️" />
+      )}
     </View>
   );
 };

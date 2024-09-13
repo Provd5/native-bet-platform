@@ -1,12 +1,13 @@
 import { Tabs } from "expo-router";
 import { Award, Goal } from "lucide-react-native";
 
+import { RouteRedirect } from "~/components/route-redirect";
 import { TabIcon } from "~/components/tab-icon";
 import { TopBar } from "~/components/top-bar";
 
 export default function TabsLayout() {
   return (
-    <>
+    <RouteRedirect layout="tabs">
       <TopBar />
       <Tabs
         screenOptions={{
@@ -35,6 +36,6 @@ export default function TabsLayout() {
           }}
         />
       </Tabs>
-    </>
+    </RouteRedirect>
   );
 }

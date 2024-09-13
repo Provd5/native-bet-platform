@@ -1,56 +1,33 @@
 import type { FC } from "react";
 import React from "react";
 import { View } from "react-native";
-import { router } from "expo-router";
-import { useQueryClient } from "@tanstack/react-query";
-import { signOut } from "firebase/auth";
-import { CircleUser, LogOut, Mail } from "lucide-react-native";
+import { CircleUser, Mail } from "lucide-react-native";
 
-import { auth } from "~/firebase.config";
-import { useAppDispatch, useAppSelector } from "~/hooks/redux";
-import { setUserData } from "~/lib/features/session-user-slice";
+import { useAppSelector } from "~/hooks/redux";
 import Icon from "~/lib/icons/Icon";
 
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { P } from "../ui/typography";
+import { SignOut } from "./sign-out";
 
 export const AccountBadge: FC = () => {
-  const queryClient = useQueryClient();
   const sessionUser = useAppSelector((state) => state.sessionUser);
-  const dispatch = useAppDispatch();
 
   if (!sessionUser.dbUserData || !sessionUser.fsUserData) return null;
-
-  const signOutUser = (): void => {
-    try {
-      signOut(auth).then(() => {
-        dispatch(setUserData({ dbUserData: null, fsUserData: null }));
-        queryClient.clear();
-        router.replace("/sign-in");
-      });
-    } catch (e) {
-      alert(`Coś poszło nie tak podczas próby wylogowania: ${e}`);
-    }
-  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button>
+        <Button variant={"outline"}>
           <View className="flex-row items-center gap-1">
-            <Icon
-              LucideIcon={CircleUser}
-              size={20}
-              className="text-primary-foreground"
-            />
+            <Icon LucideIcon={CircleUser} size={20} />
             <P>{sessionUser.dbUserData.username}</P>
           </View>
         </Button>
@@ -63,12 +40,7 @@ export const AccountBadge: FC = () => {
           </View>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onPress={() => signOutUser()}>
-          <View className="flex-row items-center gap-1">
-            <Icon LucideIcon={LogOut} size={18} />
-            <P className="flex-row gap-1">Wyloguj</P>
-          </View>
-        </DropdownMenuItem>
+        <SignOut />
       </DropdownMenuContent>
     </DropdownMenu>
   );

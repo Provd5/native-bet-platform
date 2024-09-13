@@ -16,8 +16,8 @@ interface GameCardProps {
 
 export const GameCard: FC<GameCardProps> = ({ game, sessionBet }) => {
   return (
-    <View className="w-full justify-center gap-1 border-t border-border py-2 web:cursor-pointer web:select-none web:transition-transform web:hover:scale-105 web:hover:bg-gray-500/10">
-      <View className="relative mx-auto w-full max-w-5xl px-2">
+    <View className="w-full justify-center gap-1 border-t border-border py-2 web:cursor-pointer web:select-none web:transition-colors web:hover:bg-muted-foreground/10">
+      <View className="relative mx-auto w-full max-w-4xl px-2">
         {!!sessionBet && <BetMade />}
         <GameTeams
           teams={{
@@ -34,7 +34,7 @@ export const GameCard: FC<GameCardProps> = ({ game, sessionBet }) => {
           }}
           sessionBet={sessionBet}
         />
-        <View className="mt-2 w-full flex-row items-center justify-between">
+        <View className="mt-1 w-full flex-row items-center justify-between">
           <P
             className={cn(
               game.stage === "FINAL" && "text-orange-600 dark:text-orange-500",

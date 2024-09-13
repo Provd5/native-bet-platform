@@ -1,7 +1,6 @@
 import type { FC } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { View } from "react-native";
-import { router } from "expo-router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -41,27 +40,23 @@ export const SignInForm: FC = () => {
   });
 
   async function onSubmit(values: loginSchemaType) {
-    await signInWithEmailAndPassword(auth, values.email, values.password)
-      .then((userCredential) => {
-        !!userCredential && router.replace("/games");
-      })
-      .catch((e) => {
+    await signInWithEmailAndPassword(auth, values.email, values.password).catch(
+      (e) => {
         form.setError("root", {
           message: errorHandler(e),
         });
-      });
+      },
+    );
   }
 
   async function DEMO_LOGIN() {
-    await signInWithEmailAndPassword(auth, "test@test.test", "testtest")
-      .then((userCredential) => {
-        !!userCredential && router.replace("/games");
-      })
-      .catch((e) => {
+    await signInWithEmailAndPassword(auth, "test@test.test", "testtest").catch(
+      (e) => {
         form.setError("root", {
           message: errorHandler(e),
         });
-      });
+      },
+    );
   }
 
   return (
