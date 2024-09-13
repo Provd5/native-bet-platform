@@ -15,7 +15,7 @@ interface GameTeamProps {
   };
   side: Extract<betSchemaType["winner"], "HOME_TEAM" | "AWAY_TEAM">;
   gameData?: {
-    winner: string | undefined;
+    winner: BetInterface["winner"] | undefined;
     status: GameInterface["status"];
   };
   sessionBet?: BetInterface;
@@ -34,12 +34,15 @@ export const GameTeam: FC<GameTeamProps> = ({
     sm: { image: 68, text: 80 },
   };
 
+  const gameFinished = gameData?.status === "FINISHED";
+
   const showSessionBet =
     !!sessionBet &&
     gameData?.status === "TIMED" &&
     (sessionBet.winner === side || sessionBet?.winner === "DRAW");
-  const showWinner =
-    gameData?.status === "FINISHED" && gameData?.winner === side;
+  const showWinner = gameFinished && gameData?.winner === side;
+  const showLoser =
+    gameFinished && gameData?.winner !== side && gameData?.winner !== "DRAW";
 
   return (
     <View className="items-center gap-0.5">
@@ -65,6 +68,7 @@ export const GameTeam: FC<GameTeamProps> = ({
           "truncate text-center",
           showSessionBet && "text-warning",
           showWinner && "text-success font-customSemiBold",
+          showLoser && "text-destructive",
         )}
         numberOfLines={1}
       >

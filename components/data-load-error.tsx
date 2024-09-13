@@ -3,17 +3,29 @@ import { View } from "react-native";
 
 import { ERROR_ENUM } from "~/lib/constants";
 
-import { H1, P } from "./ui/typography";
+import { H2, P } from "./ui/typography";
 
-export const DataLoadError: FC = () => {
+interface DataLoadErrorProps {
+  isEmpty?: boolean;
+  title?: string;
+  description?: string;
+}
+
+export const DataLoadError: FC<DataLoadErrorProps> = ({
+  isEmpty = false,
+  title,
+  description,
+}) => {
   return (
-    <View className="flex items-center gap-3">
-      <View className="flex flex-col">
-        <H1 className="font-customBold text-xl">
-          {ERROR_ENUM.FETCH_DATA_PROBLEM}
-        </H1>
-        <P>{ERROR_ENUM.TRY_AGAIN_LATER}</P>
-      </View>
+    <View className="items-center px-2">
+      <H2>
+        {title
+          ? title
+          : isEmpty
+            ? ERROR_ENUM.NOTHING_FOUND
+            : ERROR_ENUM.FETCH_DATA_PROBLEM}
+      </H2>
+      <P>{description ? description : ERROR_ENUM.TRY_AGAIN_LATER}</P>
     </View>
   );
 };

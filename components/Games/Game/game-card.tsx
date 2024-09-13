@@ -16,7 +16,7 @@ interface GameCardProps {
 
 export const GameCard: FC<GameCardProps> = ({ game, sessionBet }) => {
   return (
-    <View className="w-full justify-center gap-1 border-y border-border py-2 web:cursor-pointer web:select-none web:transition-transform web:hover:scale-105 web:hover:bg-gray-500/10">
+    <View className="w-full justify-center gap-1 border-t border-border py-2 web:cursor-pointer web:select-none web:transition-transform web:hover:scale-105 web:hover:bg-gray-500/10">
       <View className="relative mx-auto w-full max-w-5xl px-2">
         {!!sessionBet && <BetMade />}
         <GameTeams

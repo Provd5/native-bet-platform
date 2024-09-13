@@ -23,7 +23,7 @@ interface BetGameFormProps {
 }
 
 export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
-  const { betGameAsync, error } = useBetGame();
+  const { betGameAsync } = useBetGame();
 
   const form = useForm<betSchemaType>({
     resolver: zodResolver(betSchema),
@@ -44,10 +44,6 @@ export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
           timestamp: game.timestamp,
         },
       });
-
-      if (error) {
-        throw new Error(error.message);
-      }
 
       form.reset();
       Toast.show("Pomyślnie obstawiono mecz ✅");

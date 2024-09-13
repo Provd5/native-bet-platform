@@ -20,9 +20,7 @@ export const BetModal: FC<BetModalProps> = ({ sessionBet, game }) => {
   return (
     <>
       <Pressable onPress={() => setModalVisible(true)}>
-        <View>
-          <GameCard game={game} sessionBet={sessionBet} />
-        </View>
+        <GameCard game={game} sessionBet={sessionBet} />
       </Pressable>
       <Modal
         transparent
@@ -31,7 +29,7 @@ export const BetModal: FC<BetModalProps> = ({ sessionBet, game }) => {
         onRequestClose={() => setModalVisible(!modalVisible)}
       >
         <View className="flex-1 items-center justify-center bg-black/80 p-2">
-          <View className="w-full max-w-3xl rounded-lg border border-border bg-background p-6 shadow-lg shadow-foreground/10">
+          <View className="max-h-screen w-full max-w-3xl rounded-lg border border-border bg-background p-6 shadow-lg shadow-foreground/10">
             <Bet game={game} sessionBet={sessionBet} />
             <Button
               className="mx-auto mt-2 w-full max-w-sm"

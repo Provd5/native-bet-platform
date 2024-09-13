@@ -68,6 +68,13 @@ export const SignUpForm: FC = () => {
   });
 
   async function onSubmit(values: registerSchemaType) {
+    if (values.username.trim().length < 3) {
+      form.setError("username", {
+        message: "Nazwa musi mieć co najmniej 3 znaki",
+      });
+      return;
+    }
+
     if (values.password !== values.repeat_password) {
       form.setError("repeat_password", {
         message: "Podane hasła nie pasują do siebie",
@@ -81,7 +88,7 @@ export const SignUpForm: FC = () => {
 
         await createUserAsync({
           userId: userCredential.user.uid,
-          username: values.username,
+          username: values.username.trim(),
         });
       })
       .then(() => router.replace("/auth-callback"))

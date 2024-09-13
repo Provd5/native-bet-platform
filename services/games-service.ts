@@ -1,11 +1,4 @@
-import {
-  child,
-  onValue,
-  orderByChild,
-  query,
-  ref,
-  Unsubscribe,
-} from "firebase/database";
+import { child, onValue, query, ref, Unsubscribe } from "firebase/database";
 
 import { GameInterface } from "~/types/games";
 
@@ -19,7 +12,7 @@ export class GamesService {
   private dispatch = useAppDispatch();
 
   private getRef = () => {
-    return query(child(ref(db), COLLECTION_NAME), orderByChild("timestamp"));
+    return query(child(ref(db), COLLECTION_NAME));
   };
 
   private requiredFields: Partial<keyof GameInterface>[] = [
@@ -64,20 +57,23 @@ export class GamesService {
         });
 
         // IN_PLAY and PAUSED games always on top
-        const sortedGames = gamesData.sort((a, b) => {
-          if (
-            a.status !== "TIMED" &&
-            b.status !== "IN_PLAY" &&
-            b.status !== "PAUSED"
-          )
-            return -1;
-          return 0;
-        });
+        const sortGames = (games: GameInterface[]) =>
+          games.sort((a) => {
+            if (a.status !== "IN_PLAY" && a.status !== "PAUSED") return -1;
+            return 0;
+          });
 
-        const openGames = sortedGames.filter((game) => game.status === "TIMED");
-        const closedGames = sortedGames.filter(
-          (game) => game.status !== "TIMED",
-        );
+        const openGames = gamesData
+          .filter((game) => game.status === "TIMED")
+          .sort((a, b) => a.timestamp - b.timestamp);
+
+        const closedGames = gamesData
+          .filter((game) => game.status !== "TIMED")
+          .sort((a, b) => b.timestamp - a.timestamp)
+          .sort((a) => {
+            if (a.status === "IN_PLAY" || a.status === "PAUSED") return -1;
+            return 0;
+          });
 
         this.dispatch(setGames({ openGames, closedGames, status: "success" }));
       } catch (e) {

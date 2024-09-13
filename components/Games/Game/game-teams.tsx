@@ -24,7 +24,7 @@ interface GameTeamsProps {
     away: number;
   };
   gameData?: {
-    winner: string | undefined;
+    winner: BetInterface["winner"] | undefined;
     status: GameInterface["status"];
   };
   sessionBet?: BetInterface;
@@ -38,7 +38,12 @@ export const GameTeams: FC<GameTeamsProps> = ({
   sessionBet,
   size,
 }) => {
-  const showSessionBet = !!sessionBet && gameData?.status === "TIMED";
+  const gameTimed = gameData?.status === "TIMED";
+  const gameInPlay =
+    gameData?.status === "IN_PLAY" || gameData?.status === "PAUSED";
+  const gameFinished = gameData?.status === "FINISHED";
+
+  const showSessionBet = gameTimed && !!sessionBet;
 
   return (
     <View className="flex-row justify-center gap-3">
@@ -54,27 +59,38 @@ export const GameTeams: FC<GameTeamsProps> = ({
           <P
             className={cn(
               "truncate text-center text-sm",
-              (gameData.status === "IN_PLAY" || gameData.status === "PAUSED") &&
-                "text-info",
-              gameData.status === "FINISHED" && "text-muted-foreground",
+              gameInPlay && "text-info",
+              gameFinished && "text-muted-foreground",
             )}
             numberOfLines={1}
           >
             {translateConstantsToPolish(gameData.status)}
           </P>
         )}
-        <View
-          className={cn(
-            "mx-auto flex-row",
-            (gameData?.status === "IN_PLAY" || gameData?.status === "PAUSED") &&
-              "text-info",
-          )}
-        >
-          <H3 className={cn(showSessionBet && "text-warning")}>
+        <View className="mx-auto flex-row">
+          <H3
+            className={cn(
+              gameInPlay && "text-info",
+              showSessionBet && "text-warning",
+            )}
+          >
             {showSessionBet ? sessionBet.homeGoals : scores.home}
           </H3>
-          <H3 className={cn(showSessionBet && "text-warning")}> - </H3>
-          <H3 className={cn(showSessionBet && "text-warning")}>
+          <H3
+            className={cn(
+              gameInPlay && "text-info",
+              showSessionBet && "text-warning",
+            )}
+          >
+            {" "}
+            -{" "}
+          </H3>
+          <H3
+            className={cn(
+              gameInPlay && "text-info",
+              showSessionBet && "text-warning",
+            )}
+          >
             {showSessionBet ? sessionBet.awayGoals : scores.away}
           </H3>
         </View>

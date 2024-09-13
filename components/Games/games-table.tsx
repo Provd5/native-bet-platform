@@ -24,30 +24,45 @@ export const GamesTable: FC = () => {
 
   return (
     <View className="w-full">
-      {games.openGames.map((game) => {
-        const sessionBet = sessionBets.find((bet) => bet.gameId === game.id);
+      {games.openGames.length > 0
+        ? games.openGames.map((game) => {
+            const sessionBet = sessionBets.find(
+              (bet) => bet.gameId === game.id,
+            );
 
-        return (
-          <View
-            className={cn(games.show !== "open" && "hidden")}
-            key={`GamesTable-BetModal-${game.id}`}
-          >
-            <BetModal game={game} sessionBet={sessionBet} />
-          </View>
-        );
-      })}
-      {games.closedGames.map((game) => {
-        const sessionBet = sessionBets.find((bet) => bet.gameId === game.id);
+            return (
+              <View
+                className={cn(games.show !== "open" && "hidden")}
+                key={`GamesTable-BetModal-${game.id}`}
+              >
+                <BetModal game={game} sessionBet={sessionBet} />
+              </View>
+            );
+          })
+        : games.show === "open" && (
+            <DataLoadError isEmpty description="Brak zaplanowanych meczy 🕸️" />
+          )}
+      {games.closedGames.length > 0
+        ? games.closedGames.map((game) => {
+            const sessionBet = sessionBets.find(
+              (bet) => bet.gameId === game.id,
+            );
 
-        return (
-          <View
-            className={cn(games.show !== "closed" && "hidden")}
-            key={`GamesTable-BetModal-${game.id}`}
-          >
-            <BetModal game={game} sessionBet={sessionBet} />
-          </View>
-        );
-      })}
+            return (
+              <View
+                className={cn(games.show !== "closed" && "hidden")}
+                key={`GamesTable-BetModal-${game.id}`}
+              >
+                <BetModal game={game} sessionBet={sessionBet} />
+              </View>
+            );
+          })
+        : games.show === "closed" && (
+            <DataLoadError
+              isEmpty
+              description="Wszystkie mecze są wciąż otwarte 🕸️"
+            />
+          )}
     </View>
   );
 };

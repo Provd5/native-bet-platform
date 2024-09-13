@@ -3,7 +3,7 @@ import type { FC } from "react";
 import { type BetInterface, type GameInterface } from "~/types/games";
 
 import { BetGameForm } from "./bet-game-form";
-import { BetUsers } from "./bet-users";
+import { UsersBet } from "./users-bet";
 
 interface BetProps {
   sessionBet: BetInterface | undefined;
@@ -11,12 +11,11 @@ interface BetProps {
 }
 
 export const Bet: FC<BetProps> = ({ game, sessionBet }) => {
-  // const notStarted = game.status === "TIMED" && Date.now() <= game.timestamp;
-  const notStarted = game.status === "TIMED";
+  const notStarted = game.status === "TIMED" && Date.now() <= game.timestamp;
 
   if (notStarted) {
     return <BetGameForm game={game} sessionBet={sessionBet} />;
   } else {
-    return <BetUsers game={game} />;
+    return <UsersBet game={game} sessionUserId={sessionBet?.userId || ""} />;
   }
 };

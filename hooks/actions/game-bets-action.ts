@@ -9,7 +9,7 @@ export function useGetSessionBets() {
   const gameBetsService = new GameBetsService();
 
   const { data, status } = useQuery({
-    queryKey: [QUERY_KEY, "session-bets"],
+    queryKey: [QUERY_KEY, "session", "session-bets"],
     queryFn: () => gameBetsService.getSessionBets(),
     staleTime: Infinity,
   });
@@ -60,7 +60,7 @@ export function useBetGame() {
     }) => gameBetsService.betGame(payload.values, payload.gameValues),
     onSuccess: () =>
       queryClient.refetchQueries({
-        queryKey: [QUERY_KEY, "session-bets"],
+        queryKey: [QUERY_KEY, "session", "session-bets"],
       }),
   });
 

@@ -2,6 +2,7 @@ import type { FC } from "react";
 import React from "react";
 import { View } from "react-native";
 import { router } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { signOut } from "firebase/auth";
 import { CircleUser, LogOut, Mail } from "lucide-react-native";
 
@@ -22,6 +23,7 @@ import {
 import { P } from "../ui/typography";
 
 export const AccountBadge: FC = () => {
+  const queryClient = useQueryClient();
   const sessionUser = useAppSelector((state) => state.sessionUser);
   const dispatch = useAppDispatch();
 
@@ -31,6 +33,7 @@ export const AccountBadge: FC = () => {
     try {
       signOut(auth).then(() => {
         dispatch(setUserData({ dbUserData: null, fsUserData: null }));
+        queryClient.clear();
         router.replace("/sign-in");
       });
     } catch (e) {
