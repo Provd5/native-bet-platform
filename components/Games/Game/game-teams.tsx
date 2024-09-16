@@ -28,7 +28,7 @@ interface GameTeamsProps {
     status: GameInterface["status"];
   };
   sessionBet?: BetInterface;
-  size?: "default" | "sm";
+  size?: "lg" | "default";
 }
 
 export const GameTeams: FC<GameTeamsProps> = ({
@@ -85,7 +85,7 @@ export const GameTeams: FC<GameTeamsProps> = ({
         {gameData && (
           <P
             className={cn(
-              "truncate text-center text-sm",
+              "text-center text-sm",
               gameInPlay && "text-info",
               gameFinished && "text-muted-foreground",
             )}

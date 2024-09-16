@@ -61,6 +61,7 @@ export function useBetGame() {
     onSuccess: () =>
       queryClient.refetchQueries({
         queryKey: [QUERY_KEY, "session", "session-bets"],
+        exact: true,
       }),
   });
 

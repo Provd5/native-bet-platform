@@ -20,8 +20,10 @@ export type betFinalsSchemaType = z.infer<typeof betFinalsSchema>;
 export const betFinalsSchema = z.object({
   teams: z.array(
     z.object({
-      teamId: z.union([z.string(), z.number()]),
-      teamName: z.string(),
+      id: z.union([z.string(), z.number()]),
+      name: z.string(),
+      icon: z.string(),
+      nameCode: z.string(),
     }),
   ),
 });

@@ -10,7 +10,7 @@ import { loginSchema, loginSchemaType } from "~/lib/validators/auth-schema";
 
 import { FormField } from "../Form/form-field";
 import { LoadingSpinner } from "../Loaders/spinners";
-import { Button } from "../ui/button";
+import { Button, FormButton } from "../ui/button";
 import { P, Small } from "../ui/typography";
 
 const formFields = [
@@ -87,13 +87,12 @@ export const SignInForm: FC = () => {
           {form.formState.errors.root.message}
         </Small>
       )}
-      <Button
+      <FormButton
+        formState={form.formState}
         className="mx-auto w-full max-w-xs"
         onPress={form.handleSubmit(onSubmit)}
-        disabled={form.formState.isSubmitting}
-      >
-        {form.formState.isSubmitting ? <LoadingSpinner /> : <P>Zaloguj</P>}
-      </Button>
+        text="Zaloguj"
+      />
       <Button className="mx-auto" size={"sm"} onPress={() => DEMO_LOGIN()}>
         {form.formState.isSubmitting ? <LoadingSpinner /> : <P>DEMO</P>}
       </Button>

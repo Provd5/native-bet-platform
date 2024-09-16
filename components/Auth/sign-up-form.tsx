@@ -15,9 +15,8 @@ import {
 } from "~/lib/validators/auth-schema";
 
 import { FormField } from "../Form/form-field";
-import { LoadingSpinner } from "../Loaders/spinners";
-import { Button } from "../ui/button";
-import { P, Small } from "../ui/typography";
+import { FormButton } from "../ui/button";
+import { Small } from "../ui/typography";
 
 const formFields = [
   {
@@ -129,13 +128,12 @@ export const SignUpForm: FC = () => {
           {form.formState.errors.root.message}
         </Small>
       )}
-      <Button
+      <FormButton
         className="mx-auto w-full max-w-xs"
         onPress={form.handleSubmit(onSubmit)}
-        disabled={form.formState.isSubmitting}
-      >
-        {form.formState.isSubmitting ? <LoadingSpinner /> : <P>Utwórz konto</P>}
-      </Button>
+        formState={form.formState}
+        text="Utwórz konto"
+      />
     </View>
   );
 };

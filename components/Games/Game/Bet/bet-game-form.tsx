@@ -6,12 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { BetInterface, GameInterface } from "~/types/games";
 
-import { LoadingSpinner } from "~/components/Loaders/spinners";
-import { Button } from "~/components/ui/button";
+import { FormButton } from "~/components/ui/button";
 import { H2, P } from "~/components/ui/typography";
 import { useBetGame } from "~/hooks/actions/game-bets-action";
 import { errorHandler } from "~/lib/error-handler";
-import { cn } from "~/lib/utils";
 import { betSchema, betSchemaType } from "~/lib/validators/bet-schema";
 
 import { BetGoals } from "./bet-goals";
@@ -46,7 +44,7 @@ export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
       });
 
       form.reset();
-      Toast.show("Pomyślnie obstawiono mecz ✅");
+      Toast.show("✅ Pomyślnie obstawiono mecz");
     } catch (e) {
       form.setError("root", { message: errorHandler(e) });
     }
@@ -77,23 +75,12 @@ export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
           {form.formState.errors.root.message}
         </P>
       )}
-      <Button
-        className={cn(
-          "mx-auto mt-6 w-full max-w-xs",
-          form.formState.isSubmitSuccessful &&
-            "bg-success text-white web:hover:bg-success-foreground",
-        )}
+      <FormButton
+        className="mx-auto mt-6 w-full max-w-xs"
         onPress={form.handleSubmit(onSubmit)}
-        disabled={form.formState.isSubmitting || !form.formState.isDirty}
-      >
-        {form.formState.isSubmitting ? (
-          <LoadingSpinner />
-        ) : (
-          <P className={cn(form.formState.isSubmitSuccessful && "text-white")}>
-            {form.formState.isSubmitSuccessful ? "✅ Obstawiono!" : "Obstaw"}
-          </P>
-        )}
-      </Button>
+        formState={form.formState}
+        text={form.formState.isSubmitSuccessful ? "✅ Obstawiono!" : "Obstaw"}
+      />
     </View>
   );
 };

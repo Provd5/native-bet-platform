@@ -44,6 +44,7 @@ export function useBetFinals() {
     onSuccess: () =>
       queryClient.refetchQueries({
         queryKey: [QUERY_KEY, "session", "session-finals-bet"],
+        exact: true,
       }),
   });
 

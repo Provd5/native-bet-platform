@@ -1,66 +1,105 @@
 import { type FC, useState } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { FlatList, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { FlatList, Pressable, View } from "react-native";
+import { Circle, CircleCheck } from "lucide-react-native";
 
-import {
-  BetFinalsInterface,
-  TeamBetInterface,
-  TeamInterface,
-} from "~/types/teams";
+import { BetFinalsInterface, TeamInterface } from "~/types/teams";
 
-import { P } from "~/components/ui/typography";
+import { TeamIcon } from "~/components/team-icon";
+import { H4, P } from "~/components/ui/typography";
+import Icon from "~/lib/icons/Icon";
+import { cn } from "~/lib/utils";
 import { betFinalsSchemaType } from "~/lib/validators/bet-schema";
 
 interface SelectFinalistProps {
   setValue: UseFormSetValue<betFinalsSchemaType>;
   teams: TeamInterface[];
   sessionFinalsBet: BetFinalsInterface | null;
+  callbackSelect: (data: TeamInterface[]) => void;
 }
 
 export const SelectFinalist: FC<SelectFinalistProps> = ({
   setValue,
   teams,
   sessionFinalsBet,
+  callbackSelect,
 }) => {
-  const insets = useSafeAreaInsets();
-  const contentInsets = {
-    top: insets.top,
-    bottom: insets.bottom,
-    left: 12,
-    right: 12,
-  };
-
   const [betState, setBetState] = useState(
     sessionFinalsBet ? sessionFinalsBet.teamBet : [],
   );
 
-  const setValueFunc = (values: TeamBetInterface) => {
-    const isInBet = betState.some((bet) => bet.teamId === values.teamId);
+  const isInBet = (teamId: TeamInterface["id"]): boolean =>
+    betState.some((bet) => bet.id === teamId);
 
-    if (isInBet) {
-      const newBet = betState.filter((bet) => bet.teamId !== values.teamId);
-      setBetState(newBet);
-      setValue("teams", newBet, { shouldDirty: true });
+  const setValueFunc = (values: TeamInterface) => {
+    let newBet;
+
+    if (isInBet(values.id)) {
+      newBet = betState.filter((bet) => bet.id !== values.id);
     } else {
-      const newBet = [...betState, values];
-      setBetState(newBet);
-      setValue("teams", newBet, { shouldDirty: true });
+      if (betState.length >= 2) {
+        newBet = [betState.reverse()[0], values];
+      } else {
+        newBet = [...betState, values];
+      }
     }
+
+    setBetState(newBet);
+    callbackSelect(newBet);
+    setValue("teams", newBet, { shouldDirty: true });
   };
 
   return (
     <FlatList
       className="w-full"
-      keyExtractor={(item) => item.id.toString()}
+      keyExtractor={(item) => `SelectFinalist-${item.id}`}
       data={teams}
-      renderItem={({ item }) => (
-        <View className="w-full justify-center gap-1 border-t border-border py-2 web:cursor-pointer web:select-none web:transition-colors web:hover:bg-muted-foreground/10">
-          <View className="relative mx-auto w-full max-w-4xl px-2">
-            <P>{item.name}</P>
-          </View>
-        </View>
-      )}
+      renderItem={({ item, index }) => {
+        const isInitBet = sessionFinalsBet?.teamBet.some(
+          (bet) => bet.id === item.id,
+        );
+
+        return (
+          <Pressable
+            className={cn(
+              "w-full justify-center border-t border-border py-2 web:cursor-pointer web:select-none web:transition-colors",
+              index % 2 === 0 && "bg-muted/10",
+              isInBet(item.id)
+                ? "bg-muted-foreground/10 web:hover:bg-muted-foreground/30"
+                : "web:hover:bg-muted-foreground/10",
+            )}
+            onPress={() => setValueFunc(item)}
+          >
+            <View className="relative mx-auto w-full max-w-4xl flex-row items-center justify-between px-2">
+              <View className="flex-row items-center gap-3">
+                <P className="ml-auto w-12 text-right" numberOfLines={1}>
+                  {item.nameCode}
+                </P>
+                <TeamIcon
+                  icon={{ uri: item.icon, alt: `${item.name} icon` }}
+                  size="sm"
+                />
+                <H4
+                  className={cn(
+                    isInitBet && "text-info",
+                    isInBet(item.id) && "text-warning",
+                  )}
+                >
+                  {item.name}
+                </H4>
+              </View>
+              <Icon
+                className={cn(
+                  isInitBet && "text-info",
+                  isInBet(item.id) && "text-warning",
+                )}
+                LucideIcon={isInBet(item.id) ? CircleCheck : Circle}
+                size={24}
+              />
+            </View>
+          </Pressable>
+        );
+      }}
     />
   );
 };

@@ -1,29 +1,41 @@
 import { FC } from "react";
-import { View } from "react-native";
 
 import { DataLoadError } from "~/components/data-load-error";
-import { H2, P } from "~/components/ui/typography";
+import { P } from "~/components/ui/typography";
 import { useGetFinalsUsersBets } from "~/hooks/actions/finals-bet-actions";
+import { useAppSelector } from "~/hooks/redux";
+
+import { FinalsBetsList } from "./finals-bets-list";
 
 export const BetFinalsUsers: FC = () => {
-  const { data: finalsUsersBets, status } = useGetFinalsUsersBets();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const { data: finalsBets, status } = useGetFinalsUsersBets();
 
   if (status === "pending") return <P>Ładowanie...</P>;
-  if (status === "error" || finalsUsersBets === undefined)
-    return <DataLoadError />;
+  if (status === "error" || finalsBets === undefined) return <DataLoadError />;
 
-  return (
-    <View>
-      <H2 className="px-2 py-6 text-center">Wytypowani finaliści</H2>
-      {finalsUsersBets.length > 0 ? (
-        finalsUsersBets.map((finalsUsersBet) => (
-          <P key={`BetFinalsUsers-${finalsUsersBet.id}`}>
-            {finalsUsersBet.teamBet[0].teamName}
-          </P>
-        ))
-      ) : (
-        <DataLoadError isEmpty description="Nikt nie obstawił finalistów 🕸️" />
-      )}
-    </View>
+  const sortedFinalsBets = finalsBets
+    .sort((a, b) => {
+      const usernameA = a.username.toUpperCase();
+      const usernameB = b.username.toUpperCase();
+      if (usernameA < usernameB) {
+        return -1;
+      }
+      return 1;
+    })
+    .sort((a) => {
+      if (a.userId === sessionUser.fsUserData?.uid || "") {
+        return -1;
+      }
+      return 1;
+    });
+
+  return finalsBets.length > 0 ? (
+    <FinalsBetsList
+      finalsBets={sortedFinalsBets}
+      sessionUserId={sessionUser.fsUserData?.uid || ""}
+    />
+  ) : (
+    <DataLoadError isEmpty />
   );
 };

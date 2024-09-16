@@ -33,6 +33,7 @@ export const GameCard: FC<GameCardProps> = ({ game, sessionBet }) => {
             winner: game.regularTimeScore?.winner,
           }}
           sessionBet={sessionBet}
+          size="lg"
         />
         <View className="mt-1 w-full flex-row items-center justify-between">
           <P

@@ -22,7 +22,6 @@ export interface GameInterface {
 }
 
 export interface BetInterface {
-  id: string;
   username: string;
   userId: string;
   gameId: GameInterface["id"];

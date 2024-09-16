@@ -41,7 +41,7 @@ export class FinalsBetsService {
     } catch (e) {
       console.error("Error getting session finals bets:", e);
       throw new Error(
-        "Nie udało się pobrać danych o twoich zakładach na finały." +
+        "Nie udało się pobrać danych o twoich zakładach." +
           ` ${e instanceof Error && e.cause === "CUSTOM" ? e.message : ERROR_ENUM.TRY_AGAIN_LATER}.`,
       );
     }
@@ -61,7 +61,7 @@ export class FinalsBetsService {
     } catch (e) {
       console.error("Error getting users finals bets:", e);
       throw new Error(
-        "Nie udało się pobrać danych zakładów na finały innych użytkowników." +
+        "Nie udało się pobrać danych zakładów innych użytkowników." +
           ` ${ERROR_ENUM.TRY_AGAIN_LATER}.`,
       );
     }
@@ -72,10 +72,12 @@ export class FinalsBetsService {
       const validValues = betFinalsSchema.parse(values);
 
       if (validValues.teams.length !== 2)
-        throw new Error("Wybierz dwie drużyny finałowe!", { cause: "CUSTOM" });
+        throw new Error("Wybierz najpierw dwie drużyny finałowe", {
+          cause: "CUSTOM",
+        });
 
       if (Date.now() > FINALS_BETTING_CLOSING_DATE)
-        throw new Error("Zakłady na finały zostały już zamknięte!", {
+        throw new Error("Zakłady na finały zostały już zamknięte", {
           cause: "CUSTOM",
         });
 
@@ -92,7 +94,7 @@ export class FinalsBetsService {
     } catch (e) {
       console.error("Error creating new finals bet:", e);
       throw new Error(
-        "Nie udało się utworzyć zakładu na finały." +
+        "Nie udało się utworzyć zakładu." +
           ` ${e instanceof Error && e.cause === "CUSTOM" ? e.message : ERROR_ENUM.TRY_AGAIN_LATER}.`,
       );
     }

@@ -1,9 +1,13 @@
 import * as React from "react";
+import { FormState } from "react-hook-form";
 import { Pressable } from "react-native";
 import { cva, type VariantProps } from "class-variance-authority";
 
 import { TextClassContext } from "~/components/ui/text";
 import { cn } from "~/lib/utils";
+
+import { LoadingSpinner } from "../Loaders/spinners";
+import { P } from "./typography";
 
 const buttonVariants = cva(
   "group flex items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:focus-visible:outline-none web:focus-visible:ring-1 web:focus-visible:ring-ring web:focus-visible:ring-offset-1",
@@ -88,5 +92,47 @@ const Button = React.forwardRef<
 });
 Button.displayName = "Button";
 
-export { Button, buttonTextVariants, buttonVariants };
+const FormButton = React.forwardRef<
+  React.ElementRef<typeof Pressable>,
+  ButtonProps & { formState: FormState<any>; text: string }
+>(({ children, className, variant, size, formState, text, ...props }, ref) => {
+  return (
+    <Button
+      disabled={formState.isSubmitting || !formState.isDirty}
+      className={cn(
+        formState.isDirty &&
+          formState.isSubmitted &&
+          !formState.isSubmitSuccessful &&
+          !formState.isValid &&
+          "bg-destructive web:hover:bg-destructive-foreground",
+        formState.isSubmitSuccessful &&
+          "bg-success web:hover:bg-success-foreground",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    >
+      {formState.isValidating || formState.isSubmitting ? (
+        <LoadingSpinner />
+      ) : (
+        <P
+          className={cn(
+            buttonTextVariants({ variant, size }),
+            ((formState.isDirty &&
+              formState.isSubmitted &&
+              !formState.isSubmitSuccessful &&
+              !formState.isValid) ||
+              formState.isSubmitSuccessful) &&
+              "text-white",
+          )}
+        >
+          {text}
+        </P>
+      )}
+    </Button>
+  );
+});
+FormButton.displayName = "FormButton";
+
+export { Button, FormButton, buttonTextVariants, buttonVariants };
 export type { ButtonProps };

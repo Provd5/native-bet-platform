@@ -60,7 +60,7 @@ export const BetTeam: FC<BetTeamProps> = ({
           >
             <P
               className={cn(
-                "w-16 truncate text-center text-primary",
+                "w-16 text-center text-primary",
                 toggleValue === item.value && "text-success",
               )}
               numberOfLines={1}

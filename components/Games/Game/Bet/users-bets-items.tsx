@@ -3,8 +3,10 @@ import { ScrollView, View } from "react-native";
 
 import { type BetInterface, type GameInterface } from "~/types/games";
 
-import { H4, P } from "~/components/ui/typography";
-import { checkGameBetStatus, cn, getMatchWinnerName } from "~/lib/utils";
+import { H4 } from "~/components/ui/typography";
+import { checkGameBetStatus, cn } from "~/lib/utils";
+
+import { UsersBetsTeam } from "./users-bets-team";
 
 interface UsersBetsItemsProps {
   game: GameInterface;
@@ -19,102 +21,49 @@ export const UsersBetsItems: FC<UsersBetsItemsProps> = ({
 }) => {
   return (
     <ScrollView>
-      {bets.map((item) => {
-        const { accurateScoreHit, scoreInPlay, winnerHit, isGameInPlay } =
-          checkGameBetStatus(game, item);
+      {bets.map((item, i) => {
+        const conditions = checkGameBetStatus(game, item);
 
         return (
           <View
-            key={`UsersBetsItems-${item.userId}-${item.id}`}
-            className="w-full justify-center gap-1 border-t border-border py-2 web:select-none web:hover:bg-muted-foreground/10"
+            key={`UsersBetsItems-${item.userId}-${item.gameId}`}
+            className={cn(
+              "w-full gap-1 px-6 py-2 web:select-none web:hover:bg-muted-foreground/10",
+              i % 2 === 0 && "bg-muted/10",
+            )}
           >
-            <P
+            <H4
               className={cn(
-                "mx-auto w-full max-w-sm truncate text-center",
                 item.userId === sessionUserId &&
                   "font-customSemiBold text-info",
               )}
+              numberOfLines={1}
             >
               {item.username}
-            </P>
-            <H4
-              className={cn(
-                "-mt-1 text-center",
-                accurateScoreHit
-                  ? "text-success"
-                  : scoreInPlay
-                    ? "text-warning"
-                    : "text-destructive",
-              )}
-            >
-              {item.homeGoals} - {item.awayGoals}
             </H4>
-            <P
-              className={cn(
-                "-mt-1 text-center",
-                winnerHit
-                  ? "text-success"
-                  : isGameInPlay
-                    ? "text-warning"
-                    : "text-destructive",
-              )}
-            >
-              {getMatchWinnerName(item.winner, game)}
-            </P>
+            <View className="gap-1">
+              <UsersBetsTeam
+                conditions={conditions}
+                game={{
+                  side: "HOME_TEAM",
+                  teamIcon: game.homeTeamIcon,
+                  teamName: game.homeTeamName,
+                }}
+                bet={{ goals: item.homeGoals, winner: item.winner }}
+              />
+              <UsersBetsTeam
+                conditions={conditions}
+                game={{
+                  side: "AWAY_TEAM",
+                  teamIcon: game.awayTeamIcon,
+                  teamName: game.awayTeamName,
+                }}
+                bet={{ goals: item.awayGoals, winner: item.winner }}
+              />
+            </View>
           </View>
         );
       })}
     </ScrollView>
   );
 };
-
-{
-  /* <FlatList
-className="!h-96"
-contentContainerClassName="!h-96"
-data={bets}
-renderItem={({ item }) => {
-  const { accurateScoreHit, scoreInPlay, winnerHit, isGameInPlay } =
-    checkGameBetStatus(game, item);
-
-  return (
-    <View className="w-full justify-center gap-1 border-t border-border py-2 web:select-none web:hover:bg-muted-foreground/10">
-      <P
-        className={cn(
-          "mx-auto w-full max-w-sm truncate text-center",
-          item.userId === sessionUserId &&
-            "font-customSemiBold text-info",
-        )}
-      >
-        {item.username}
-      </P>
-      <H4
-        className={cn(
-          "-mt-1 text-center",
-          accurateScoreHit
-            ? "text-success"
-            : scoreInPlay
-              ? "text-warning"
-              : "text-destructive",
-        )}
-      >
-        {item.homeGoals} - {item.awayGoals}
-      </H4>
-      <P
-        className={cn(
-          "-mt-1 text-center",
-          winnerHit
-            ? "text-success"
-            : isGameInPlay
-              ? "text-warning"
-              : "text-destructive",
-        )}
-      >
-        {getMatchWinnerName(item.winner, game)}
-      </P>
-    </View>
-  );
-}}
-keyExtractor={(item) => `UsersBet-${item.userId}-${item.id}`}
-/> */
-}

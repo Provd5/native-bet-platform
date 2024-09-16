@@ -1,25 +1,25 @@
 import type { FC } from "react";
 import React from "react";
-import { Image, View } from "react-native";
+import { View } from "react-native";
 
 import { BetInterface, type GameInterface } from "~/types/games";
 
+import { TeamIcon } from "~/components/team-icon";
 import { Muted, P } from "~/components/ui/typography";
 import { cn, translateConstantsToPolish } from "~/lib/utils";
-import { betSchemaType } from "~/lib/validators/bet-schema";
 
 interface GameTeamProps {
   team: {
     name: string;
     icon: string;
   };
-  side: Extract<betSchemaType["winner"], "HOME_TEAM" | "AWAY_TEAM">;
+  side: Extract<BetInterface["winner"], "HOME_TEAM" | "AWAY_TEAM">;
   gameData?: {
     winner: BetInterface["winner"] | undefined;
     status: GameInterface["status"];
   };
   sessionBet?: BetInterface;
-  size?: "default" | "sm";
+  size?: "lg" | "default";
 }
 
 export const GameTeam: FC<GameTeamProps> = ({
@@ -30,8 +30,8 @@ export const GameTeam: FC<GameTeamProps> = ({
   size = "default",
 }) => {
   const sizes = {
-    default: { image: 78, text: 90 },
-    sm: { image: 68, text: 80 },
+    lg: 88,
+    default: 76,
   };
 
   const gameFinished = gameData?.status === "FINISHED";
@@ -40,32 +40,28 @@ export const GameTeam: FC<GameTeamProps> = ({
     !!sessionBet &&
     gameData?.status === "TIMED" &&
     (sessionBet.winner === side || sessionBet?.winner === "DRAW");
-  const showWinner = gameFinished && gameData?.winner === side;
+  const showWinner =
+    (gameFinished && gameData?.winner === side) || gameData?.winner === "DRAW";
   const showLoser =
     gameFinished && gameData?.winner !== side && gameData?.winner !== "DRAW";
 
   return (
     <View className="items-center gap-0.5">
       <Muted
-        style={{ width: sizes[size].text }}
-        className="truncate text-center"
+        style={{ width: sizes[size] }}
+        className="text-center"
         numberOfLines={1}
       >
         {translateConstantsToPolish(side)}
       </Muted>
-      <View className="rounded-2xl bg-secondary p-3">
-        <Image
-          source={{ uri: team.icon }}
-          style={{ width: sizes[size].image, height: sizes[size].image }}
-          alt={`${team.name} icon`}
-          resizeMode="contain"
-          className="pointer-events-none"
-        />
-      </View>
+      <TeamIcon
+        icon={{ uri: team.icon, alt: `${team.name} icon` }}
+        size={size}
+      />
       <P
-        style={{ width: sizes[size].text }}
+        style={{ width: sizes[size] }}
         className={cn(
-          "truncate text-center",
+          "text-center",
           showSessionBet && "text-warning",
           showWinner && "font-customSemiBold text-success",
           showLoser && "text-destructive",

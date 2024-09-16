@@ -4,7 +4,7 @@ import { View } from "react-native";
 import { type GameInterface } from "~/types/games";
 
 import { DataLoadError } from "~/components/data-load-error";
-import { H2, P } from "~/components/ui/typography";
+import { H3, P } from "~/components/ui/typography";
 import { useGetGameBets } from "~/hooks/actions/game-bets-action";
 import { sortUsersBets } from "~/lib/utils";
 
@@ -26,12 +26,12 @@ export const UsersBets: FC<UsersBetsProps> = ({ sessionUserId, game }) => {
     if (a.userId === sessionUserId) {
       return -1;
     }
-    return 0;
+    return 1;
   });
 
   return (
     <View className="max-h-full gap-3">
-      <H2 className="text-center">Tak obstawili inni</H2>
+      <H3 className="text-center">Tak obstawili inni</H3>
       <GameTeams
         teams={{
           away: { icon: game.awayTeamIcon, name: game.awayTeamName },
@@ -45,7 +45,6 @@ export const UsersBets: FC<UsersBetsProps> = ({ sessionUserId, game }) => {
           status: game.status,
           winner: game.regularTimeScore?.winner,
         }}
-        size="sm"
       />
       {bets.length > 0 ? (
         <UsersBetsItems
@@ -54,14 +53,6 @@ export const UsersBets: FC<UsersBetsProps> = ({ sessionUserId, game }) => {
           sessionUserId={sessionUserId}
         />
       ) : (
-        // sortedBets.map((userBet) => (
-        //   <BetCarouselItem
-        //     key={`UsersBet-${userBet.userId}-${userBet.id}`}
-        //     game={game}
-        //     userBet={userBet}
-        //     sessionUserId={sessionUserId}
-        //   />
-        // ))
         <DataLoadError isEmpty description="Nikt nie obstawił tego meczu 🕸️" />
       )}
     </View>
