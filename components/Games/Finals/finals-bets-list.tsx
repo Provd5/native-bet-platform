@@ -35,8 +35,8 @@ export const FinalsBetsList: FC<FinalsBetsListProps> = ({
         return (
           <View
             className={cn(
-              "border-t border-border px-6 py-2 pb-4 web:select-none web:hover:bg-muted-foreground/10",
-              index % 2 === 0 && "bg-muted/10",
+              "border-t border-border px-6 py-2 pb-4 web:hover:bg-muted-foreground/20",
+              index % 2 === 0 && "bg-muted/30",
             )}
           >
             <View className="mx-auto w-full max-w-xl justify-center gap-2">

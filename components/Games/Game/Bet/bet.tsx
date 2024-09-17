@@ -4,6 +4,7 @@ import { type BetInterface, type GameInterface } from "~/types/games";
 
 import { BetGameForm } from "./bet-game-form";
 import { UsersBets } from "./users-bets";
+import { UsersBetsWrapper } from "./users-bets-wrapper";
 
 interface BetProps {
   sessionBet: BetInterface | undefined;
@@ -16,6 +17,10 @@ export const Bet: FC<BetProps> = ({ game, sessionBet }) => {
   if (notStarted) {
     return <BetGameForm game={game} sessionBet={sessionBet} />;
   } else {
-    return <UsersBets game={game} sessionUserId={sessionBet?.userId || ""} />;
+    return (
+      <UsersBetsWrapper game={game}>
+        <UsersBets game={game} sessionUserId={sessionBet?.userId || ""} />
+      </UsersBetsWrapper>
+    );
   }
 };

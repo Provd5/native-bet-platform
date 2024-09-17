@@ -40,7 +40,7 @@ export const BetGoals: FC<BetGoalsProps> = ({
           teams={teams}
           scores={{ away: awayScoreState, home: homeScoreState }}
         />
-        <View className="flex-row justify-between px-1.5">
+        <View className="flex-row justify-between">
           <GoalsInput
             register={register}
             setValue={setValue}

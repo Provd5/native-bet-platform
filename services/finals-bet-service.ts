@@ -2,7 +2,7 @@ import { collection, doc, getDoc, getDocs, setDoc } from "firebase/firestore";
 
 import { BetFinalsInterface } from "~/types/teams";
 
-import { FINALS_BETTING_CLOSING_DATE } from "~/constants/current-event";
+import { FINALS_BETTING_CLOSING_DATE } from "~/constants/app";
 import { store } from "~/firebase.config";
 import { useAppSelector } from "~/hooks/redux";
 import { ERROR_ENUM } from "~/lib/constants";

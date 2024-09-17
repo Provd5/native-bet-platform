@@ -2,8 +2,7 @@ import type { FC } from "react";
 import { View } from "react-native";
 import { Link } from "expo-router";
 
-import { APP_TITLE } from "~/constants/app";
-import { CURRENT_EVENT } from "~/constants/current-event";
+import { APP_TITLE, CURRENT_EVENT } from "~/constants/app";
 
 import { ScrollArea } from "../scroll-area";
 import {

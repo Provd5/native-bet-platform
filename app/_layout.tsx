@@ -17,6 +17,7 @@ import {
 import { PortalHost } from "@rn-primitives/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
+import { PageTitle } from "~/components/MetaTags/page-title";
 import { Stacks } from "~/components/stacks";
 import { NAV_THEME } from "~/lib/constants";
 import { store } from "~/lib/store";
@@ -89,6 +90,7 @@ export default function RootLayout() {
           <RootSiblingParent>
             <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
               <>
+                <PageTitle />
                 <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
                 <Stacks />
                 <PortalHost />

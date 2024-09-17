@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import { GameInterface } from "~/types/games";
 
-import { DataStatus } from "../constants";
+import { DataStatus } from "~/constants/data";
 
 interface GamesState {
   status: DataStatus;
@@ -18,7 +18,7 @@ const initialState: GamesState = {
 
 const gamesSlice = createSlice({
   name: "games",
-  initialState: initialState,
+  initialState,
   reducers: {
     setGames: (state, action: PayloadAction<GamesState>) => {
       state.status = action.payload.status;

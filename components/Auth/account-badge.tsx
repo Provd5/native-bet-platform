@@ -32,7 +32,11 @@ export const AccountBadge: FC = () => {
           </View>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-48" insets={{ right: 8, left: 8 }}>
+      <DropdownMenuContent
+        className="w-48"
+        insets={{ right: 8, left: 8 }}
+        align="end"
+      >
         <DropdownMenuLabel className="flex py-3">
           <View className="flex-row items-center gap-1">
             <Icon LucideIcon={Mail} size={18} />

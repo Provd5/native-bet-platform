@@ -15,7 +15,7 @@ const initialState: SessionUserState = {
 
 const sessionUserSlice = createSlice({
   name: "sessionUser",
-  initialState: initialState,
+  initialState,
   reducers: {
     setUserData: (state, action: PayloadAction<SessionUserState>) => {
       state = action.payload;

@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { DataLoadError } from "~/components/data-load-error";
-import { P } from "~/components/ui/typography";
+import { ContentLoader } from "~/components/Loaders/ContentLoader";
 import { useGetSessionFinalsBet } from "~/hooks/actions/finals-bet-actions";
 import { useAppSelector } from "~/hooks/redux";
 
@@ -12,7 +12,7 @@ export const BetFinals: FC = () => {
   const { data: sessionFinalsBet, status } = useGetSessionFinalsBet();
 
   if (teams.status === "pending" || status === "pending")
-    return <P>Ładowanie...</P>;
+    return <ContentLoader />;
   if (
     teams.status === "error" ||
     status === "error" ||

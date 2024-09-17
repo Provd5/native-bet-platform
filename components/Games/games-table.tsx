@@ -5,7 +5,7 @@ import { useGetSessionBets } from "~/hooks/actions/game-bets-action";
 import { useAppSelector } from "~/hooks/redux";
 
 import { DataLoadError } from "../data-load-error";
-import { P } from "../ui/typography";
+import { ContentLoader } from "../Loaders/ContentLoader";
 import { BetModal } from "./Game/Bet/bet-modal";
 
 interface GamesTableProps {
@@ -17,7 +17,7 @@ export const GamesTable: FC<GamesTableProps> = ({ isClosed = false }) => {
   const { data: sessionBets, status } = useGetSessionBets();
 
   if (games.status === "pending" || status === "pending")
-    return <P>Ładowanie...</P>;
+    return <ContentLoader />;
   if (
     games.status === "error" ||
     status === "error" ||
@@ -29,9 +29,15 @@ export const GamesTable: FC<GamesTableProps> = ({ isClosed = false }) => {
     <FlatList
       className="w-full"
       data={isClosed ? games.closedGames : games.openGames}
-      renderItem={({ item }) => {
+      renderItem={({ item, index }) => {
         const sessionBet = sessionBets.find((bet) => bet.gameId === item.id);
-        return <BetModal game={item} sessionBet={sessionBet} />;
+        return (
+          <BetModal
+            game={item}
+            sessionBet={sessionBet}
+            isOdd={index % 2 === 0}
+          />
+        );
       }}
       keyExtractor={(item) => `GamesTable-${item.id}`}
     />

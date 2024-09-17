@@ -21,15 +21,15 @@ export const UsersBetsItems: FC<UsersBetsItemsProps> = ({
 }) => {
   return (
     <ScrollView>
-      {bets.map((item, i) => {
+      {bets.map((item, index) => {
         const conditions = checkGameBetStatus(game, item);
 
         return (
           <View
             key={`UsersBetsItems-${item.userId}-${item.gameId}`}
             className={cn(
-              "w-full gap-1 px-6 py-2 web:select-none web:hover:bg-muted-foreground/10",
-              i % 2 === 0 && "bg-muted/10",
+              "w-full gap-1 px-6 py-2 web:hover:bg-muted-foreground/20",
+              index % 2 === 0 && "bg-muted/30",
             )}
           >
             <H4

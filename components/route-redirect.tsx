@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 
 import { useAppSelector } from "~/hooks/redux";
 
-import { P } from "./ui/typography";
+import { PageLoader } from "./Loaders/PageLoader";
 
 interface RouteRedirectProps {
   children: React.ReactNode;
@@ -36,7 +36,7 @@ export const RouteRedirect: FC<RouteRedirectProps> = ({ children, layout }) => {
     setLoadChildren(true);
   }, [isSession, isUserActive, layout, router]);
 
-  if (!isSession) return <P>Ładowanie...</P>;
+  if (!isSession) return <PageLoader />;
 
-  return loadChildren ? children : <P>Ładowanie...</P>;
+  return loadChildren ? children : <PageLoader />;
 };

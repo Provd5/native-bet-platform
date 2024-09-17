@@ -6,8 +6,7 @@ import { Logo } from "~/components/logo";
 import { ScrollArea } from "~/components/scroll-area";
 import { Button } from "~/components/ui/button";
 import { H1, H4, P } from "~/components/ui/typography";
-import { APP_TITLE } from "~/constants/app";
-import { CURRENT_EVENT } from "~/constants/current-event";
+import { APP_TITLE, CURRENT_EVENT } from "~/constants/app";
 
 export default function Index() {
   return (

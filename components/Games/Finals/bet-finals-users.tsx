@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { DataLoadError } from "~/components/data-load-error";
-import { P } from "~/components/ui/typography";
+import { ContentLoader } from "~/components/Loaders/ContentLoader";
 import { useGetFinalsUsersBets } from "~/hooks/actions/finals-bet-actions";
 import { useAppSelector } from "~/hooks/redux";
 
@@ -11,7 +11,7 @@ export const BetFinalsUsers: FC = () => {
   const sessionUser = useAppSelector((state) => state.sessionUser);
   const { data: finalsBets, status } = useGetFinalsUsersBets();
 
-  if (status === "pending") return <P>Ładowanie...</P>;
+  if (status === "pending") return <ContentLoader />;
   if (status === "error" || finalsBets === undefined) return <DataLoadError />;
 
   const sortedFinalsBets = finalsBets

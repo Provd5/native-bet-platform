@@ -5,7 +5,8 @@ import { twMerge } from "tailwind-merge";
 
 import { BetInterface, GameInterface } from "~/types/games";
 
-import { constantTranslations } from "./constants";
+import { STAGE_MULTIPLIERS } from "~/constants/calculator";
+import { CONSTANT_TRANSLATIONS } from "~/constants/data";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -67,5 +68,8 @@ export function sortUsersBets(game: GameInterface, bets: BetInterface[]) {
 }
 
 export const translateConstantsToPolish = (
-  key: keyof typeof constantTranslations,
-) => constantTranslations[key] || key;
+  key: keyof typeof CONSTANT_TRANSLATIONS,
+) => CONSTANT_TRANSLATIONS[key] || key;
+
+export const multiplyResult = (key: keyof typeof STAGE_MULTIPLIERS) =>
+  STAGE_MULTIPLIERS[key] || key;

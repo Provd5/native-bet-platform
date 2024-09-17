@@ -12,11 +12,17 @@ import { GameTeams } from "./game-teams";
 interface GameCardProps {
   game: GameInterface;
   sessionBet: BetInterface | undefined;
+  isOdd: boolean;
 }
 
-export const GameCard: FC<GameCardProps> = ({ game, sessionBet }) => {
+export const GameCard: FC<GameCardProps> = ({ game, sessionBet, isOdd }) => {
   return (
-    <View className="w-full justify-center gap-1 border-t border-border py-2 web:cursor-pointer web:select-none web:transition-colors web:hover:bg-muted-foreground/10">
+    <View
+      className={cn(
+        "w-full justify-center gap-1 border-t border-border py-2 web:cursor-pointer web:hover:bg-muted-foreground/20",
+        isOdd && "bg-muted/30",
+      )}
+    >
       <View className="relative mx-auto w-full max-w-4xl px-2">
         {!!sessionBet && <BetMade />}
         <GameTeams

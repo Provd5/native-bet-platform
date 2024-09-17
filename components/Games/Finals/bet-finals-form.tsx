@@ -1,15 +1,12 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
-import { View } from "react-native";
+import { FlatList, View } from "react-native";
 import Toast from "react-native-root-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { BetFinalsInterface, TeamInterface } from "~/types/teams";
 
-import { TeamIcon } from "~/components/team-icon";
-import { FormButton } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
-import { H4 } from "~/components/ui/typography";
 import { useBetFinals } from "~/hooks/actions/finals-bet-actions";
 import { errorHandler } from "~/lib/error-handler";
 import {
@@ -18,6 +15,7 @@ import {
 } from "~/lib/validators/bet-schema";
 
 import { SelectFinalist } from "./select-finalist";
+import { SelectFinalistSave } from "./select-finalist-save";
 
 interface BetFinalsFormProps {
   teams: TeamInterface[];
@@ -29,20 +27,8 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
   sessionFinalsBet,
 }) => {
   const { betFinalsAsync } = useBetFinals();
-  const initSelectedTeams = sessionFinalsBet ? sessionFinalsBet.teamBet : [];
-  const [selectedTeams, setSelectedTeams] =
-    useState<TeamInterface[]>(initSelectedTeams);
-
-  const isInitBet = () => {
-    const initTeamIds = initSelectedTeams.map((team) => team?.id).sort();
-    const selectedTeamIds = selectedTeams.map((team) => team?.id).sort();
-
-    return initTeamIds.every((id, index) => id === selectedTeamIds[index]);
-  };
-
-  const callbackSelect = (data: TeamInterface[]) => {
-    setSelectedTeams(data);
-  };
+  const initBet = sessionFinalsBet?.teamBet || [];
+  const [selectedFinalists, setSelectedFinalists] = useState(initBet);
 
   const form = useForm<betFinalsSchemaType>({
     resolver: zodResolver(betFinalsSchema),
@@ -64,53 +50,52 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
     }
   });
 
+  const setValueFunc = (team: TeamInterface) => {
+    let newBet: TeamInterface[];
+    const isInBet = selectedFinalists.some((bet) => bet.id === team.id);
+
+    if (isInBet) {
+      newBet = selectedFinalists.filter((bet) => bet.id !== team.id);
+    } else {
+      if (selectedFinalists.length >= 2) {
+        newBet = [selectedFinalists.toReversed()[0], team];
+      } else {
+        newBet = [...selectedFinalists, team];
+      }
+    }
+    console.log("newBet", newBet);
+
+    setSelectedFinalists(newBet);
+    form.setValue("teams", newBet, { shouldDirty: true });
+  };
+
   return (
     <>
       <View className="hidden">
         <Input readOnly {...form.register("teams")} />
       </View>
 
-      <SelectFinalist
-        setValue={form.setValue}
-        teams={teams}
-        sessionFinalsBet={sessionFinalsBet}
-        callbackSelect={callbackSelect}
+      <FlatList
+        className="w-full"
+        keyExtractor={(item) => `BetFinalsForm-${item.id}`}
+        data={teams}
+        renderItem={({ item, index }) => (
+          <SelectFinalist
+            isOdd={index % 2 === 0}
+            initBet={initBet}
+            selectedFinalists={selectedFinalists}
+            team={item}
+            setValueFunc={setValueFunc}
+          />
+        )}
       />
 
-      <View className="absolute inset-x-0 bottom-0 flex-row items-center border-t border-border bg-background px-2 py-1">
-        <View className="mx-auto flex-row items-center gap-2">
-          <TeamIcon
-            icon={
-              selectedTeams[0]
-                ? {
-                    uri: selectedTeams[0].icon,
-                    alt: `${selectedTeams[0].name} icon`,
-                  }
-                : null
-            }
-            size="xs"
-          />
-          <H4>VS</H4>
-          <TeamIcon
-            icon={
-              selectedTeams[1]
-                ? {
-                    uri: selectedTeams[1].icon,
-                    alt: `${selectedTeams[1].name} icon`,
-                  }
-                : null
-            }
-            size="xs"
-          />
-          <FormButton
-            disabled={isInitBet()}
-            className="ml-3 px-12"
-            formState={form.formState}
-            onPress={onSubmit}
-            text="Zapisz"
-          />
-        </View>
-      </View>
+      <SelectFinalistSave
+        initBet={initBet}
+        selectedFinalists={selectedFinalists}
+        formState={form.formState}
+        onSubmit={onSubmit}
+      />
     </>
   );
 };

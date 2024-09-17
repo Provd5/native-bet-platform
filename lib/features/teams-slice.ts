@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 import { TeamInterface } from "~/types/teams";
 
-import { DataStatus } from "../constants";
+import { DataStatus } from "~/constants/data";
 
 interface TeamsState {
   status: DataStatus;
@@ -16,7 +16,7 @@ const initialState: TeamsState = {
 
 const teamsSlice = createSlice({
   name: "teams",
-  initialState: initialState,
+  initialState,
   reducers: {
     setTeams: (state, action: PayloadAction<TeamsState>) => {
       state.status = action.payload.status;
