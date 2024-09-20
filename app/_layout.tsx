@@ -23,7 +23,7 @@ import { NAV_THEME } from "~/lib/constants";
 import { store } from "~/lib/store";
 import { useColorScheme } from "~/lib/useColorScheme";
 
-import "~/global.css";
+import "../global.css";
 
 const LIGHT_THEME: Theme = {
   dark: false,
