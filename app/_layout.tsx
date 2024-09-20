@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Platform } from "react-native";
+import { Appearance, Platform } from "react-native";
 import { RootSiblingParent } from "react-native-root-siblings";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
@@ -61,18 +61,22 @@ export default function RootLayout() {
         // Adds the background color to the html element to prevent white background on overscroll.
         document.documentElement.classList.add("bg-background");
       }
+
       if (!theme) {
-        AsyncStorage.setItem("theme", colorScheme);
+        const appearance = Appearance.getColorScheme();
+        AsyncStorage.setItem("theme", appearance === "dark" ? "dark" : "light");
         setIsColorSchemeLoaded(true);
         return;
       }
-      const colorTheme = theme === "dark" ? "dark" : "light";
-      if (colorTheme !== colorScheme) {
-        setColorScheme(colorTheme);
+
+      const appearance = theme === "dark" ? "dark" : "light";
+      if (appearance !== colorScheme) {
+        setColorScheme(appearance);
 
         setIsColorSchemeLoaded(true);
         return;
       }
+
       setIsColorSchemeLoaded(true);
     })().finally(() => {
       if (fontsLoaded) SplashScreen.hideAsync();
