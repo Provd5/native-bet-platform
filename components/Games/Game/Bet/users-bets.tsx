@@ -3,7 +3,7 @@ import React, { type FC } from "react";
 import { type GameInterface } from "~/types/games";
 
 import { DataLoadError } from "~/components/data-load-error";
-import { ContentLoader } from "~/components/Loaders/ContentLoader";
+import { ContentLoader } from "~/components/Loaders/content-loader";
 import { useGetGameBets } from "~/hooks/actions/game-bets-action";
 import { sortUsersBets } from "~/lib/utils";
 

@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 
 import { useAppSelector } from "~/hooks/redux";
 
-import { PageLoader } from "./Loaders/PageLoader";
+import { PageLoader } from "./Loaders/page-loader";
 
 interface RouteRedirectProps {
   children: React.ReactNode;

@@ -63,7 +63,6 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
         newBet = [...selectedFinalists, team];
       }
     }
-    console.log("newBet", newBet);
 
     setSelectedFinalists(newBet);
     form.setValue("teams", newBet, { shouldDirty: true });

@@ -5,7 +5,7 @@ import { useGetSessionBets } from "~/hooks/actions/game-bets-action";
 import { useAppSelector } from "~/hooks/redux";
 
 import { DataLoadError } from "../data-load-error";
-import { ContentLoader } from "../Loaders/ContentLoader";
+import { ContentLoader } from "../Loaders/content-loader";
 import { BetModal } from "./Game/Bet/bet-modal";
 
 interface GamesTableProps {

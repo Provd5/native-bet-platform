@@ -31,8 +31,6 @@ export class GameBetsService {
   // GET
   getSessionBets = async (): Promise<BetInterface[]> => {
     try {
-      console.log("getSessionBets");
-
       if (!this.sessionUser.dbUserData || !this.sessionUser.fsUserData) {
         throw new Error(ERROR_ENUM.UNAUTHORIZED, { cause: "CUSTOM" });
       }
@@ -59,8 +57,6 @@ export class GameBetsService {
 
   getGameBets = async (gameId: string | number): Promise<BetInterface[]> => {
     try {
-      console.log("getGameBets");
-
       const q = query(this.getRef(), where("gameId", "==", gameId));
       const bets = await getDocs(q);
 
@@ -80,8 +76,6 @@ export class GameBetsService {
 
   getUsersBets = async (): Promise<BetInterface[]> => {
     try {
-      console.log("getUsersBets");
-
       const bets = await getDocs(this.getRef());
 
       if (bets.empty) return [];

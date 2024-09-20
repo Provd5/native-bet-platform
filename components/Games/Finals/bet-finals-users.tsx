@@ -1,7 +1,7 @@
 import { FC } from "react";
 
 import { DataLoadError } from "~/components/data-load-error";
-import { ContentLoader } from "~/components/Loaders/ContentLoader";
+import { ContentLoader } from "~/components/Loaders/content-loader";
 import { useGetFinalsUsersBets } from "~/hooks/actions/finals-bet-actions";
 import { useAppSelector } from "~/hooks/redux";
 

@@ -6,7 +6,7 @@ import { useGetUsersBets } from "~/hooks/actions/game-bets-action";
 import { useAppSelector } from "~/hooks/redux";
 
 import { DataLoadError } from "../data-load-error";
-import { ContentLoader } from "../Loaders/ContentLoader";
+import { ContentLoader } from "../Loaders/content-loader";
 import resultsCalculator from "./Calculator/results-calculator";
 import { ResultCard } from "./Result/result-card";
 

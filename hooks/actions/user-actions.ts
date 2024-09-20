@@ -11,6 +11,7 @@ export function useGetUser(userId: string) {
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, userId],
     queryFn: () => userService.getUser(userId),
+    staleTime: Infinity,
   });
 
   return {
