@@ -12,7 +12,7 @@ export const PageTitle: FC = () => {
     (subTitle ? ` - ${subTitle}` : "") +
     ` | ${APP_TITLE}`;
 
-  let title = template();
+  let title = "";
   let subTitle = "";
 
   if (segments[1] === "auth-callback") title = "Konto nieaktywowane";

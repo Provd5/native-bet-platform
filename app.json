@@ -4,27 +4,27 @@
     "slug": "native-bet-platform",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/favicon.png",
+    "icon": "./assets/splash/icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/favicon.png",
+      "image": "./assets/splash/screen.png",
       "resizeMode": "contain",
-      "backgroundColor": "#09090b"
+      "backgroundColor": "#09090a"
     },
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/favicon.png",
-        "backgroundColor": "#09090b"
+        "foregroundImage": "./assets/splash/icon.png",
+        "backgroundColor": "#09090a"
       }
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/favicon.png"
     },
     "plugins": ["expo-router"],
     "experiments": {
