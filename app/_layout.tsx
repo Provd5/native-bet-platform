@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Appearance, Platform } from "react-native";
-import { RootSiblingParent } from "react-native-root-siblings";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,6 +17,7 @@ import { PortalHost } from "@rn-primitives/portal";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import { PageTitle } from "~/components/MetaTags/page-title";
+import { Notifications } from "~/components/notifications";
 import { Stacks } from "~/components/stacks";
 import { NAV_THEME } from "~/lib/constants";
 import { store } from "~/lib/store";
@@ -91,16 +91,15 @@ export default function RootLayout() {
     <QueryClientProvider client={queryClient}>
       <Provider store={store}>
         <SafeAreaProvider>
-          <RootSiblingParent>
-            <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-              <>
-                <PageTitle />
-                <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
-                <Stacks />
-                <PortalHost />
-              </>
-            </ThemeProvider>
-          </RootSiblingParent>
+          <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+            <>
+              <PageTitle />
+              <StatusBar style={isDarkColorScheme ? "light" : "dark"} />
+              <Stacks />
+              <Notifications />
+              <PortalHost />
+            </>
+          </ThemeProvider>
         </SafeAreaProvider>
       </Provider>
     </QueryClientProvider>

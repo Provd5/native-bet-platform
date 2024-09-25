@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast/headless";
 import { View } from "react-native";
-import Toast from "react-native-root-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { BetInterface, GameInterface } from "~/types/games";
@@ -44,7 +44,7 @@ export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
       });
 
       form.reset();
-      Toast.show("✅ Pomyślnie obstawiono mecz");
+      toast("Pomyślnie obstawiono mecz", { icon: "✅" });
     } catch (e) {
       form.setError("root", { message: errorHandler(e) });
     }

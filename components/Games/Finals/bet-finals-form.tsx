@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast/headless";
 import { FlatList, View } from "react-native";
-import Toast from "react-native-root-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { BetFinalsInterface, TeamInterface } from "~/types/teams";
@@ -40,13 +40,10 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
       await betFinalsAsync({ values });
 
       form.reset();
-      Toast.show("✅ Pomyślnie obstawiono finalistów");
+      toast("Pomyślnie obstawiono finalistów", { icon: "✅" });
     } catch (e) {
       form.setError("root", { message: errorHandler(e) });
-      Toast.show(`❌ ${errorHandler(e)}`, {
-        duration: Toast.durations.LONG,
-        hideOnPress: true,
-      });
+      toast(errorHandler(e), { icon: "❌", duration: 44000 });
     }
   });
 
