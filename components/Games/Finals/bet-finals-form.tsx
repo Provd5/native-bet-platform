@@ -43,7 +43,7 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
       toast("Pomyślnie obstawiono finalistów", { icon: "✅" });
     } catch (e) {
       form.setError("root", { message: errorHandler(e) });
-      toast(errorHandler(e), { icon: "❌", duration: 44000 });
+      toast(errorHandler(e), { icon: "❌", duration: 4000 });
     }
   });
 
