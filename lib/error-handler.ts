@@ -22,9 +22,11 @@ export const errorHandler = (error: unknown): string => {
 
 const translateError = (msg: string): string => {
   const errorTranslations: Record<string, string> = {
+    "auth/invalid-credential": "Nieprawidłowe dane logowania",
+    "auth/email-already-in-use": "Podany adres e-mail jest już używany.",
+    "auth/email-already-exists": "Podany adres e-mail jest już używany.",
     "auth/claims-too-large":
       "Zbyt duży ładunek danych. Przekroczono limit 1000 bajtów.",
-    "auth/email-already-exists": "Podany adres e-mail jest już używany.",
     "auth/id-token-expired": "Token ID wygasł. Zaloguj się ponownie.",
     "auth/id-token-revoked":
       "Token ID został unieważniony. Zaloguj się ponownie.",
@@ -38,8 +40,6 @@ const translateError = (msg: string): string => {
       "Nieprawidłowe roszczenia niestandardowe. Sprawdź dostarczone atrybuty.",
     "auth/invalid-continue-uri": "Nieprawidłowy URL przekierowania.",
     "auth/invalid-creation-time": "Nieprawidłowy format daty utworzenia.",
-    "auth/invalid-credential":
-      "Nieprawidłowe poświadczenia. Upewnij się, że używasz właściwego tokenu.",
     "auth/invalid-disabled-field":
       "Nieprawidłowa wartość pola 'disabled'. Musi to być wartość true lub false.",
     "auth/invalid-display-name":
