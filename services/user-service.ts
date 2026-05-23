@@ -4,14 +4,14 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { UserInterface } from "~/types/users";
 
 import { auth, store } from "~/firebase.config";
-import { useAppDispatch } from "~/hooks/redux";
 import { ERROR_ENUM } from "~/lib/constants";
 import { setUserData } from "~/lib/features/session-user-slice";
+import type { AppDispatch } from "~/lib/store";
 
 const COLLECTION_NAME = "users";
 
 export class UserService {
-  private dispatch = useAppDispatch();
+  constructor(private dispatch?: AppDispatch) {}
 
   private getRef = (userId: string) => {
     return doc(store, COLLECTION_NAME, userId);
@@ -50,11 +50,17 @@ export class UserService {
   };
 
   // SUBSCRIBE
-  subscribeToAuthChanges = (): Unsubscribe =>
-    onAuthStateChanged(auth, (user) => {
+  subscribeToAuthChanges = (): Unsubscribe => {
+    const dispatch = this.dispatch;
+
+    if (!dispatch) {
+      throw new Error("Dispatch is required for auth subscription");
+    }
+
+    return onAuthStateChanged(auth, (user) => {
       try {
         if (!user) {
-          this.dispatch(setUserData({ dbUserData: null, fsUserData: null }));
+          dispatch(setUserData({ dbUserData: null, fsUserData: null }));
           return;
         }
 
@@ -62,7 +68,7 @@ export class UserService {
           const { email, emailVerified, uid } = user;
           await this.getUser(user.uid).then((dbUser) => {
             if (dbUser) {
-              this.dispatch(
+              dispatch(
                 setUserData({
                   dbUserData: dbUser,
                   fsUserData: { uid, email, emailVerified },
@@ -70,10 +76,14 @@ export class UserService {
               );
             }
           });
-        })();
+        })().catch((e) => {
+          console.error("Error subscribing to auth changes:", e);
+          dispatch(setUserData({ dbUserData: null, fsUserData: null }));
+        });
       } catch (e) {
         console.error("Error subscribing to auth changes:", e);
-        this.dispatch(setUserData({ dbUserData: null, fsUserData: null }));
+        dispatch(setUserData({ dbUserData: null, fsUserData: null }));
       }
     });
+  };
 }

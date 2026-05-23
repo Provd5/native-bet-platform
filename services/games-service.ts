@@ -3,13 +3,13 @@ import { child, onValue, query, ref, Unsubscribe } from "firebase/database";
 import { GameInterface } from "~/types/games";
 
 import { db } from "~/firebase.config";
-import { useAppDispatch } from "~/hooks/redux";
 import { setGames } from "~/lib/features/games-slice";
+import type { AppDispatch } from "~/lib/store";
 
 const COLLECTION_NAME = "matches";
 
 export class GamesService {
-  private dispatch = useAppDispatch();
+  constructor(private dispatch: AppDispatch) {}
 
   private getRef = () => {
     return query(child(ref(db), COLLECTION_NAME));
@@ -34,6 +34,7 @@ export class GamesService {
           this.dispatch(
             setGames({ openGames: [], closedGames: [], status: "error" }),
           );
+          return;
         }
 
         const snapshotValue: unknown = snapshot.val();
@@ -52,7 +53,9 @@ export class GamesService {
         ) as GameInterface[];
 
         this.requiredFields.forEach((field) => {
-          if (!gamesData.every((x) => x[field]))
+          if (
+            !gamesData.every((x) => x[field] !== undefined && x[field] !== null)
+          )
             throw new Error(`No ${field} field`);
         });
 

@@ -25,11 +25,7 @@ export const FinalsBetsList: FC<FinalsBetsListProps> = ({
         const sortedTeamBets = [...(item.teamBet ?? [])].sort((a, b) => {
           const nameA = (a.name ?? "").toUpperCase();
           const nameB = (b.name ?? "").toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-
-          return 1;
+          return nameA.localeCompare(nameB);
         });
 
         const firstTeam = sortedTeamBets[0];

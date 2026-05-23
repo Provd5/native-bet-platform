@@ -1,7 +1,6 @@
 import React, { type FC } from "react";
 import { View } from "react-native";
 import { router } from "expo-router";
-import { useQueryClient } from "@tanstack/react-query";
 
 import { RefetchButton } from "~/components/refetch-button";
 import { H4, P } from "~/components/ui/typography";
@@ -14,21 +13,18 @@ interface RefetchUserProps {
 }
 
 export const RefetchUser: FC<RefetchUserProps> = ({ userId }) => {
-  const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
 
   const user = useGetUser(userId);
 
-  const refetchFunc = () => {
-    queryClient
-      .refetchQueries({
-        queryKey: ["user", userId],
-        exact: true,
-      })
-      .then(() => {
-        dispatch(setDbUserData(user.data));
-        if (user.data?.isActive) router.replace("/games");
-      });
+  const refetchFunc = async () => {
+    try {
+      const freshUser = (await user.refetch()).data ?? null;
+      dispatch(setDbUserData(freshUser));
+      if (freshUser?.isActive) router.replace("/games");
+    } catch (e) {
+      console.error("Error refetching user:", e);
+    }
   };
 
   return (

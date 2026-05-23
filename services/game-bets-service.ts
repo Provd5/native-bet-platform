@@ -10,9 +10,9 @@ import {
 import { BetInterface } from "~/types/games";
 
 import { store } from "~/firebase.config";
-import { useAppSelector } from "~/hooks/redux";
 import { ERROR_ENUM } from "~/lib/constants";
 import { getServerNow, initServerTimeGuard } from "~/lib/server-time";
+import type { AppState } from "~/lib/store";
 import {
   betGameSchema,
   betGameSchemaType,
@@ -23,7 +23,7 @@ import {
 const COLLECTION_NAME = "bets";
 
 export class GameBetsService {
-  private sessionUser = useAppSelector((state) => state.sessionUser);
+  constructor(private sessionUser: AppState["sessionUser"]) {}
 
   private isValidBet = (value: unknown): value is BetInterface => {
     if (!value || typeof value !== "object") return false;
@@ -125,7 +125,7 @@ export class GameBetsService {
 
       await initServerTimeGuard();
 
-      if (getServerNow() > gameValues.timestamp)
+      if (getServerNow() > validGameValues.timestamp)
         throw new Error("Zakłady na ten mecz zostały już zamknięte", {
           cause: "CUSTOM",
         });

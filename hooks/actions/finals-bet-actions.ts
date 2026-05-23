@@ -1,12 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useAppSelector } from "~/hooks/redux";
 import { betFinalsSchemaType } from "~/lib/validators/bet-schema";
 import { FinalsBetsService } from "~/services/finals-bet-service";
 
 const QUERY_KEY = "finals-bet";
 
 export function useGetSessionFinalsBet() {
-  const finalsBetsService = new FinalsBetsService();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const finalsBetsService = new FinalsBetsService(sessionUser);
 
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, "session", "session-finals-bet"],
@@ -21,7 +23,8 @@ export function useGetSessionFinalsBet() {
 }
 
 export function useGetFinalsUsersBets() {
-  const finalsBetsService = new FinalsBetsService();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const finalsBetsService = new FinalsBetsService(sessionUser);
 
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, "users-finals-bets"],
@@ -35,7 +38,8 @@ export function useGetFinalsUsersBets() {
 }
 
 export function useBetFinals() {
-  const finalsBetsService = new FinalsBetsService();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const finalsBetsService = new FinalsBetsService(sessionUser);
   const queryClient = useQueryClient();
 
   const { mutateAsync, error } = useMutation({

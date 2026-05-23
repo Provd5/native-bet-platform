@@ -16,12 +16,11 @@ export const SignOut: FC = () => {
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
 
-  const signOutUser = (): void => {
+  const signOutUser = async (): Promise<void> => {
     try {
-      signOut(auth).then(() => {
-        dispatch(setUserData({ dbUserData: null, fsUserData: null }));
-        queryClient.clear();
-      });
+      await signOut(auth);
+      dispatch(setUserData({ dbUserData: null, fsUserData: null }));
+      queryClient.clear();
     } catch (e) {
       alert(`Coś poszło nie tak podczas próby wylogowania: ${e}`);
     }

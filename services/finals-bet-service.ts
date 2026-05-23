@@ -4,9 +4,9 @@ import { BetFinalsInterface } from "~/types/teams";
 
 import { FINALS_BETTING_CLOSING_DATE } from "~/constants/app";
 import { store } from "~/firebase.config";
-import { useAppSelector } from "~/hooks/redux";
 import { ERROR_ENUM } from "~/lib/constants";
 import { getServerNow, initServerTimeGuard } from "~/lib/server-time";
+import type { AppState } from "~/lib/store";
 import {
   betFinalsSchema,
   betFinalsSchemaType,
@@ -15,7 +15,7 @@ import {
 const COLLECTION_NAME = "finals";
 
 export class FinalsBetsService {
-  private sessionUser = useAppSelector((state) => state.sessionUser);
+  constructor(private sessionUser: AppState["sessionUser"]) {}
 
   private isValidFinalsBet = (value: unknown): value is BetFinalsInterface => {
     if (!value || typeof value !== "object") return false;

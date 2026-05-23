@@ -1,12 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { useAppSelector } from "~/hooks/redux";
 import { betGameSchemaType, betSchemaType } from "~/lib/validators/bet-schema";
 import { GameBetsService } from "~/services/game-bets-service";
 
 const QUERY_KEY = "game-bets";
 
 export function useGetSessionBets() {
-  const gameBetsService = new GameBetsService();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const gameBetsService = new GameBetsService(sessionUser);
 
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, "session", "session-bets"],
@@ -21,7 +23,8 @@ export function useGetSessionBets() {
 }
 
 export function useGetGameBets(gameId: string | number) {
-  const gameBetsService = new GameBetsService();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const gameBetsService = new GameBetsService(sessionUser);
 
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, "game-bets", gameId],
@@ -36,7 +39,8 @@ export function useGetGameBets(gameId: string | number) {
 }
 
 export function useGetUsersBets() {
-  const gameBetsService = new GameBetsService();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const gameBetsService = new GameBetsService(sessionUser);
 
   const { data, status } = useQuery({
     queryKey: [QUERY_KEY, "users-bets"],
@@ -50,7 +54,8 @@ export function useGetUsersBets() {
 }
 
 export function useBetGame() {
-  const gameBetsService = new GameBetsService();
+  const sessionUser = useAppSelector((state) => state.sessionUser);
+  const gameBetsService = new GameBetsService(sessionUser);
   const queryClient = useQueryClient();
 
   const { mutateAsync, error } = useMutation({

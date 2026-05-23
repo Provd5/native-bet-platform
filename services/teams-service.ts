@@ -3,13 +3,13 @@ import { child, onValue, query, ref, Unsubscribe } from "firebase/database";
 import { TeamInterface } from "~/types/teams";
 
 import { db } from "~/firebase.config";
-import { useAppDispatch } from "~/hooks/redux";
 import { setTeams } from "~/lib/features/teams-slice";
+import type { AppDispatch } from "~/lib/store";
 
 const COLLECTION_NAME = "teams";
 
 export class TeamsService {
-  private dispatch = useAppDispatch();
+  constructor(private dispatch: AppDispatch) {}
 
   private getRef = () => {
     return query(child(ref(db), COLLECTION_NAME));
@@ -28,6 +28,7 @@ export class TeamsService {
       try {
         if (!snapshot.exists()) {
           this.dispatch(setTeams({ teams: [], status: "error" }));
+          return;
         }
 
         const snapshotValue: unknown = snapshot.val();
@@ -46,18 +47,16 @@ export class TeamsService {
         ) as TeamInterface[];
 
         this.requiredFields.forEach((field) => {
-          if (!teamsData.every((x) => x[field]))
+          if (
+            !teamsData.every((x) => x[field] !== undefined && x[field] !== null)
+          )
             throw new Error(`No ${field} field`);
         });
 
         const teams = teamsData.sort((a, b) => {
           const nameA = (a.name ?? "").toUpperCase();
           const nameB = (b.name ?? "").toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-
-          return 0;
+          return nameA.localeCompare(nameB);
         });
 
         this.dispatch(setTeams({ teams, status: "success" }));
