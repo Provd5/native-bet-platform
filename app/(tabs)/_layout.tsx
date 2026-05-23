@@ -4,8 +4,11 @@ import { Award, Goal } from "lucide-react-native";
 import { RouteRedirect } from "~/components/route-redirect";
 import { TabIcon } from "~/components/tab-icon";
 import { TopBar } from "~/components/top-bar";
+import { useFetchGamesSubscriber } from "~/hooks/actions/games-actions";
 
 export default function TabsLayout() {
+  useFetchGamesSubscriber();
+
   return (
     <RouteRedirect layout="tabs">
       <TopBar />

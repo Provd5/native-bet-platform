@@ -38,7 +38,7 @@ export const RefetchUser: FC<RefetchUserProps> = ({ userId }) => {
       </P>
       <View className="mt-6 flex-row items-center gap-3">
         <RefetchButton refetchFunc={refetchFunc} />
-        <H4>{`Konto powinno być już aktywne?\nSpróbuj odświeżyć!`}</H4>
+        <H4>{`Konto powinno być już aktywne?\nSpróbuj odświeżyć!`}</H4>
       </View>
     </View>
   );

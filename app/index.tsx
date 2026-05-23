@@ -1,6 +1,5 @@
-import React from "react";
-import { SafeAreaView } from "react-native";
 import { Link } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Logo } from "~/components/logo";
 import { ScrollArea } from "~/components/scroll-area";

@@ -95,7 +95,7 @@ Button.displayName = "Button";
 const FormButton = React.forwardRef<
   React.ElementRef<typeof Pressable>,
   ButtonProps & { formState: FormState<any>; text: string }
->(({ children, className, variant, size, formState, text, ...props }, ref) => {
+>(({ className, variant, size, formState, text, ...props }, ref) => {
   return (
     <Button
       disabled={formState.isSubmitting || !formState.isDirty}

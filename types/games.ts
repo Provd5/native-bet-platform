@@ -1,4 +1,4 @@
-import { MatchStage, MatchStatus, MatchWinner } from "~/lib/constants";
+import { MatchStage, MatchStatus, MatchWinner } from "~/constants/data";
 
 export interface GameInterface {
   id: string | number;

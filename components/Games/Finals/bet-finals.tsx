@@ -20,7 +20,7 @@ export const BetFinals: FC = () => {
   )
     return <DataLoadError />;
 
-  return !!teams.teams ? (
+  return teams.teams ? (
     <BetFinalsForm teams={teams.teams} sessionFinalsBet={sessionFinalsBet} />
   ) : (
     <DataLoadError isEmpty />

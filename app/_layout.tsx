@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Appearance, Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Provider } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Theme, ThemeProvider } from "@react-navigation/native";
 import { SplashScreen } from "expo-router";
+import {
+  DarkTheme,
+  DefaultTheme,
+  Theme,
+  ThemeProvider,
+} from "expo-router/react-navigation";
 import { StatusBar } from "expo-status-bar";
 import {
   Rubik_400Regular,
@@ -26,11 +31,11 @@ import { useColorScheme } from "~/lib/useColorScheme";
 import "../global.css";
 
 const LIGHT_THEME: Theme = {
-  dark: false,
+  ...DefaultTheme,
   colors: NAV_THEME.light,
 };
 const DARK_THEME: Theme = {
-  dark: true,
+  ...DarkTheme,
   colors: NAV_THEME.dark,
 };
 
@@ -51,37 +56,40 @@ export default function RootLayout() {
     "Rubik-SemiBold": Rubik_600SemiBold,
     "Rubik-Bold": Rubik_700Bold,
   });
-  const { colorScheme, setColorScheme, isDarkColorScheme } = useColorScheme();
+  const { setColorScheme, isDarkColorScheme } = useColorScheme();
   const [isColorSchemeLoaded, setIsColorSchemeLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const theme = await AsyncStorage.getItem("theme");
+      const storedTheme = await AsyncStorage.getItem("theme");
+      const appearance: "light" | "dark" = storedTheme
+        ? storedTheme === "dark"
+          ? "dark"
+          : "light"
+        : Appearance.getColorScheme() === "dark"
+          ? "dark"
+          : "light";
+
       if (Platform.OS === "web") {
         // Adds the background color to the html element to prevent white background on overscroll.
         document.documentElement.classList.add("bg-background");
+        document.documentElement.classList.toggle(
+          "dark",
+          appearance === "dark",
+        );
       }
 
-      if (!theme) {
-        const appearance = Appearance.getColorScheme();
-        AsyncStorage.setItem("theme", appearance === "dark" ? "dark" : "light");
-        setIsColorSchemeLoaded(true);
-        return;
+      if (!storedTheme) {
+        await AsyncStorage.setItem("theme", appearance);
       }
 
-      const appearance = theme === "dark" ? "dark" : "light";
-      if (appearance !== colorScheme) {
-        setColorScheme(appearance);
-
-        setIsColorSchemeLoaded(true);
-        return;
-      }
+      setColorScheme(appearance);
 
       setIsColorSchemeLoaded(true);
     })().finally(() => {
       if (fontsLoaded) SplashScreen.hideAsync();
     });
-  }, [colorScheme, fontsLoaded, setColorScheme]);
+  }, [fontsLoaded, setColorScheme]);
 
   if (!isColorSchemeLoaded || !fontsLoaded) {
     return null;
