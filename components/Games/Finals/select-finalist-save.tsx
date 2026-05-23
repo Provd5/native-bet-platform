@@ -26,8 +26,14 @@ export const SelectFinalistSave: FC<SelectFinalistSaveProps> = ({
     const initTeamIds = initBet.map((team) => team?.id).sort();
     const selectedTeamIds = selectedFinalists.map((team) => team?.id).sort();
 
+    if (initTeamIds.length !== selectedTeamIds.length) {
+      return false;
+    }
+
     return initTeamIds.every((id, index) => id === selectedTeamIds[index]);
   };
+
+  const isSelectionComplete = selectedFinalists.length === 2;
 
   return (
     <View className="absolute inset-x-0 bottom-0 flex-row items-center border-t border-border bg-background px-2 py-1">
@@ -56,7 +62,7 @@ export const SelectFinalistSave: FC<SelectFinalistSaveProps> = ({
           size="xs"
         />
         <FormButton
-          disabled={isInInitBet()}
+          disabled={!isSelectionComplete || isInInitBet()}
           className="ml-3 px-12"
           formState={formState}
           onPress={onSubmit}
