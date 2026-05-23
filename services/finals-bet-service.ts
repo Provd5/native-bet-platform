@@ -6,6 +6,7 @@ import { FINALS_BETTING_CLOSING_DATE } from "~/constants/app";
 import { store } from "~/firebase.config";
 import { useAppSelector } from "~/hooks/redux";
 import { ERROR_ENUM } from "~/lib/constants";
+import { getServerNow, initServerTimeGuard } from "~/lib/server-time";
 import {
   betFinalsSchema,
   betFinalsSchemaType,
@@ -88,7 +89,9 @@ export class FinalsBetsService {
           cause: "CUSTOM",
         });
 
-      if (Date.now() > FINALS_BETTING_CLOSING_DATE)
+      await initServerTimeGuard();
+
+      if (getServerNow() > FINALS_BETTING_CLOSING_DATE)
         throw new Error("Zakłady na finały zostały już zamknięte", {
           cause: "CUSTOM",
         });

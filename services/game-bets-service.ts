@@ -12,6 +12,7 @@ import { BetInterface } from "~/types/games";
 import { store } from "~/firebase.config";
 import { useAppSelector } from "~/hooks/redux";
 import { ERROR_ENUM } from "~/lib/constants";
+import { getServerNow, initServerTimeGuard } from "~/lib/server-time";
 import {
   betGameSchema,
   betGameSchemaType,
@@ -122,7 +123,9 @@ export class GameBetsService {
       if (values.winner === "")
         throw new Error("Wybierz najpierw kto wygra", { cause: "CUSTOM" });
 
-      if (Date.now() > gameValues.timestamp)
+      await initServerTimeGuard();
+
+      if (getServerNow() > gameValues.timestamp)
         throw new Error("Zakłady na ten mecz zostały już zamknięte", {
           cause: "CUSTOM",
         });

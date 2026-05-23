@@ -1,5 +1,6 @@
 import type { FC } from "react";
 
+import { useServerTime } from "~/hooks/use-server-time";
 import { type BetInterface, type GameInterface } from "~/types/games";
 
 import { BetGameForm } from "./bet-game-form";
@@ -12,7 +13,8 @@ interface BetProps {
 }
 
 export const Bet: FC<BetProps> = ({ game, sessionBet }) => {
-  const notStarted = game.status === "TIMED" && Date.now() <= game.timestamp;
+  const serverNow = useServerTime();
+  const notStarted = game.status === "TIMED" && serverNow <= game.timestamp;
 
   if (notStarted) {
     return <BetGameForm game={game} sessionBet={sessionBet} />;

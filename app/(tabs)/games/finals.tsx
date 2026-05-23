@@ -5,11 +5,13 @@ import { BetFinalsUsers } from "~/components/Games/Finals/bet-finals-users";
 import { H3, P } from "~/components/ui/typography";
 import { FINALS_BETTING_CLOSING_DATE } from "~/constants/app";
 import { useFetchTeamsSubscriber } from "~/hooks/actions/teams-actions";
+import { useServerTime } from "~/hooks/use-server-time";
 import { dateFormat } from "~/lib/utils";
 
 export default function FinalsPage() {
   useFetchTeamsSubscriber();
-  const isFinished = Date.now() > FINALS_BETTING_CLOSING_DATE;
+  const serverNow = useServerTime();
+  const isFinished = serverNow > FINALS_BETTING_CLOSING_DATE;
 
   return isFinished ? (
     <View className="h-full items-center">
