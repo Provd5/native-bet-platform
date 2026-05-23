@@ -22,15 +22,18 @@ export const FinalsBetsList: FC<FinalsBetsListProps> = ({
       keyExtractor={(item) => `FinalsBetsList-${item.userId}`}
       data={finalsBets}
       renderItem={({ index, item }) => {
-        const sortedTeamBets = item.teamBet.sort((a, b) => {
-          const nameA = a.name.toUpperCase();
-          const nameB = b.name.toUpperCase();
+        const sortedTeamBets = [...(item.teamBet ?? [])].sort((a, b) => {
+          const nameA = (a.name ?? "").toUpperCase();
+          const nameB = (b.name ?? "").toUpperCase();
           if (nameA < nameB) {
             return -1;
           }
 
           return 1;
         });
+
+        const firstTeam = sortedTeamBets[0];
+        const secondTeam = sortedTeamBets[1];
 
         return (
           <View
@@ -47,28 +50,40 @@ export const FinalsBetsList: FC<FinalsBetsListProps> = ({
                 )}
                 numberOfLines={1}
               >
-                {item.username}
+                {item.username || "Nieznany użytkownik"}
               </H4>
               <View className="gap-1">
                 <View className="flex-row items-center gap-1">
-                  <TeamIcon
-                    icon={{
-                      uri: sortedTeamBets[0].icon,
-                      alt: `${sortedTeamBets[0].name} icon`,
-                    }}
-                    size="xs"
-                  />
-                  <P>{sortedTeamBets[0].name}</P>
+                  {firstTeam ? (
+                    <>
+                      <TeamIcon
+                        icon={{
+                          uri: firstTeam.icon,
+                          alt: `${firstTeam.name} icon`,
+                        }}
+                        size="xs"
+                      />
+                      <P>{firstTeam.name}</P>
+                    </>
+                  ) : (
+                    <P>Brak pierwszej drużyny</P>
+                  )}
                 </View>
                 <View className="flex-row items-center gap-1">
-                  <TeamIcon
-                    icon={{
-                      uri: sortedTeamBets[1].icon,
-                      alt: `${sortedTeamBets[1].name} icon`,
-                    }}
-                    size="xs"
-                  />
-                  <P>{sortedTeamBets[1].name}</P>
+                  {secondTeam ? (
+                    <>
+                      <TeamIcon
+                        icon={{
+                          uri: secondTeam.icon,
+                          alt: `${secondTeam.name} icon`,
+                        }}
+                        size="xs"
+                      />
+                      <P>{secondTeam.name}</P>
+                    </>
+                  ) : (
+                    <P>Brak drugiej drużyny</P>
+                  )}
                 </View>
               </View>
             </View>

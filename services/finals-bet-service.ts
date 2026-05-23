@@ -16,6 +16,18 @@ const COLLECTION_NAME = "finals";
 export class FinalsBetsService {
   private sessionUser = useAppSelector((state) => state.sessionUser);
 
+  private isValidFinalsBet = (value: unknown): value is BetFinalsInterface => {
+    if (!value || typeof value !== "object") return false;
+
+    const finalsBet = value as Partial<BetFinalsInterface>;
+
+    return (
+      typeof finalsBet.userId === "string" &&
+      typeof finalsBet.username === "string" &&
+      finalsBet.teamBet instanceof Array
+    );
+  };
+
   private getRef = () => {
     return collection(store, COLLECTION_NAME);
   };
@@ -53,9 +65,9 @@ export class FinalsBetsService {
 
       if (finalsBets.empty) return [];
 
-      const finalsArray = finalsBets.docs.map((doc) =>
-        doc.data(),
-      ) as BetFinalsInterface[];
+      const finalsArray = finalsBets.docs
+        .map((doc) => doc.data())
+        .filter(this.isValidFinalsBet);
 
       return finalsArray;
     } catch (e) {

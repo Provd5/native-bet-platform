@@ -14,21 +14,30 @@ export function calculateFinalsPoints(
   const accurateScores = currentPoints?.currentAccurateScores || 0;
   const liveAccurateScores = currentPoints?.currentLiveAccurateScores || 0;
 
-  const finals_team_hit = teamBet.some(
-    (bet) =>
-      bet.name === finalGame.awayTeamName ||
-      bet.name === finalGame.homeTeamName,
-  );
-  const double_finals_team_hit = teamBet.every(
-    (bet) =>
-      bet.name === finalGame.awayTeamName ||
-      bet.name === finalGame.homeTeamName,
-  );
-  if (finals_team_hit) {
+  if (!(teamBet instanceof Array) || teamBet.length !== 2) {
+    return {
+      currentPoints: points,
+      currentLivePoints: livePoints,
+      currentAccurateScores: accurateScores,
+      currentLiveAccurateScores: liveAccurateScores,
+    };
+  }
+
+  const normalize = (value: string) => value.trim().toUpperCase();
+  const finalists = new Set([
+    normalize(finalGame.awayTeamName),
+    normalize(finalGame.homeTeamName),
+  ]);
+
+  const hitsCount = teamBet
+    .map((bet) => normalize(bet.name || ""))
+    .filter((name) => finalists.has(name)).length;
+
+  if (hitsCount >= 1) {
     points += ACCURATE_FINALS_TEAM_POINTS;
     livePoints += ACCURATE_FINALS_TEAM_POINTS;
   }
-  if (double_finals_team_hit) {
+  if (hitsCount === 2) {
     points += ACCURATE_FINALS_TEAM_POINTS;
     livePoints += ACCURATE_FINALS_TEAM_POINTS;
   }

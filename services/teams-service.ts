@@ -51,8 +51,8 @@ export class TeamsService {
         });
 
         const teams = teamsData.sort((a, b) => {
-          const nameA = a.name.toUpperCase();
-          const nameB = b.name.toUpperCase();
+          const nameA = (a.name ?? "").toUpperCase();
+          const nameB = (b.name ?? "").toUpperCase();
           if (nameA < nameB) {
             return -1;
           }

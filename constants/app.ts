@@ -3,7 +3,7 @@ export const CURRENT_EVENT = "Euro 2024";
 
 // change FINALS_BETTING_CLOSING_DATE
 const setDate = {
-  year: "2027", // YYYY
+  year: "2025", // YYYY
   month: "06", // MM (01 to 12)
   day: "14", // DD (01 to 31)
   hour: "21:00", // HH:mm (00 to 23):(00 to 59)

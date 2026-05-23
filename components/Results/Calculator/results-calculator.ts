@@ -4,7 +4,7 @@ import { type BetFinalsInterface } from "~/types/teams";
 
 import { calculateBets } from "./Bets/calculate-bets";
 import { calculateLeaderboard } from "./calculate-leaderboard";
-import { calculateFinals } from "./FinalsBets/calculate-finals";
+import { applyPenalty, calculateFinals } from "./FinalsBets/calculate-finals";
 
 export default function resultsCalculator(
   games: GameInterface[],
@@ -18,6 +18,7 @@ export default function resultsCalculator(
 
   calculateFinals(finalsBets, finalGame, userResultsMap);
   calculateBets(bets, gameMap, userResultsMap);
+  applyPenalty(userResultsMap);
 
   const leaderboard = calculateLeaderboard(userResultsMap);
 

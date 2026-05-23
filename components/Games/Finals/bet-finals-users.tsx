@@ -10,30 +10,29 @@ import { FinalsBetsList } from "./finals-bets-list";
 export const BetFinalsUsers: FC = () => {
   const sessionUser = useAppSelector((state) => state.sessionUser);
   const { data: finalsBets, status } = useGetFinalsUsersBets();
+  const sessionUserId = sessionUser.fsUserData?.uid ?? "";
 
   if (status === "pending") return <ContentLoader />;
   if (status === "error" || finalsBets === undefined) return <DataLoadError />;
 
-  const sortedFinalsBets = finalsBets
-    .sort((a, b) => {
-      const usernameA = a.username.toUpperCase();
-      const usernameB = b.username.toUpperCase();
-      if (usernameA < usernameB) {
-        return -1;
-      }
-      return 1;
-    })
-    .sort((a) => {
-      if (a.userId === sessionUser.fsUserData?.uid || "") {
-        return -1;
-      }
-      return 1;
-    });
+  const sortedFinalsBets = [...finalsBets].sort((a, b) => {
+    const aIsSessionUser = a.userId === sessionUserId;
+    const bIsSessionUser = b.userId === sessionUserId;
 
-  return finalsBets.length > 0 ? (
+    if (aIsSessionUser !== bIsSessionUser) {
+      return aIsSessionUser ? -1 : 1;
+    }
+
+    const usernameA = (a.username ?? "").toUpperCase();
+    const usernameB = (b.username ?? "").toUpperCase();
+
+    return usernameA.localeCompare(usernameB);
+  });
+
+  return sortedFinalsBets.length > 0 ? (
     <FinalsBetsList
       finalsBets={sortedFinalsBets}
-      sessionUserId={sessionUser.fsUserData?.uid || ""}
+      sessionUserId={sessionUserId}
     />
   ) : (
     <DataLoadError isEmpty />

@@ -32,7 +32,11 @@ export function calculateFinals(
       });
     }
   });
+}
 
+export function applyPenalty(
+  userResultsMap: Map<string, ResultInterface>,
+): void {
   PENALTY_USERS_IDS.forEach((userId) => {
     if (userResultsMap.has(userId)) {
       const existingUser = userResultsMap.get(userId);

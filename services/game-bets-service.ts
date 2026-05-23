@@ -24,6 +24,18 @@ const COLLECTION_NAME = "bets";
 export class GameBetsService {
   private sessionUser = useAppSelector((state) => state.sessionUser);
 
+  private isValidBet = (value: unknown): value is BetInterface => {
+    if (!value || typeof value !== "object") return false;
+
+    const bet = value as Partial<BetInterface>;
+
+    return (
+      typeof bet.username === "string" &&
+      typeof bet.userId === "string" &&
+      bet.gameId !== undefined
+    );
+  };
+
   private getRef = () => {
     return collection(store, COLLECTION_NAME);
   };
@@ -43,7 +55,9 @@ export class GameBetsService {
 
       if (bets.empty) return [];
 
-      const betsArray = bets.docs.map((doc) => doc.data()) as BetInterface[];
+      const betsArray = bets.docs
+        .map((doc) => doc.data())
+        .filter(this.isValidBet);
 
       return betsArray;
     } catch (e) {
@@ -62,7 +76,9 @@ export class GameBetsService {
 
       if (bets.empty) return [];
 
-      const betsArray = bets.docs.map((doc) => doc.data()) as BetInterface[];
+      const betsArray = bets.docs
+        .map((doc) => doc.data())
+        .filter(this.isValidBet);
 
       return betsArray;
     } catch (e) {
@@ -80,7 +96,9 @@ export class GameBetsService {
 
       if (bets.empty) return [];
 
-      const betsArray = bets.docs.map((doc) => doc.data()) as BetInterface[];
+      const betsArray = bets.docs
+        .map((doc) => doc.data())
+        .filter(this.isValidBet);
 
       return betsArray;
     } catch (e) {

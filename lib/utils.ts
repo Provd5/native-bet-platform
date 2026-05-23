@@ -42,8 +42,8 @@ export function checkGameBetStatus(game: GameInterface, bet: BetInterface) {
 export function sortUsersBets(game: GameInterface, bets: BetInterface[]) {
   return bets
     .sort((a, b) => {
-      const usernameA = a.username.toUpperCase();
-      const usernameB = b.username.toUpperCase();
+      const usernameA = (a.username ?? "").toUpperCase();
+      const usernameB = (b.username ?? "").toUpperCase();
       if (usernameA < usernameB) {
         return -1;
       }

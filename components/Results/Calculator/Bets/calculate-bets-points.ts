@@ -13,10 +13,12 @@ export function calculateBetsPoints(
   bet: BetInterface,
   game: GameInterface,
 ): PointsInterface {
-  let points = currentPoints?.currentPoints || 0;
-  let livePoints = currentPoints?.currentLivePoints || 0;
+  const basePoints = currentPoints?.currentPoints || 0;
+  const baseLivePoints = currentPoints?.currentLivePoints || 0;
   let accurateScores = currentPoints?.currentAccurateScores || 0;
   let liveAccurateScores = currentPoints?.currentLiveAccurateScores || 0;
+  let pointsDelta = 0;
+  let livePointsDelta = 0;
 
   const away_goals_hit = bet.awayGoals === game.regularTimeScore?.away;
   const home_goals_hit = bet.homeGoals === game.regularTimeScore?.home;
@@ -32,23 +34,24 @@ export function calculateBetsPoints(
     game.status === "PAUSED";
 
   if (winner_hit) {
-    points += isGameFinished ? WINNER_POINTS : 0;
-    livePoints += isGameInPlayOrFinished ? WINNER_POINTS : 0;
+    pointsDelta += isGameFinished ? WINNER_POINTS : 0;
+    livePointsDelta += isGameInPlayOrFinished ? WINNER_POINTS : 0;
   }
   if (accurate_score_hit) {
-    points += isGameFinished ? ACCURATE_SCORE_POINTS : 0;
-    livePoints += isGameInPlayOrFinished ? ACCURATE_SCORE_POINTS : 0;
+    pointsDelta += isGameFinished ? ACCURATE_SCORE_POINTS : 0;
+    livePointsDelta += isGameInPlayOrFinished ? ACCURATE_SCORE_POINTS : 0;
 
     accurateScores += isGameFinished ? 1 : 0;
     liveAccurateScores += isGameInPlayOrFinished ? 1 : 0;
   }
-  if (accurate_score_and_winner_hit) {
-    points += ACCURATE_SCORE_AND_WINNER_BONUS_POINTS;
+  if (accurate_score_and_winner_hit && isGameFinished) {
+    pointsDelta += ACCURATE_SCORE_AND_WINNER_BONUS_POINTS;
   }
 
-  const multiplier = multiplyResult(game.stage);
-  points *= multiplier;
-  livePoints *= multiplier;
+  const multiplierValue = multiplyResult(game.stage);
+  const multiplier = typeof multiplierValue === "number" ? multiplierValue : 1;
+  const points = basePoints + pointsDelta * multiplier;
+  const livePoints = baseLivePoints + livePointsDelta * multiplier;
 
   return {
     currentPoints: points,
