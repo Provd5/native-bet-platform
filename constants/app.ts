@@ -1,11 +1,11 @@
 export const APP_TITLE = "Betowanie";
-export const CURRENT_EVENT = "Euro 2024";
+export const CURRENT_EVENT = "Mistrzostwa Świata 2026";
 
 // change FINALS_BETTING_CLOSING_DATE
 const setDate = {
-  year: "2025", // YYYY
+  year: "2026", // YYYY
   month: "06", // MM (01 to 12)
-  day: "14", // DD (01 to 31)
+  day: "11", // DD (01 to 31)
   hour: "21:00", // HH:mm (00 to 23):(00 to 59)
 };
 
