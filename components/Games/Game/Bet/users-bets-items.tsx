@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { ScrollView, View } from "react-native";
+import { FlatList, View } from "react-native";
 
 import { type BetInterface, type GameInterface } from "~/types/games";
 
@@ -20,20 +20,25 @@ export const UsersBetsItems: FC<UsersBetsItemsProps> = ({
   sessionUserId,
 }) => {
   return (
-    <ScrollView>
-      {bets.map((item, index) => {
+    <FlatList
+      className="w-full flex-1 gap-1 overflow-y-auto py-2"
+      data={bets}
+      keyExtractor={(item) => `UsersBetsItems-${item.userId}-${item.gameId}`}
+      contentContainerClassName="mx-auto w-full max-w-4xl gap-2 px-3 pb-3"
+      scrollEnabled={true}
+      renderItem={({ item, index }) => {
         const conditions = checkGameBetStatus(game, item);
 
         return (
           <View
-            key={`UsersBetsItems-${item.userId}-${item.gameId}`}
             className={cn(
-              "w-full gap-1 px-6 py-2 web:hover:bg-muted-foreground/20",
-              index % 2 === 0 && "bg-muted/30",
+              "w-full gap-1.5 rounded-xl border border-border/70 bg-card/95 px-3 py-2.5",
+              index % 2 !== 0 && "bg-secondary/15",
             )}
           >
             <H4
               className={cn(
+                "text-lg",
                 item.userId === sessionUserId &&
                   "font-customSemiBold text-info",
               )}
@@ -63,7 +68,7 @@ export const UsersBetsItems: FC<UsersBetsItemsProps> = ({
             </View>
           </View>
         );
-      })}
-    </ScrollView>
+      }}
+    />
   );
 };

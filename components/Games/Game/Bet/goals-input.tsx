@@ -41,6 +41,7 @@ export const GoalsInput: FC<GoalsInputProps> = ({
 
       <View className="flex-row-reverse gap-1">
         <Button
+          className="size-10 rounded-full"
           variant={"outline"}
           size={"icon"}
           onPress={() => (
@@ -48,9 +49,10 @@ export const GoalsInput: FC<GoalsInputProps> = ({
             setValue(registerTeam, scoreState + 1, { shouldDirty: true })
           )}
         >
-          <Icon LucideIcon={Plus} size={20} />
+          <Icon LucideIcon={Plus} size={16} />
         </Button>
         <Button
+          className="size-10 rounded-full"
           variant={"outline"}
           size={"icon"}
           onPress={() => (
@@ -60,7 +62,7 @@ export const GoalsInput: FC<GoalsInputProps> = ({
             })
           )}
         >
-          <Icon LucideIcon={Minus} size={20} />
+          <Icon LucideIcon={Minus} size={16} />
         </Button>
       </View>
     </View>

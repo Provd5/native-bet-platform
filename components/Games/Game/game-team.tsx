@@ -46,10 +46,10 @@ export const GameTeam: FC<GameTeamProps> = ({
     gameFinished && gameData?.winner !== side && gameData?.winner !== "DRAW";
 
   return (
-    <View className="items-center gap-0.5">
+    <View className="items-center gap-1">
       <Muted
         style={{ width: sizes[size] }}
-        className="text-center"
+        className="rounded-full bg-muted/30 px-2 py-0.5 text-center text-xs"
         numberOfLines={1}
       >
         {translateConstantsToPolish(side)}
@@ -61,7 +61,7 @@ export const GameTeam: FC<GameTeamProps> = ({
       <P
         style={{ width: sizes[size] }}
         className={cn(
-          "text-center",
+          "text-center text-sm",
           showSessionBet && "text-warning",
           showWinner && "font-customSemiBold text-success",
           showLoser && "text-destructive",

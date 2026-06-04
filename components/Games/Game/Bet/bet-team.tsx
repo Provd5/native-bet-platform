@@ -42,7 +42,7 @@ export const BetTeam: FC<BetTeamProps> = ({
       </View>
       <ToggleGroup
         variant="outline"
-        size="lg"
+        size="sm"
         type="single"
         onValueChange={(value) => {
           setToggleValue(value as betSchemaType["winner"]);
@@ -61,7 +61,7 @@ export const BetTeam: FC<BetTeamProps> = ({
             <P
               className={cn(
                 "w-16 text-center text-primary",
-                toggleValue === item.value && "text-success",
+                toggleValue === item.value && "text-background",
               )}
               numberOfLines={1}
             >

@@ -46,7 +46,7 @@ export const GameTeams: FC<GameTeamsProps> = ({
   const showSessionBet = gameTimed && !!sessionBet;
 
   return (
-    <View className="flex-row justify-center gap-3">
+    <View className="flex-row items-center justify-center gap-2">
       <GameTeam
         team={teams.home}
         side={"HOME_TEAM"}
@@ -54,10 +54,11 @@ export const GameTeams: FC<GameTeamsProps> = ({
         sessionBet={sessionBet}
         size={size}
       />
-      <View className="w-20 self-center">
-        <View className="mx-auto flex-row">
+      <View className="w-[104px] rounded-2xl border border-border/70 bg-muted/35 px-2 py-2.5">
+        <View className="mx-auto flex-row items-center justify-center">
           <H3
             className={cn(
+              "text-xl",
               gameInPlay && "text-info",
               showSessionBet && "text-warning",
             )}
@@ -66,6 +67,7 @@ export const GameTeams: FC<GameTeamsProps> = ({
           </H3>
           <H3
             className={cn(
+              "text-xl",
               gameInPlay && "text-info",
               showSessionBet && "text-warning",
             )}
@@ -75,6 +77,7 @@ export const GameTeams: FC<GameTeamsProps> = ({
           </H3>
           <H3
             className={cn(
+              "text-xl",
               gameInPlay && "text-info",
               showSessionBet && "text-warning",
             )}
@@ -85,7 +88,7 @@ export const GameTeams: FC<GameTeamsProps> = ({
         {gameData && (
           <P
             className={cn(
-              "text-center text-sm",
+              "mt-0.5 text-center text-xs",
               gameInPlay && "text-info",
               gameFinished && "text-muted-foreground",
             )}

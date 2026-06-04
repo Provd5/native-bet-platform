@@ -20,14 +20,15 @@ export const UsersBets: FC<UsersBetsProps> = ({ sessionUserId, game }) => {
   if (status === "pending") return <ContentLoader />;
   if (status === "error" || bets === undefined) return <DataLoadError />;
 
-  const sortedBets = sortUsersBets(game, bets).sort((a) => {
-    if (a.userId === sessionUserId) {
-      return -1;
-    }
-    return 1;
+  const sortedBets = sortUsersBets(game, bets).sort((a, b) => {
+    const aIsSession = a.userId === sessionUserId;
+    const bIsSession = b.userId === sessionUserId;
+
+    if (aIsSession === bIsSession) return 0;
+    return aIsSession ? -1 : 1;
   });
 
-  return bets.length > 0 ? (
+  return sortedBets.length > 0 ? (
     <UsersBetsItems
       game={game}
       bets={sortedBets}

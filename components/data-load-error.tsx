@@ -17,15 +17,19 @@ export const DataLoadError: FC<DataLoadErrorProps> = ({
   description,
 }) => {
   return (
-    <View className="px-2 py-3">
-      <H3>
-        {title
-          ? title
-          : isEmpty
-            ? ERROR_ENUM.NOTHING_FOUND
-            : ERROR_ENUM.FETCH_DATA_PROBLEM}
-      </H3>
-      <P>{description ? description : ERROR_ENUM.TRY_AGAIN_LATER}</P>
+    <View className="mx-auto w-full max-w-3xl items-center px-4 py-6">
+      <View className="w-full rounded-3xl border border-border/70 bg-card/95 p-5">
+        <H3 className="text-center text-foreground">
+          {title
+            ? title
+            : isEmpty
+              ? ERROR_ENUM.NOTHING_FOUND
+              : ERROR_ENUM.FETCH_DATA_PROBLEM}
+        </H3>
+        <P className="mt-2 text-center text-muted-foreground">
+          {description ? description : ERROR_ENUM.TRY_AGAIN_LATER}
+        </P>
+      </View>
     </View>
   );
 };

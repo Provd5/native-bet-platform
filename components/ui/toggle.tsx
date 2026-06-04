@@ -7,13 +7,13 @@ import { TextClassContext } from "~/components/ui/text";
 import { cn } from "~/lib/utils";
 
 const toggleVariants = cva(
-  "web:group web:inline-flex items-center justify-center rounded-md web:ring-offset-background web:transition-colors web:hover:bg-muted active:bg-muted web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
+  "web:group web:inline-flex items-center justify-center rounded-xl border border-border/80 bg-card web:ring-offset-background web:transition-all web:duration-200 web:hover:bg-secondary/70 active:bg-secondary web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
-        default: "bg-transparent",
+        default: "",
         outline:
-          "border border-input bg-transparent web:hover:bg-accent active:bg-accent active:bg-accent",
+          "border border-input bg-card web:hover:bg-secondary active:bg-secondary",
       },
       size: {
         default: "h-10 px-3 native:h-12 native:px-[12]",
@@ -29,7 +29,7 @@ const toggleVariants = cva(
 );
 
 const toggleTextVariants = cva(
-  "text-sm native:text-base text-foreground font-customMedium",
+  "text-sm native:text-base text-foreground font-customSemiBold",
   {
     variants: {
       variant: {
@@ -59,8 +59,8 @@ const Toggle = React.forwardRef<
     value={cn(
       toggleTextVariants({ variant, size }),
       props.pressed
-        ? "text-accent-foreground"
-        : "web:group-hover:text-muted-foreground",
+        ? "text-primary-foreground"
+        : "web:group-hover:text-foreground",
       className,
     )}
   >
@@ -69,7 +69,7 @@ const Toggle = React.forwardRef<
       className={cn(
         toggleVariants({ variant, size }),
         props.disabled && "opacity-50 web:pointer-events-none",
-        props.pressed && "bg-accent",
+        props.pressed && "border-primary bg-primary",
         className,
       )}
       {...props}

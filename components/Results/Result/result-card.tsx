@@ -4,6 +4,7 @@ import { Crosshair, Sparkles } from "lucide-react-native";
 
 import { type ResultInterface } from "~/types/results";
 
+import { Card, CardContent } from "~/components/ui/card";
 import { H3, H4, P } from "~/components/ui/typography";
 import Icon from "~/lib/icons/Icon";
 import { cn } from "~/lib/utils";
@@ -33,53 +34,61 @@ export const ResultCard: FC<ResultCardProps> = ({
     result.points.currentLiveAccurateScores -
     result.points.currentAccurateScores;
 
-  // const pointsAdvance =
-  //   result.points.currentLivePoints - result.points.currentPoints;
-
   return (
-    <View
+    <Card
       className={cn(
-        "w-full justify-center border-t border-border py-2 web:hover:bg-muted-foreground/20",
-        isOdd && "bg-muted/30",
+        "mb-2 w-full border border-border/70 bg-card/95 shadow-sm shadow-foreground/10",
+        isOdd && "bg-secondary/20",
       )}
     >
-      <View className="relative mx-auto w-full max-w-4xl flex-row items-center gap-1 px-2">
-        <H4 className="w-12 text-center">
-          {medal ? medal : `${result.currentPosition}.`}
-        </H4>
-        <View className="gap-1">
-          <H3
-            className={cn("max-w-[70vw]", sessionResult && "text-info")}
-            numberOfLines={1}
-          >
-            {result.username}
-          </H3>
-          <View className="flex-row items-center gap-3">
-            <View className="flex-row items-center gap-1">
-              <Icon LucideIcon={Crosshair} size={16} />
-              <P>Traf. wyniki:</P>
+      <CardContent className="relative mx-auto w-full max-w-4xl px-3.5 pb-3.5 pt-3.5">
+        <View className="flex-row items-center gap-3">
+          <View className="h-10 w-10 items-center justify-center rounded-xl border border-border/80 bg-muted/35">
+            <H4 className="text-center text-lg">
+              {medal ? medal : `${result.currentPosition}.`}
+            </H4>
+          </View>
+
+          <View className="h-full min-w-0 flex-1 flex-row gap-2">
+            <H3
+              className={cn(
+                "self-center text-lg",
+                sessionResult && "text-info",
+              )}
+              numberOfLines={1}
+            >
+              {result.username}
+            </H3>
+            <View className="ml-auto self-start">
+              <ResultPositionAdvance
+                positionAdvance={result.livePositionAdvance}
+              />
+            </View>
+          </View>
+
+          <View className="flex items-center gap-1">
+            <View className="flex-row items-center gap-1 rounded-full border border-border/70 bg-muted/30 px-2 py-1">
+              <Icon LucideIcon={Sparkles} size={14} />
+              <P className="text-xs">Pkt.:</P>
+              <P className="font-customSemiBold text-xs">
+                {result.points.currentLivePoints}
+              </P>
+            </View>
+            <View className="flex-row items-center gap-1 rounded-full border border-border/70 bg-muted/30 px-2 py-1">
+              <Icon LucideIcon={Crosshair} size={14} />
+              <P className="text-xs">Dok.:</P>
               <P
                 className={cn(
-                  "font-customSemiBold text-lg",
+                  "font-customSemiBold text-xs",
                   accurateScoreAdvance > 0 && "text-success",
                 )}
               >
                 {result.points.currentLiveAccurateScores}
               </P>
             </View>
-            <View className="flex-row items-center gap-1">
-              <Icon LucideIcon={Sparkles} size={16} />
-              <P>Punkty:</P>
-              <P className={cn("font-customSemiBold text-lg")}>
-                {result.points.currentLivePoints}
-              </P>
-            </View>
           </View>
         </View>
-        <View className="ml-auto self-start">
-          <ResultPositionAdvance positionAdvance={result.livePositionAdvance} />
-        </View>
-      </View>
-    </View>
+      </CardContent>
+    </Card>
   );
 };

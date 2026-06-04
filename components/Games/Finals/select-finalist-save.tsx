@@ -36,8 +36,8 @@ export const SelectFinalistSave: FC<SelectFinalistSaveProps> = ({
   const isSelectionComplete = selectedFinalists.length === 2;
 
   return (
-    <View className="absolute inset-x-0 bottom-0 flex-row items-center border-t border-border bg-background px-2 py-1">
-      <View className="mx-auto flex-row items-center gap-2">
+    <View className="flex-row items-center px-2">
+      <View className="mx-auto w-full max-w-4xl flex-row items-center justify-center gap-2">
         <TeamIcon
           icon={
             selectedFinalists[0]
@@ -49,7 +49,7 @@ export const SelectFinalistSave: FC<SelectFinalistSaveProps> = ({
           }
           size="xs"
         />
-        <H4>VS</H4>
+        <H4 className="text-base">VS</H4>
         <TeamIcon
           icon={
             selectedFinalists[1]
@@ -63,7 +63,7 @@ export const SelectFinalistSave: FC<SelectFinalistSaveProps> = ({
         />
         <FormButton
           disabled={!isSelectionComplete || isInInitBet()}
-          className="ml-3 px-12"
+          className="ml-2 px-6"
           formState={formState}
           onPress={onSubmit}
           text="Zapisz"

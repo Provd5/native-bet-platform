@@ -3,11 +3,14 @@ import { View } from "react-native";
 
 import { BetInterface, GameInterface } from "~/types/games";
 
+import { GameReactions } from "~/components/Reactions/game-reactions";
+import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Muted, P } from "~/components/ui/typography";
 import { cn, dateFormat, translateConstantsToPolish } from "~/lib/utils";
 
-import { BetMade } from "./Bet/bet-made";
 import { GameTeams } from "./game-teams";
+import { CircleCheckBig } from "lucide-react-native";
+import Icon from "~/lib/icons/Icon";
 
 interface GameCardProps {
   game: GameInterface;
@@ -16,15 +19,52 @@ interface GameCardProps {
 }
 
 export const GameCard: FC<GameCardProps> = ({ game, sessionBet, isOdd }) => {
+  const isFinal = game.stage === "FINAL";
+  const isSemiFinal = game.stage === "SEMI_FINALS";
+
   return (
-    <View
+    <Card
       className={cn(
-        "w-full justify-center gap-1 border-t border-border py-2 web:cursor-pointer web:hover:bg-muted-foreground/20",
-        isOdd && "bg-muted/30",
+        "mb-2.5 w-full border border-border/70 bg-card/95 shadow-sm shadow-foreground/10",
+        isOdd && "bg-secondary/25",
+        "web:cursor-pointer web:transition-transform web:duration-200 web:hover:translate-y-[-1px]",
       )}
     >
-      <View className="relative mx-auto w-full max-w-4xl px-2">
-        {!!sessionBet && <BetMade />}
+      <CardHeader className="pb-2 pt-3">
+        <View className="grid grid-cols-3 items-center justify-items-center gap-2">
+          <View className="justify-self-start rounded-full border border-border/80 bg-muted/40 px-2.5 py-1">
+            <P
+              className={cn(
+                "font-customSemiBold text-xs",
+                isFinal && "text-warning",
+                isSemiFinal && "text-info",
+              )}
+            >
+              {translateConstantsToPolish(game.stage)}
+            </P>
+          </View>
+
+          <Muted
+            className="text-center text-xs"
+            style={{ textTransform: "capitalize" }}
+          >
+            {dateFormat(game.timestamp)}
+          </Muted>
+
+          {!!sessionBet && (
+            <View className="flex-row items-center gap-1 justify-self-end rounded-full bg-success px-2.5 py-1">
+              <Icon
+                LucideIcon={CircleCheckBig}
+                size={12}
+                className="text-white"
+              />
+              <P className="text-xs text-white">Bet</P>
+            </View>
+          )}
+        </View>
+      </CardHeader>
+
+      <CardContent className="px-3.5 pb-3.5 pt-0">
         <GameTeams
           teams={{
             home: { icon: game.homeTeamIcon, name: game.homeTeamName },
@@ -41,24 +81,8 @@ export const GameCard: FC<GameCardProps> = ({ game, sessionBet, isOdd }) => {
           sessionBet={sessionBet}
           size="lg"
         />
-        <View className="mt-1 w-full flex-row items-center justify-between">
-          <P
-            className={cn(
-              game.stage === "FINAL" && "text-orange-600 dark:text-orange-500",
-              game.stage === "SEMI_FINALS" &&
-                "text-cyan-600 dark:text-cyan-400",
-            )}
-          >
-            {translateConstantsToPolish(game.stage)}
-          </P>
-          <Muted
-            className="whitespace-nowrap"
-            style={{ textTransform: "capitalize" }}
-          >
-            {dateFormat(game.timestamp)}
-          </Muted>
-        </View>
-      </View>
-    </View>
+        <GameReactions gameId={game.id} />
+      </CardContent>
+    </Card>
   );
 };

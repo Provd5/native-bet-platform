@@ -17,7 +17,7 @@ export const ModalWrapper: FC<ModalWrapperProps> = ({
 
   return (
     <>
-      <Pressable role="button" onPress={() => setModalVisible(true)}>
+      <Pressable onPress={() => setModalVisible(true)}>
         {triggerChildren}
       </Pressable>
       <Modal

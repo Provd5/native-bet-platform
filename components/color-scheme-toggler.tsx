@@ -20,12 +20,12 @@ export const ColorSchemeToggler: FC = () => {
       size="icon"
       variant="outline"
       onPress={toggleColorScheme}
-      className="mr-auto self-start"
+      className="size-8 self-start border-primary/20 bg-secondary/40"
     >
       {isDarkColorScheme ? (
-        <Icon LucideIcon={MoonStar} />
+        <Icon LucideIcon={MoonStar} className="size-2/3 text-primary" />
       ) : (
-        <Icon LucideIcon={Sun} />
+        <Icon LucideIcon={Sun} className="size-2/3 text-primary" />
       )}
     </Button>
   );

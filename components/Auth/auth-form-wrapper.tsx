@@ -25,28 +25,32 @@ export const AuthFormWrapper: FC<AuthFormWrapperProps> = ({
   children,
 }) => {
   return (
-    <ScrollArea center className="mx-2">
-      <Card className="mx-auto w-full web:max-w-lg">
+    <ScrollArea center className="mx-auto w-full max-w-3xl px-2">
+      <Card className="mx-auto w-full border-border/70 bg-card/95 web:max-w-lg">
         <CardHeader>
-          <CardTitle>{isLogin ? "Zaloguj się" : "Stwórz konto"}</CardTitle>
-          <CardDescription>{`${APP_TITLE} - ${CURRENT_EVENT}`}</CardDescription>
+          <CardTitle className="text-center">
+            {isLogin ? "Witaj ponownie" : "Dołącz do gry"}
+          </CardTitle>
+          <CardDescription className="text-center">{`${APP_TITLE} - ${CURRENT_EVENT}`}</CardDescription>
         </CardHeader>
         <CardContent>{children}</CardContent>
-        <CardFooter>
+        <CardFooter className="justify-center">
           {isLogin ? (
-            <View>
-              <P className="mr-1 text-card-foreground">
-                Nie masz jeszcze konta?
-              </P>
+            <View className="items-center">
+              <P className="text-card-foreground/90">Nie masz jeszcze konta?</P>
               <Link href="/sign-up" asChild>
-                <P className="text-card-foreground underline">Stwórz je!</P>
+                <P className="font-customSemiBold text-primary underline">
+                  Stwórz je!
+                </P>
               </Link>
             </View>
           ) : (
-            <View>
-              <P className="mr-1 text-card-foreground">Masz już konto?</P>
-              <Link href="/sign-in">
-                <P className="text-card-foreground underline">Zaloguj się!</P>
+            <View className="items-center">
+              <P className="text-card-foreground/90">Masz już konto?</P>
+              <Link href="/sign-in" asChild>
+                <P className="font-customSemiBold text-primary underline">
+                  Zaloguj się!
+                </P>
               </Link>
             </View>
           )}

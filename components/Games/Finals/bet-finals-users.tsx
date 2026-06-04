@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { View } from "react-native";
 
 import { DataLoadError } from "~/components/data-load-error";
 import { ContentLoader } from "~/components/Loaders/content-loader";
@@ -30,10 +31,12 @@ export const BetFinalsUsers: FC = () => {
   });
 
   return sortedFinalsBets.length > 0 ? (
-    <FinalsBetsList
-      finalsBets={sortedFinalsBets}
-      sessionUserId={sessionUserId}
-    />
+    <View className="w-full flex-1 overflow-hidden">
+      <FinalsBetsList
+        finalsBets={sortedFinalsBets}
+        sessionUserId={sessionUserId}
+      />
+    </View>
   ) : (
     <DataLoadError isEmpty />
   );

@@ -2,16 +2,16 @@ import TopTabs from "expo-router/js-top-tabs";
 import { Award, Coins, ListChecks } from "lucide-react-native";
 
 import { TabIcon } from "~/components/tab-icon";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function GamesTabsLayout() {
+  const { isDarkColorScheme } = useColorScheme();
+
   return (
     <TopTabs
       initialRouteName="index"
       screenOptions={{
-        tabBarScrollEnabled: true,
-        tabBarItemStyle: { width: "auto" },
-        tabBarIconStyle: { width: "100%", paddingHorizontal: 10 },
-        tabBarStyle: { margin: "auto", shadowColor: "transparent" },
+        tabBarIndicatorStyle: { backgroundColor: "transparent" },
       }}
     >
       <TopTabs.Screen

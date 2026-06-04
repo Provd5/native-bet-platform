@@ -5,8 +5,7 @@ import { H3 } from "~/components/ui/typography";
 
 export default function ClosedGamesPage() {
   return (
-    <View className="h-full items-center">
-      <H3 className="px-2 py-3 text-center">Sprawdź typy innych!</H3>
+    <View className="h-full items-center bg-background px-2">
       <GamesTable isClosed />
     </View>
   );

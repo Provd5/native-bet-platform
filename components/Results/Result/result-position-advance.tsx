@@ -29,8 +29,9 @@ export const ResultPositionAdvance: FC<ResultPositionAdvanceProps> = ({
             ? "double-down"
             : null;
 
+  if (!positionAdvanceDirection) return;
+
   const showAdvance =
-    !!positionAdvanceDirection &&
     positionAdvance !== -2 &&
     positionAdvance !== -1 &&
     positionAdvance !== 1 &&
@@ -43,22 +44,22 @@ export const ResultPositionAdvance: FC<ResultPositionAdvanceProps> = ({
   const colorClass = isIncreased ? "text-success" : "text-destructive";
 
   return (
-    <View className="flex-row items-center">
+    <View className="flex-row items-center justify-center rounded-full border border-border/70 bg-muted/25 p-1">
       {positionAdvanceDirection === "up" && (
-        <Icon className={colorClass} LucideIcon={ChevronUp} size={24} />
+        <Icon className={colorClass} LucideIcon={ChevronUp} size={18} />
       )}
       {positionAdvanceDirection === "double-up" && (
-        <Icon className={colorClass} LucideIcon={ChevronsUp} size={24} />
+        <Icon className={colorClass} LucideIcon={ChevronsUp} size={18} />
       )}
       {positionAdvanceDirection === "down" && (
-        <Icon className={colorClass} LucideIcon={ChevronDown} size={24} />
+        <Icon className={colorClass} LucideIcon={ChevronDown} size={18} />
       )}
       {positionAdvanceDirection === "double-down" && (
-        <Icon className={colorClass} LucideIcon={ChevronsDown} size={24} />
+        <Icon className={colorClass} LucideIcon={ChevronsDown} size={18} />
       )}
 
       {showAdvance && (
-        <P className={cn("-ml-1 font-customSemiBold", colorClass)}>
+        <P className={cn("font-customSemiBold text-xs", colorClass)}>
           {isIncreased ? "+" : ""}
           {positionAdvance}
         </P>

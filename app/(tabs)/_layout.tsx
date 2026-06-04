@@ -1,13 +1,15 @@
 import { Tabs } from "expo-router";
-import { Award, Goal } from "lucide-react-native";
+import { Award, Goal, Newspaper } from "lucide-react-native";
 
 import { RouteRedirect } from "~/components/route-redirect";
 import { TabIcon } from "~/components/tab-icon";
 import { TopBar } from "~/components/top-bar";
 import { useFetchGamesSubscriber } from "~/hooks/actions/games-actions";
+import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function TabsLayout() {
   useFetchGamesSubscriber();
+  const { isDarkColorScheme } = useColorScheme();
 
   return (
     <RouteRedirect layout="tabs">
@@ -15,9 +17,22 @@ export default function TabsLayout() {
       <Tabs
         screenOptions={{
           tabBarShowLabel: false,
-          tabBarStyle: { height: 60 },
         }}
       >
+        <Tabs.Screen
+          name="ai-news"
+          options={{
+            title: "AI News",
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <TabIcon
+                IconToRender={Newspaper}
+                name="AI News"
+                focused={focused}
+              />
+            ),
+          }}
+        />
         <Tabs.Screen
           name="games"
           options={{

@@ -27,10 +27,10 @@ export const SignOut: FC = () => {
   };
 
   return (
-    <DropdownMenuItem onPress={() => signOutUser()}>
-      <View className="flex-row items-center gap-1">
-        <Icon LucideIcon={LogOut} size={18} />
-        <P className="flex-row gap-1">Wyloguj</P>
+    <DropdownMenuItem onPress={() => signOutUser()} className="py-2.5">
+      <View className="flex-row items-center gap-2">
+        <Icon LucideIcon={LogOut} size={16} className="text-destructive" />
+        <P className="font-customSemiBold text-destructive">Wyloguj</P>
       </View>
     </DropdownMenuItem>
   );

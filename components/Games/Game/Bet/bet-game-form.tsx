@@ -51,7 +51,7 @@ export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
   }
 
   return (
-    <View className="gap-3">
+    <View className="flex-1 gap-3 overflow-y-auto py-2">
       <H2 className="text-center">Obstaw mecz</H2>
       <BetGoals
         register={form.register}
@@ -76,7 +76,7 @@ export const BetGameForm: FC<BetGameFormProps> = ({ game, sessionBet }) => {
         </P>
       )}
       <FormButton
-        className="mx-auto mt-6 w-full max-w-xs"
+        className="mx-auto w-full max-w-xs"
         onPress={form.handleSubmit(onSubmit)}
         formState={form.formState}
         text={form.formState.isSubmitSuccessful ? "✅ Obstawiono!" : "Obstaw"}

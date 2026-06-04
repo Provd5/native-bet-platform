@@ -60,7 +60,7 @@ export const SignInForm: FC = () => {
   }
 
   return (
-    <View className="gap-6">
+    <View className="gap-6 text-current">
       {formFields.map((formField) => (
         <Controller
           key={`SignInForm-${formField.name}`}

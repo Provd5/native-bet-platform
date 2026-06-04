@@ -19,6 +19,7 @@ export const PageTitle: FC = () => {
   if (segments[1] === "sign-in") title = "Zaloguj się";
   if (segments[1] === "sign-up") title = "Stwórz konto";
   if (segments[1] === "results") title = "Wyniki";
+  if (segments[1] === "ai-news") title = "AI News";
   if (segments[1] === "games") {
     title = "Mecze";
     subTitle = "Otwarte";

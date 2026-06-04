@@ -43,15 +43,15 @@ const DropdownMenuSubTrigger = React.forwardRef<
   return (
     <TextClassContext.Provider
       value={cn(
-        "select-none text-sm native:text-lg text-primary",
-        open && "native:text-accent-foreground",
+        "select-none text-sm native:text-lg text-popover-foreground",
+        open && "native:text-primary-foreground",
       )}
     >
       <DropdownMenuPrimitive.SubTrigger
         ref={ref}
         className={cn(
-          "native:py-2 flex flex-row items-center gap-2 rounded-sm px-2 py-1.5 active:bg-accent web:cursor-default web:select-none web:outline-none web:hover:bg-accent web:focus:bg-accent",
-          open && "bg-accent",
+          "native:py-2 flex flex-row items-center gap-2 rounded-xl px-3 py-2 active:bg-primary/90 web:cursor-default web:select-none web:outline-none web:hover:bg-secondary web:focus:bg-secondary",
+          open && "bg-primary",
           inset && "pl-8",
           className,
         )}
@@ -61,7 +61,10 @@ const DropdownMenuSubTrigger = React.forwardRef<
         <Icon
           LucideIcon={IconToRender}
           size={18}
-          className="ml-auto text-primary"
+          className={cn(
+            "ml-auto",
+            open ? "text-primary-foreground" : "text-foreground",
+          )}
         />
       </DropdownMenuPrimitive.SubTrigger>
     </TextClassContext.Provider>
@@ -79,7 +82,7 @@ const DropdownMenuSubContent = React.forwardRef<
     <DropdownMenuPrimitive.SubContent
       ref={ref}
       className={cn(
-        "z-50 mt-1 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 shadow-md shadow-foreground/5 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        "z-50 mt-1 min-w-[9rem] overflow-hidden rounded-2xl border border-border/80 bg-popover p-2 shadow-md shadow-foreground/15 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         open
           ? "web:animate-in web:fade-in-0 web:zoom-in-95"
           : "web:animate-out web:fade-out-0 web:zoom-out",
@@ -123,7 +126,7 @@ const DropdownMenuContent = React.forwardRef<
           <DropdownMenuPrimitive.Content
             ref={ref}
             className={cn(
-              "z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 shadow-md shadow-foreground/5 web:cursor-default web:data-[side=bottom]:slide-in-from-top-2 web:data-[side=left]:slide-in-from-right-2 web:data-[side=right]:slide-in-from-left-2 web:data-[side=top]:slide-in-from-bottom-2",
+              "z-50 min-w-[9rem] overflow-hidden rounded-2xl border border-border/80 bg-popover p-2 shadow-md shadow-foreground/15 web:cursor-default web:data-[side=bottom]:slide-in-from-top-2 web:data-[side=left]:slide-in-from-right-2 web:data-[side=right]:slide-in-from-left-2 web:data-[side=top]:slide-in-from-bottom-2",
               open
                 ? "web:animate-in web:fade-in-0 web:zoom-in-95"
                 : "web:animate-out web:fade-out-0 web:zoom-out-95",
@@ -144,11 +147,11 @@ const DropdownMenuItem = React.forwardRef<
     inset?: boolean;
   }
 >(({ className, inset, ...props }, ref) => (
-  <TextClassContext.Provider value="select-none text-sm native:text-lg text-popover-foreground web:group-focus:text-accent-foreground">
+  <TextClassContext.Provider value="select-none text-sm native:text-lg font-customMedium text-popover-foreground web:group-focus:text-foreground">
     <DropdownMenuPrimitive.Item
       ref={ref}
       className={cn(
-        "native:py-2 group relative flex flex-row items-center gap-2 rounded-sm px-2 py-1.5 active:bg-accent web:cursor-pointer web:outline-none web:hover:bg-accent web:focus:bg-accent",
+        "native:py-2 group relative flex flex-row items-center gap-2 rounded-xl px-3 py-2 active:bg-secondary web:cursor-pointer web:outline-none web:hover:bg-secondary web:focus:bg-secondary",
         inset && "pl-8",
         props.disabled && "opacity-50 web:pointer-events-none",
         className,
@@ -166,7 +169,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
     className={cn(
-      "web:group native:py-2 relative flex flex-row items-center rounded-sm py-1.5 pl-8 pr-2 active:bg-accent web:cursor-default web:outline-none web:focus:bg-accent",
+      "web:group native:py-2 relative flex flex-row items-center rounded-xl py-2 pl-9 pr-3 active:bg-secondary web:cursor-default web:outline-none web:focus:bg-secondary",
       props.disabled && "opacity-50 web:pointer-events-none",
       className,
     )}
@@ -196,7 +199,7 @@ const DropdownMenuRadioItem = React.forwardRef<
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
     className={cn(
-      "web:group native:py-2 relative flex flex-row items-center rounded-sm py-1.5 pl-8 pr-2 active:bg-accent web:cursor-default web:outline-none web:focus:bg-accent",
+      "web:group native:py-2 relative flex flex-row items-center rounded-xl py-2 pl-9 pr-3 active:bg-secondary web:cursor-default web:outline-none web:focus:bg-secondary",
       props.disabled && "opacity-50 web:pointer-events-none",
       className,
     )}
@@ -221,7 +224,7 @@ const DropdownMenuLabel = React.forwardRef<
   <DropdownMenuPrimitive.Label
     ref={ref}
     className={cn(
-      "native:text-base px-2 py-1.5 font-customSemiBold text-sm web:cursor-default",
+      "native:text-base px-3 py-2 font-customSemiBold text-sm uppercase tracking-wide text-muted-foreground web:cursor-default",
       inset && "pl-8",
       className,
     )}
@@ -236,7 +239,7 @@ const DropdownMenuSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={cn("-mx-1 my-1 h-px bg-border", className)}
+    className={cn("-mx-1 my-1 h-px bg-border/80", className)}
     {...props}
   />
 ));

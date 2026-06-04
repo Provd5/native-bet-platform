@@ -12,7 +12,7 @@ const Card = React.forwardRef<
   <View
     ref={ref}
     className={cn(
-      "rounded-lg border border-border bg-card shadow-sm shadow-foreground/10",
+      "rounded-3xl border border-border/80 bg-card/95 shadow-md shadow-foreground/10",
       className,
     )}
     {...props}
@@ -26,7 +26,7 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <View
     ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
+    className={cn("flex flex-col space-y-2 p-6", className)}
     {...props}
   />
 ));
@@ -41,7 +41,7 @@ const CardTitle = React.forwardRef<
     aria-level={3}
     ref={ref}
     className={cn(
-      "font-customSemiBold text-2xl leading-none tracking-tight text-card-foreground",
+      "font-customBold text-2xl leading-tight tracking-tight text-card-foreground",
       className,
     )}
     {...props}
@@ -55,7 +55,7 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <Text
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("text-sm leading-relaxed text-muted-foreground", className)}
     {...props}
   />
 ));
@@ -65,7 +65,7 @@ const CardContent = React.forwardRef<
   ViewRef,
   React.ComponentPropsWithoutRef<typeof View>
 >(({ className, ...props }, ref) => (
-  <TextClassContext.Provider value="text-card-foreground">
+  <TextClassContext.Provider value="text-card-foreground leading-relaxed">
     <View ref={ref} className={cn("p-6 pt-0", className)} {...props} />
   </TextClassContext.Provider>
 ));

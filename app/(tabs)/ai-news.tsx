@@ -1,11 +1,11 @@
 import { View } from "react-native";
 
-import { GamesTable } from "~/components/Games/games-table";
+import { AINewsFeed } from "~/components/AINews/ai-news-feed";
 
-export default function GamesPage() {
+export default function AINewsPage() {
   return (
     <View className="h-full items-center bg-background px-2">
-      <GamesTable />
+      <AINewsFeed />
     </View>
   );
 }

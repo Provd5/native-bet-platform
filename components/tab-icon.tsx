@@ -20,19 +20,52 @@ export const TabIcon: FC<TabIconProps> = ({
   focused,
   secondary = false,
 }) => {
+  if (secondary) {
+    return (
+      <View
+        className={cn(
+          "flex-row items-center gap-1 rounded-full border px-2.5 py-1",
+          focused
+            ? "border-primary/40 bg-primary/15"
+            : "border-border/70 bg-card/70",
+        )}
+      >
+        <Icon
+          LucideIcon={IconToRender}
+          className={cn(focused ? "text-primary" : "text-muted-foreground/90")}
+          size={14}
+        />
+        <P
+          className={cn(
+            "text-xs",
+            focused
+              ? "font-customSemiBold text-foreground"
+              : "font-customRegular text-muted-foreground",
+          )}
+        >
+          {name}
+        </P>
+      </View>
+    );
+  }
+
   return (
-    <View className={cn(secondary && "flex-row items-center gap-1")}>
+    <View className={cn("border-none")}>
       <Icon
         LucideIcon={IconToRender}
         className={cn(
-          "shrink-0",
-          !secondary && "self-center",
-          focused ? "text-primary" : "text-muted-foreground",
+          "self-center",
+          focused ? "text-primary" : "text-muted-foreground/90",
         )}
-        size={secondary ? 16 : 25}
+        size={18}
       />
       <P
-        className={cn(focused ? "font-customMedium" : "text-muted-foreground")}
+        className={cn(
+          "mt-0.5 text-[11px]",
+          focused
+            ? "font-customSemiBold text-foreground"
+            : "font-customRegular text-muted-foreground",
+        )}
       >
         {name}
       </P>

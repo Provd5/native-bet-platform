@@ -14,19 +14,11 @@ export default function FinalsPage() {
   const isFinished = serverNow > FINALS_BETTING_CLOSING_DATE;
 
   return isFinished ? (
-    <View className="h-full items-center">
-      <H3 className="px-2 py-3 text-center">Wytypowani finaliści!</H3>
+    <View className="flex-1 bg-background px-2">
       <BetFinalsUsers />
     </View>
   ) : (
-    <View className="h-full items-center pb-[57px]">
-      <H3 className="px-2 pt-3 text-center">Wytypuj finalistów!</H3>
-      <P className="px-2 pb-1.5 text-center font-customSemiBold text-info">
-        Zamknięcie zakładów:{" "}
-        <P style={{ textTransform: "capitalize" }}>
-          {dateFormat(FINALS_BETTING_CLOSING_DATE)}
-        </P>
-      </P>
+    <View className="flex-1 bg-background px-2">
       <BetFinals />
     </View>
   );
