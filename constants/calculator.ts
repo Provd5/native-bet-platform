@@ -7,9 +7,11 @@ export const ACCURATE_FINALS_TEAM_POINTS: number = 3;
 
 export const STAGE_MULTIPLIERS: { [key in GameInterface["stage"]]: number } = {
   FINAL: 1,
+  THIRD_PLACE: 1,
   SEMI_FINALS: 1,
   QUARTER_FINALS: 1,
   LAST_16: 1,
+  LAST_32: 1,
   GROUP_STAGE: 1,
   REGULAR_SEASON: 1,
 };

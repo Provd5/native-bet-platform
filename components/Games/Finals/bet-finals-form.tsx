@@ -142,19 +142,13 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
         }}
       >
         <Pressable
-          className="flex-1 items-center justify-center bg-black/80 p-2"
-          onPress={() => {
-            setPickerOpen(false);
-            setPickerSlot(null);
-          }}
+          className="flex-1 cursor-default items-center justify-center bg-black/80 p-2"
+          onPress={() => {}}
         >
-          <Pressable
-            className="w-full max-w-md rounded-2xl border border-border bg-background p-3.5 shadow-lg shadow-foreground/20"
-            onPress={(e) => e.stopPropagation?.()}
-          >
+          <View className="w-full max-w-md rounded-2xl border border-border bg-background p-3.5 shadow-lg shadow-foreground/20">
             <View className="mb-2.5 flex-row items-center justify-between">
               <Small className="font-customSemiBold uppercase tracking-wide text-muted-foreground">
-                Wybierz druzyne
+                Wybierz drużynę
               </Small>
               <Button
                 size="sm"
@@ -173,7 +167,7 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
               className="max-h-72"
               data={teams}
               keyExtractor={(item) => `FinalsPicker-${item.id}`}
-              contentContainerClassName="gap-1.5 pb-1"
+              contentContainerClassName="gap-0.5 pb-1 px-2"
               renderItem={({ item }) => {
                 const isPicked = selectedFinalists.some(
                   (t) => t.id === item.id,
@@ -182,7 +176,7 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
                 return (
                   <Pressable
                     className={cn(
-                      "flex-row items-center gap-2 rounded-lg border border-border/70 bg-card px-2.5 py-2",
+                      "flex-row items-center gap-2 rounded-lg border border-border/70 bg-card px-2.5 py-2 hover:bg-secondary/10",
                       isPicked && "border-primary/40 bg-primary/10",
                     )}
                     onPress={() => selectTeamForSlot(item)}
@@ -198,7 +192,7 @@ export const BetFinalsForm: FC<BetFinalsFormProps> = ({
                 );
               }}
             />
-          </Pressable>
+          </View>
         </Pressable>
       </Modal>
     </>

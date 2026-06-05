@@ -61,7 +61,7 @@ export const BetTeam: FC<BetTeamProps> = ({
             <P
               className={cn(
                 "w-16 text-center text-primary",
-                toggleValue === item.value && "text-background",
+                toggleValue === item.value && "text-foreground",
               )}
               numberOfLines={1}
             >

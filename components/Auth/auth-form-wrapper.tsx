@@ -26,7 +26,7 @@ export const AuthFormWrapper: FC<AuthFormWrapperProps> = ({
 }) => {
   return (
     <ScrollArea center className="mx-auto w-full max-w-3xl px-2">
-      <Card className="mx-auto w-full border-border/70 bg-card/95 web:max-w-lg">
+      <Card className="mx-auto w-full max-w-lg border-border/70 bg-card/95">
         <CardHeader>
           <CardTitle className="text-center">
             {isLogin ? "Witaj ponownie" : "Dołącz do gry"}

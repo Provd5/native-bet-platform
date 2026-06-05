@@ -5,7 +5,7 @@ import Icon from "~/lib/icons/Icon";
 
 import { AINewsReaction } from "~/types/ai-news";
 
-import { ALL_EMOJIS } from "~/constants/emojis";
+import { ALL_EMOJIS, type EmojiGroup } from "~/constants/emojis";
 import { errorHandler } from "~/lib/error-handler";
 import { cn } from "~/lib/utils";
 
@@ -18,7 +18,7 @@ interface ReactionsPickerProps {
   currentUserId: string;
   reactionUsersMap: Record<string, string>;
   onToggleReaction: (payload: {
-    emoji: string;
+    emoji: string | EmojiGroup;
     currentReaction: string | undefined;
   }) => Promise<void>;
 }
@@ -46,17 +46,11 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
       {} as Record<string, string[]>,
     );
 
-    return Object.entries(grouped)
-      .map(([emoji, users]) => ({
-        emoji,
-        count: users.length,
-        isSelected: users.includes(currentUserId),
-      }))
-      .sort((a, b) => {
-        if (a.isSelected !== b.isSelected) return a.isSelected ? -1 : 1;
-        if (b.count !== a.count) return b.count - a.count;
-        return a.emoji.localeCompare(b.emoji);
-      });
+    return Object.entries(grouped).map(([emoji, users]) => ({
+      emoji,
+      count: users.length,
+      isSelected: users.includes(currentUserId),
+    }));
   }, [currentUserId, reactionsByUserId]);
 
   const reactionUsersByEmoji = useMemo(
@@ -75,7 +69,9 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
     [reactionUsersMap, reactionsByUserId],
   );
 
-  const onReact = async (emoji: string) => {
+  const onReact = async (emojiValue: string | EmojiGroup) => {
+    const emoji = typeof emojiValue === "string" ? emojiValue : emojiValue.emoji;
+
     try {
       setPendingEmoji(emoji);
       await onToggleReaction({ emoji, currentReaction });
@@ -86,7 +82,7 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
     }
   };
 
-  const onPickEmoji = async (emoji: string) => {
+  const onPickEmoji = async (emoji: EmojiGroup) => {
     setPickerOpen(false);
     await onReact(emoji);
   };
@@ -119,7 +115,10 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
                       : "border-border bg-muted/60",
                   )}
                   disabled={pendingEmoji !== null}
-                  onPress={() => openEmojiDetails(reaction.emoji)}
+                  onPress={() => {
+                    void onReact(reaction.emoji);
+                  }}
+                  onLongPress={() => openEmojiDetails(reaction.emoji)}
                 >
                   <P className={cn("text-sm")}>{reaction.emoji}</P>
                   <Small
@@ -154,13 +153,10 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
         onRequestClose={() => setPickerOpen(false)}
       >
         <Pressable
-          className="flex-1 items-center justify-center bg-black/80 p-2"
+          className="flex-1 cursor-default items-center justify-center bg-black/80 p-2"
           onPress={() => {}}
         >
-          <Pressable
-            className="w-full max-w-md rounded-2xl border border-border bg-background p-3.5 shadow-lg shadow-foreground/20"
-            onPress={(e) => e.stopPropagation?.()}
-          >
+          <View className="w-full max-w-md rounded-2xl border border-border bg-background p-3.5 shadow-lg shadow-foreground/20">
             <View className="mb-2.5 flex-row items-center justify-between">
               <Small className="font-customSemiBold uppercase tracking-wide text-muted-foreground">
                 Emoji Picker
@@ -175,22 +171,39 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
               </Button>
             </View>
 
-            <ScrollView
-              className="max-h-72"
-              contentContainerClassName="flex-row flex-wrap gap-1 pb-1"
-            >
-              {ALL_EMOJIS.map((emoji) => (
-                <Pressable
-                  key={`Picker-${emoji}`}
-                  className="h-10 w-10 items-center justify-center rounded-lg border border-border bg-muted/40"
-                  onPress={() => onPickEmoji(emoji)}
-                  disabled={pendingEmoji !== null}
-                >
-                  <P className="text-xl leading-6">{emoji}</P>
-                </Pressable>
-              ))}
+            <ScrollView className="max-h-72" contentContainerClassName="pb-1">
+              {useMemo(() => {
+                const grouped = ALL_EMOJIS.reduce(
+                  (acc, item) => {
+                    if (!acc[item.group]) acc[item.group] = [];
+                    acc[item.group].push(item);
+                    return acc;
+                  },
+                  {} as Record<string, EmojiGroup[]>,
+                );
+
+                return Object.entries(grouped).map(([group, emojis]) => (
+                  <View key={`Group-${group}`} className="mb-3">
+                    <Small className="mb-2 px-2 uppercase tracking-wide text-muted-foreground">
+                      {group}
+                    </Small>
+                    <View className="grid gap-1 px-2 [grid-template-columns:repeat(auto-fill,minmax(40px,1fr))]">
+                      {emojis.map((item, i) => (
+                        <Pressable
+                          key={`Picker-${item.emoji}-${i}`}
+                          className="aspect-square items-center justify-center rounded-lg border border-border bg-muted/40 hover:bg-muted/80"
+                          onPress={() => onPickEmoji(item)}
+                          disabled={pendingEmoji !== null}
+                        >
+                          <P>{item.emoji}</P>
+                        </Pressable>
+                      ))}
+                    </View>
+                  </View>
+                ));
+              }, [pendingEmoji])}
             </ScrollView>
-          </Pressable>
+          </View>
         </Pressable>
       </Modal>
 
@@ -201,13 +214,10 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
         onRequestClose={closeEmojiDetails}
       >
         <Pressable
-          className="flex-1 items-center justify-center bg-black/80 p-2"
           onPress={() => {}}
+          className="flex-1 cursor-default items-center justify-center bg-black/80 p-2"
         >
-          <Pressable
-            className="w-full max-w-sm rounded-2xl border border-border bg-background p-3.5 shadow-lg shadow-foreground/20"
-            onPress={(e) => e.stopPropagation?.()}
-          >
+          <View className="w-full max-w-sm rounded-2xl border border-border bg-background p-3.5 shadow-lg shadow-foreground/20">
             <View className="mb-2.5 flex-row items-center justify-between">
               <Small className="font-customSemiBold uppercase tracking-wide text-muted-foreground">
                 {detailsEmoji ? `Reakcja ${detailsEmoji}` : "Reakcje"}
@@ -243,7 +253,7 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
                 </Small>
               )}
             </ScrollView>
-          </Pressable>
+          </View>
         </Pressable>
       </Modal>
     </View>

@@ -7,13 +7,13 @@ import { TextClassContext } from "~/components/ui/text";
 import { cn } from "~/lib/utils";
 
 const toggleVariants = cva(
-  "web:group web:inline-flex items-center justify-center rounded-xl border border-border/80 bg-card web:ring-offset-background web:transition-all web:duration-200 web:hover:bg-secondary/70 active:bg-secondary web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
+  "group inline-flex items-center justify-center rounded-xl border border-border/80 bg-card ring-offset-background transition-all duration-200 hover:bg-secondary/70 active:bg-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
         default: "",
         outline:
-          "border border-input bg-card web:hover:bg-secondary active:bg-secondary",
+          "border border-input bg-card hover:bg-secondary active:bg-secondary",
       },
       size: {
         default: "h-10 px-3 native:h-12 native:px-[12]",
@@ -35,7 +35,7 @@ const toggleTextVariants = cva(
       variant: {
         default: "",
         outline:
-          "web:group-hover:text-accent-foreground web:group-active:text-accent-foreground",
+          "group-hover:text-accent-foreground group-active:text-accent-foreground",
       },
       size: {
         default: "",
@@ -58,9 +58,7 @@ const Toggle = React.forwardRef<
   <TextClassContext.Provider
     value={cn(
       toggleTextVariants({ variant, size }),
-      props.pressed
-        ? "text-primary-foreground"
-        : "web:group-hover:text-foreground",
+      props.pressed ? "text-primary-foreground" : "group-hover:text-foreground",
       className,
     )}
   >
@@ -68,7 +66,7 @@ const Toggle = React.forwardRef<
       ref={ref}
       className={cn(
         toggleVariants({ variant, size }),
-        props.disabled && "opacity-50 web:pointer-events-none",
+        props.disabled && "pointer-events-none opacity-50",
         props.pressed && "border-primary bg-primary",
         className,
       )}

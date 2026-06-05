@@ -21,13 +21,14 @@ interface GameCardProps {
 export const GameCard: FC<GameCardProps> = ({ game, sessionBet, isOdd }) => {
   const isFinal = game.stage === "FINAL";
   const isSemiFinal = game.stage === "SEMI_FINALS";
+  const isThirdPlace = game.stage === "THIRD_PLACE";
 
   return (
     <Card
       className={cn(
         "mb-2.5 w-full border border-border/70 bg-card/95 shadow-sm shadow-foreground/10",
         isOdd && "bg-secondary/25",
-        "web:cursor-pointer web:transition-transform web:duration-200 web:hover:translate-y-[-1px]",
+        "cursor-pointer transition-transform duration-200 hover:bg-card/50",
       )}
     >
       <CardHeader className="pb-2 pt-3">
@@ -38,6 +39,7 @@ export const GameCard: FC<GameCardProps> = ({ game, sessionBet, isOdd }) => {
                 "font-customSemiBold text-xs",
                 isFinal && "text-warning",
                 isSemiFinal && "text-info",
+                isThirdPlace && "text-accent",
               )}
             >
               {translateConstantsToPolish(game.stage)}

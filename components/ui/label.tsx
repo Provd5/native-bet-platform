@@ -16,7 +16,7 @@ const Label = React.forwardRef<
     const textClass = React.useContext(TextClassContext);
     return (
       <LabelPrimitive.Root
-        className="web:cursor-default"
+        className="cursor-default"
         onPress={onPress}
         onLongPress={onLongPress}
         onPressIn={onPressIn}
@@ -25,7 +25,7 @@ const Label = React.forwardRef<
         <LabelPrimitive.Text
           ref={ref}
           className={cn(
-            "native:text-base native:-mb-0.5 font-customSemiBold text-sm leading-none text-foreground web:peer-disabled:cursor-not-allowed web:peer-disabled:opacity-70",
+            "native:text-base native:-mb-0.5 font-customSemiBold text-sm leading-none text-foreground peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
             textClass,
             className,
           )}

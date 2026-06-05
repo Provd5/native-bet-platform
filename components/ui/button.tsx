@@ -10,21 +10,21 @@ import { LoadingSpinner } from "../Loaders/spinners";
 import { P } from "./typography";
 
 const buttonVariants = cva(
-  "group flex items-center justify-center rounded-2xl border border-transparent web:ring-offset-background web:transition-all web:duration-200 web:focus-visible:outline-none web:focus-visible:ring-2 web:focus-visible:ring-ring web:focus-visible:ring-offset-2",
+  "group flex items-center justify-center rounded-2xl border border-transparent ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   {
     variants: {
       variant: {
         default:
-          "bg-primary shadow-sm shadow-primary/30 web:hover:translate-y-[-1px] web:hover:opacity-95 active:opacity-90",
+          "bg-primary shadow-sm shadow-primary/30 hover:translate-y-[-1px] hover:opacity-95 active:opacity-90",
         destructive:
-          "bg-destructive shadow-sm shadow-destructive/30 web:hover:opacity-95 active:opacity-90",
+          "bg-destructive shadow-sm shadow-destructive/30 hover:opacity-95 active:opacity-90",
         outline:
-          "border border-border bg-card web:hover:bg-secondary active:bg-secondary",
+          "border border-border bg-card hover:bg-secondary active:bg-secondary",
         secondary:
-          "bg-secondary shadow-sm shadow-secondary/40 web:hover:opacity-90 active:opacity-85",
+          "bg-secondary shadow-sm shadow-secondary/40 hover:opacity-90 active:opacity-85",
         ghost:
-          "border border-transparent bg-transparent web:hover:bg-secondary/60 active:bg-secondary/70",
-        link: "web:underline-offset-4 web:hover:underline web:focus:underline",
+          "border border-transparent bg-transparent hover:bg-secondary/60 active:bg-secondary/70",
+        link: "underline-offset-4 hover:underline focus:underline",
       },
       size: {
         default: "h-11 px-5 py-2 native:h-12 native:px-6 native:py-3",
@@ -41,7 +41,7 @@ const buttonVariants = cva(
 );
 
 const buttonTextVariants = cva(
-  "web:whitespace-nowrap text-sm native:text-base font-customSemiBold text-foreground web:transition-colors",
+  "whitespace-nowrap text-sm native:text-base font-customSemiBold text-foreground transition-colors",
   {
     variants: {
       variant: {
@@ -76,13 +76,13 @@ const Button = React.forwardRef<
   return (
     <TextClassContext.Provider
       value={cn(
-        props.disabled && "web:pointer-events-none",
+        props.disabled && "pointer-events-none",
         buttonTextVariants({ variant, size }),
       )}
     >
       <Pressable
         className={cn(
-          props.disabled && "opacity-50 web:pointer-events-none",
+          props.disabled && "pointer-events-none opacity-50",
           buttonVariants({ variant, size, className }),
         )}
         ref={ref}
@@ -106,9 +106,8 @@ const FormButton = React.forwardRef<
           formState.isSubmitted &&
           !formState.isSubmitSuccessful &&
           !formState.isValid &&
-          "bg-destructive web:hover:bg-destructive-foreground",
-        formState.isSubmitSuccessful &&
-          "bg-success web:hover:bg-success-foreground",
+          "bg-destructive",
+        formState.isSubmitSuccessful && "bg-success",
         className,
       )}
       ref={ref}

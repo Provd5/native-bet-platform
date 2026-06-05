@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+import { EmojiGroup } from "~/constants/emojis";
 import { useAppSelector } from "~/hooks/redux";
 import { AINewsService } from "~/services/ai-news-service";
 
@@ -48,17 +49,19 @@ export function useToggleAINewsReaction() {
   const { mutateAsync, error } = useMutation({
     mutationFn: async (payload: {
       newsId: string;
-      emoji: string;
+      emoji: string | EmojiGroup;
       currentReaction: string | undefined;
     }) => {
       const userId = sessionUser.fsUserData?.uid || "";
+      const emoji =
+        typeof payload.emoji === "string" ? payload.emoji : payload.emoji.emoji;
 
-      if (payload.currentReaction === payload.emoji) {
+      if (payload.currentReaction === emoji) {
         await aiNewsService.removeReaction(payload.newsId, userId);
         return;
       }
 
-      await aiNewsService.setReaction(payload.newsId, userId, payload.emoji);
+      await aiNewsService.setReaction(payload.newsId, userId, emoji);
     },
     onSuccess: () => {
       queryClient.refetchQueries({ queryKey: [QUERY_KEY, "feed"] });
