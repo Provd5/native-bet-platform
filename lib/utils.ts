@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 import { BetInterface, GameInterface } from "~/types/games";
 
 import { STAGE_MULTIPLIERS } from "~/constants/calculator";
-import { CONSTANT_TRANSLATIONS } from "~/constants/data";
+import { CONSTANT_TRANSLATIONS, isLiveMatchStatus } from "~/constants/data";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -22,7 +22,7 @@ export function dateFormat(timestamp: number): string {
 }
 
 export function checkGameBetStatus(game: GameInterface, bet: BetInterface) {
-  const gameInPlay = game.status === "IN_PLAY" || game.status === "PAUSED";
+  const gameInPlay = isLiveMatchStatus(game.status);
 
   const accurateScoreHit =
     game.regularTimeScore?.home === bet.homeGoals &&

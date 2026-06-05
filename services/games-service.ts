@@ -2,6 +2,7 @@ import { child, onValue, query, ref, Unsubscribe } from "firebase/database";
 
 import { GameInterface } from "~/types/games";
 
+import { isLiveMatchStatus, isUpcomingMatchStatus } from "~/constants/data";
 import { db } from "~/firebase.config";
 import { setGames } from "~/lib/features/games-slice";
 import type { AppDispatch } from "~/lib/store";
@@ -32,7 +33,12 @@ export class GamesService {
       try {
         if (!snapshot.exists()) {
           this.dispatch(
-            setGames({ openGames: [], closedGames: [], status: "error" }),
+            setGames({
+              openGames: [],
+              liveGames: [],
+              closedGames: [],
+              status: "error",
+            }),
           );
           return;
         }
@@ -60,32 +66,33 @@ export class GamesService {
         });
 
         const openGames = gamesData
-          .filter((game) => game.status === "TIMED")
+          .filter((game) => isUpcomingMatchStatus(game.status))
+          .sort((a, b) => a.timestamp - b.timestamp);
+
+        const liveGames = gamesData
+          .filter((game) => isLiveMatchStatus(game.status))
           .sort((a, b) => a.timestamp - b.timestamp);
 
         const closedGames = gamesData
-          .filter((game) => game.status !== "TIMED")
-          .sort((a, b) => {
-            // First, prioritize IN_PLAY and PAUSED statuses
-            const statusPriorityA =
-              a.status === "IN_PLAY" || a.status === "PAUSED" ? -1 : 0;
-            const statusPriorityB =
-              b.status === "IN_PLAY" || b.status === "PAUSED" ? -1 : 0;
+          .filter(
+            (game) =>
+              !isUpcomingMatchStatus(game.status) &&
+              !isLiveMatchStatus(game.status),
+          )
+          .sort((a, b) => b.timestamp - a.timestamp);
 
-            // If both have the same priority, sort by timestamp descending
-            if (statusPriorityA === statusPriorityB) {
-              return b.timestamp - a.timestamp;
-            }
-
-            // Otherwise, sort by the status priority
-            return statusPriorityA - statusPriorityB;
-          });
-
-        this.dispatch(setGames({ openGames, closedGames, status: "success" }));
+        this.dispatch(
+          setGames({ openGames, liveGames, closedGames, status: "success" }),
+        );
       } catch (e) {
         console.error("Error subscribing to fetch games:", e);
         this.dispatch(
-          setGames({ openGames: [], closedGames: [], status: "error" }),
+          setGames({
+            openGames: [],
+            liveGames: [],
+            closedGames: [],
+            status: "error",
+          }),
         );
       }
     });

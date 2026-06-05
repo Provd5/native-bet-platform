@@ -7,12 +7,14 @@ import { DataStatus } from "~/constants/data";
 interface GamesState {
   status: DataStatus;
   openGames: GameInterface[];
+  liveGames: GameInterface[];
   closedGames: GameInterface[];
 }
 
 const initialState: GamesState = {
   status: "pending",
   openGames: [],
+  liveGames: [],
   closedGames: [],
 };
 
@@ -23,6 +25,7 @@ const gamesSlice = createSlice({
     setGames: (state, action: PayloadAction<GamesState>) => {
       state.status = action.payload.status;
       state.openGames = action.payload.openGames;
+      state.liveGames = action.payload.liveGames;
       state.closedGames = action.payload.closedGames;
       return state;
     },

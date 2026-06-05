@@ -22,8 +22,8 @@ export const PageTitle: FC = () => {
   if (segments[1] === "ai-news") title = "AI News";
   if (segments[1] === "games") {
     title = "Mecze";
-    subTitle = "Otwarte";
-    if (segments[2] === "closed") subTitle = "Zamknięte";
+    subTitle = "Nadchodzące";
+    if (segments[2] === "closed") subTitle = "Zakończone";
     if (segments[2] === "finals") subTitle = "Finaliści";
   }
 

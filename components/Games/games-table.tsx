@@ -6,17 +6,45 @@ import { useAppSelector } from "~/hooks/redux";
 
 import { DataLoadError } from "../data-load-error";
 import { ContentLoader } from "../Loaders/content-loader";
-import { Muted, Small } from "../ui/typography";
+import { Small } from "../ui/typography";
 import { BetModal } from "./Game/Bet/bet-modal";
 
+type GamesTableVariant = "open" | "live" | "closed";
+
 interface GamesTableProps {
-  isClosed?: boolean;
+  variant?: GamesTableVariant;
 }
 
-export const GamesTable: FC<GamesTableProps> = ({ isClosed = false }) => {
+const GAMES_TABLE_COPY: Record<
+  GamesTableVariant,
+  {
+    title: string;
+    empty: string;
+  }
+> = {
+  open: {
+    title: "Aktywne zakłady",
+    empty: "Brak zaplanowanych meczy\u00a0🕸️",
+  },
+  live: {
+    title: "Trwające mecze",
+    empty: "Brak trwających meczów\u00a0🕸️",
+  },
+  closed: {
+    title: "Archiwum zakładów",
+    empty: "Wszystkie mecze są\u00a0wciąż otwarte\u00a0🕸️",
+  },
+};
+
+export const GamesTable: FC<GamesTableProps> = ({ variant = "open" }) => {
   const games = useAppSelector((state) => state.games);
   const { data: sessionBets, status } = useGetSessionBets();
-  const displayedGames = isClosed ? games.closedGames : games.openGames;
+  const displayedGames =
+    variant === "closed"
+      ? games.closedGames
+      : variant === "live"
+        ? games.liveGames
+        : games.openGames;
 
   if (games.status === "pending" || status === "pending")
     return <ContentLoader />;
@@ -27,6 +55,8 @@ export const GamesTable: FC<GamesTableProps> = ({ isClosed = false }) => {
   )
     return <DataLoadError />;
 
+  const copy = GAMES_TABLE_COPY[variant];
+
   return displayedGames.length > 0 ? (
     <FlatList
       className="w-full"
@@ -36,7 +66,7 @@ export const GamesTable: FC<GamesTableProps> = ({ isClosed = false }) => {
         <View className="mb-3 rounded-2xl border border-border/70 bg-card/90 p-3.5">
           <View className="flex-row flex-wrap items-center justify-between gap-2">
             <Small className="font-customSemiBold uppercase tracking-wide text-muted-foreground">
-              {isClosed ? "Archiwum zakładów" : "Aktywne zakłady"}
+              {copy.title}
             </Small>
             <View className="rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1">
               <Small className="font-customSemiBold text-primary">
@@ -60,9 +90,7 @@ export const GamesTable: FC<GamesTableProps> = ({ isClosed = false }) => {
       }}
       keyExtractor={(item) => `GamesTable-${item.id}`}
     />
-  ) : isClosed ? (
-    <DataLoadError isEmpty description="Brak zaplanowanych meczy 🕸️" />
   ) : (
-    <DataLoadError isEmpty description="Wszystkie mecze są wciąż otwarte 🕸️" />
+    <DataLoadError isEmpty description={copy.empty} />
   );
 };

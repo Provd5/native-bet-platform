@@ -8,7 +8,7 @@ import { useAppSelector } from "~/hooks/redux";
 
 import { DataLoadError } from "../data-load-error";
 import { ContentLoader } from "../Loaders/content-loader";
-import { Muted, Small } from "../ui/typography";
+import { Small } from "../ui/typography";
 import resultsCalculator from "./Calculator/results-calculator";
 
 export const ResultsTable: FC = () => {
@@ -33,7 +33,7 @@ export const ResultsTable: FC = () => {
     return <DataLoadError />;
 
   const results = resultsCalculator(
-    [...games.closedGames, ...games.openGames],
+    [...games.closedGames, ...games.liveGames, ...games.openGames],
     bets.data,
     finalsBets.data,
   );

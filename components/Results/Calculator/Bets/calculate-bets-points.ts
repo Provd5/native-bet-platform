@@ -6,6 +6,7 @@ import {
   ACCURATE_SCORE_POINTS,
   WINNER_POINTS,
 } from "~/constants/calculator";
+import { isLiveMatchStatus } from "~/constants/data";
 import { multiplyResult } from "~/lib/utils";
 
 export function calculateBetsPoints(
@@ -29,9 +30,7 @@ export function calculateBetsPoints(
 
   const isGameFinished = game.status === "FINISHED";
   const isGameInPlayOrFinished =
-    game.status === "FINISHED" ||
-    game.status === "IN_PLAY" ||
-    game.status === "PAUSED";
+    game.status === "FINISHED" || isLiveMatchStatus(game.status);
 
   if (winner_hit) {
     pointsDelta += isGameFinished ? WINNER_POINTS : 0;

@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { BetInterface, GameInterface } from "~/types/games";
 
 import { H3, P } from "~/components/ui/typography";
+import { isLiveMatchStatus, isUpcomingMatchStatus } from "~/constants/data";
 import { cn, translateConstantsToPolish } from "~/lib/utils";
 
 import { GameTeam } from "./game-team";
@@ -38,9 +39,10 @@ export const GameTeams: FC<GameTeamsProps> = ({
   sessionBet,
   size,
 }) => {
-  const gameTimed = gameData?.status === "TIMED";
+  const gameTimed =
+    gameData?.status !== undefined && isUpcomingMatchStatus(gameData.status);
   const gameInPlay =
-    gameData?.status === "IN_PLAY" || gameData?.status === "PAUSED";
+    gameData?.status !== undefined && isLiveMatchStatus(gameData.status);
   const gameFinished = gameData?.status === "FINISHED";
 
   const showSessionBet = gameTimed && !!sessionBet;

@@ -13,6 +13,21 @@ export const MATCH_STATUS_ARRAY = [
   "CANCELLED",
 ] as const;
 
+export const UPCOMING_MATCH_STATUSES = ["TIMED", "SCHEDULED"] as const;
+export const LIVE_MATCH_STATUSES = ["LIVE", "IN_PLAY", "PAUSED"] as const;
+
+export const isUpcomingMatchStatus = (
+  status: MatchStatus,
+): status is (typeof UPCOMING_MATCH_STATUSES)[number] =>
+  UPCOMING_MATCH_STATUSES.includes(
+    status as (typeof UPCOMING_MATCH_STATUSES)[number],
+  );
+
+export const isLiveMatchStatus = (
+  status: MatchStatus,
+): status is (typeof LIVE_MATCH_STATUSES)[number] =>
+  LIVE_MATCH_STATUSES.includes(status as (typeof LIVE_MATCH_STATUSES)[number]);
+
 export type MatchStage = (typeof MATCH_STAGE_ARRAY)[number];
 export const MATCH_STAGE_ARRAY = [
   "REGULAR_SEASON",

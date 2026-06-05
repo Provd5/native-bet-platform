@@ -6,6 +6,7 @@ import { BetInterface, type GameInterface } from "~/types/games";
 
 import { TeamIcon } from "~/components/team-icon";
 import { Muted, P } from "~/components/ui/typography";
+import { isUpcomingMatchStatus } from "~/constants/data";
 import { cn, translateConstantsToPolish } from "~/lib/utils";
 
 interface GameTeamProps {
@@ -38,7 +39,8 @@ export const GameTeam: FC<GameTeamProps> = ({
 
   const showSessionBet =
     !!sessionBet &&
-    gameData?.status === "TIMED" &&
+    gameData?.status !== undefined &&
+    isUpcomingMatchStatus(gameData.status) &&
     (sessionBet.winner === side || sessionBet?.winner === "DRAW");
   const showWinner =
     (gameFinished && gameData?.winner === side) || gameData?.winner === "DRAW";

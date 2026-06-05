@@ -1,12 +1,9 @@
 import TopTabs from "expo-router/js-top-tabs";
-import { Award, Coins, ListChecks } from "lucide-react-native";
+import { Activity, Award, Coins, ListChecks } from "lucide-react-native";
 
 import { TabIcon } from "~/components/tab-icon";
-import { useColorScheme } from "~/lib/useColorScheme";
 
 export default function GamesTabsLayout() {
-  const { isDarkColorScheme } = useColorScheme();
-
   return (
     <TopTabs
       initialRouteName="index"
@@ -32,13 +29,28 @@ export default function GamesTabsLayout() {
       <TopTabs.Screen
         name="index"
         options={{
-          title: "Otwarte",
+          title: "Nadchodzące",
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }: { focused: boolean }) => (
             <TabIcon
               secondary
               IconToRender={Coins}
-              name="Otwarte"
+              name="Nadchodzące"
+              focused={focused}
+            />
+          ),
+        }}
+      />
+      <TopTabs.Screen
+        name="live"
+        options={{
+          title: "Trwające",
+          tabBarShowLabel: false,
+          tabBarIcon: ({ focused }: { focused: boolean }) => (
+            <TabIcon
+              secondary
+              IconToRender={Activity}
+              name="Trwające"
               focused={focused}
             />
           ),
@@ -47,13 +59,13 @@ export default function GamesTabsLayout() {
       <TopTabs.Screen
         name="closed"
         options={{
-          title: "Zamknięte",
+          title: "Zakończone",
           tabBarShowLabel: false,
           tabBarIcon: ({ focused }: { focused: boolean }) => (
             <TabIcon
               secondary
               IconToRender={ListChecks}
-              name="Zamknięte"
+              name="Zakończone"
               focused={focused}
             />
           ),
