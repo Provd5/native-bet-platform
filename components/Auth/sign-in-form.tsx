@@ -93,9 +93,9 @@ export const SignInForm: FC = () => {
         onPress={form.handleSubmit(onSubmit)}
         text="Zaloguj"
       />
-      <Button className="mx-auto" size={"sm"} onPress={() => DEMO_LOGIN()}>
+      {/* <Button className="mx-auto" size={"sm"} onPress={() => DEMO_LOGIN()}>
         {form.formState.isSubmitting ? <LoadingSpinner /> : <P>DEMO</P>}
-      </Button>
+      </Button> */}
     </View>
   );
 };

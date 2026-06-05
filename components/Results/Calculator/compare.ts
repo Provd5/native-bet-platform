@@ -6,17 +6,32 @@ export function compareLiveResults(
 ): number {
   if (b.points.currentLivePoints !== a.points.currentLivePoints) {
     return b.points.currentLivePoints - a.points.currentLivePoints;
-  } else {
+  }
+
+  if (
+    b.points.currentLiveAccurateScores !== a.points.currentLiveAccurateScores
+  ) {
     return (
       b.points.currentLiveAccurateScores - a.points.currentLiveAccurateScores
     );
   }
+
+  return (
+    a.points.currentLiveGoalsDifferenceSum -
+    b.points.currentLiveGoalsDifferenceSum
+  );
 }
 
 export function compareResults(a: ResultInterface, b: ResultInterface): number {
   if (b.points.currentPoints !== a.points.currentPoints) {
     return b.points.currentPoints - a.points.currentPoints;
-  } else {
+  }
+
+  if (b.points.currentAccurateScores !== a.points.currentAccurateScores) {
     return b.points.currentAccurateScores - a.points.currentAccurateScores;
   }
+
+  return (
+    a.points.currentGoalsDifferenceSum - b.points.currentGoalsDifferenceSum
+  );
 }

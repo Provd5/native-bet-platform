@@ -18,6 +18,9 @@ export function calculateBetsPoints(
   const baseLivePoints = currentPoints?.currentLivePoints || 0;
   let accurateScores = currentPoints?.currentAccurateScores || 0;
   let liveAccurateScores = currentPoints?.currentLiveAccurateScores || 0;
+  let goalsDifferenceSum = currentPoints?.currentGoalsDifferenceSum || 0;
+  let liveGoalsDifferenceSum =
+    currentPoints?.currentLiveGoalsDifferenceSum || 0;
   let pointsDelta = 0;
   let livePointsDelta = 0;
 
@@ -27,10 +30,20 @@ export function calculateBetsPoints(
   const winner_hit = bet.winner === game.regularTimeScore?.winner;
   const accurate_score_and_winner_hit =
     away_goals_hit && home_goals_hit && winner_hit;
+  const scoreDifference =
+    game.regularTimeScore === undefined
+      ? null
+      : Math.abs(bet.homeGoals - game.regularTimeScore.home) +
+        Math.abs(bet.awayGoals - game.regularTimeScore.away);
 
   const isGameFinished = game.status === "FINISHED";
   const isGameInPlayOrFinished =
     game.status === "FINISHED" || isLiveMatchStatus(game.status);
+
+  if (scoreDifference !== null) {
+    goalsDifferenceSum += isGameFinished ? scoreDifference : 0;
+    liveGoalsDifferenceSum += isGameInPlayOrFinished ? scoreDifference : 0;
+  }
 
   if (winner_hit) {
     pointsDelta += isGameFinished ? WINNER_POINTS : 0;
@@ -57,5 +70,7 @@ export function calculateBetsPoints(
     currentLivePoints: livePoints,
     currentAccurateScores: accurateScores,
     currentLiveAccurateScores: liveAccurateScores,
+    currentGoalsDifferenceSum: goalsDifferenceSum,
+    currentLiveGoalsDifferenceSum: liveGoalsDifferenceSum,
   };
 }

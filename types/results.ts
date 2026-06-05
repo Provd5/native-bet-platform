@@ -3,6 +3,8 @@ export interface PointsInterface {
   currentLivePoints: number;
   currentAccurateScores: number;
   currentLiveAccurateScores: number;
+  currentGoalsDifferenceSum: number;
+  currentLiveGoalsDifferenceSum: number;
 }
 
 export interface ResultInterface {

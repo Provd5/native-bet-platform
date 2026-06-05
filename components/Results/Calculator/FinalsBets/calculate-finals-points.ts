@@ -13,6 +13,9 @@ export function calculateFinalsPoints(
   let livePoints = currentPoints?.currentLivePoints || 0;
   const accurateScores = currentPoints?.currentAccurateScores || 0;
   const liveAccurateScores = currentPoints?.currentLiveAccurateScores || 0;
+  const goalsDifferenceSum = currentPoints?.currentGoalsDifferenceSum || 0;
+  const liveGoalsDifferenceSum =
+    currentPoints?.currentLiveGoalsDifferenceSum || 0;
 
   if (!(teamBet instanceof Array) || teamBet.length !== 2) {
     return {
@@ -20,6 +23,8 @@ export function calculateFinalsPoints(
       currentLivePoints: livePoints,
       currentAccurateScores: accurateScores,
       currentLiveAccurateScores: liveAccurateScores,
+      currentGoalsDifferenceSum: goalsDifferenceSum,
+      currentLiveGoalsDifferenceSum: liveGoalsDifferenceSum,
     };
   }
 
@@ -47,6 +52,8 @@ export function calculateFinalsPoints(
     currentLivePoints: livePoints,
     currentAccurateScores: accurateScores,
     currentLiveAccurateScores: liveAccurateScores,
+    currentGoalsDifferenceSum: goalsDifferenceSum,
+    currentLiveGoalsDifferenceSum: liveGoalsDifferenceSum,
   };
 
   return newPoints;
