@@ -70,7 +70,8 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
   );
 
   const onReact = async (emojiValue: string | EmojiGroup) => {
-    const emoji = typeof emojiValue === "string" ? emojiValue : emojiValue.emoji;
+    const emoji =
+      typeof emojiValue === "string" ? emojiValue : emojiValue.emoji;
 
     try {
       setPendingEmoji(emoji);
@@ -109,7 +110,7 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
               <View key={`Reaction-${reaction.emoji}`}>
                 <Pressable
                   className={cn(
-                    "min-w-[48px] flex-row items-center justify-center gap-0.5 rounded-full border px-2 py-1",
+                    "min-w-[48px] select-none flex-row items-center justify-center gap-0.5 rounded-full border px-2 py-1",
                     reaction.isSelected
                       ? "border-primary bg-primary/20"
                       : "border-border bg-muted/60",
@@ -120,10 +121,10 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
                   }}
                   onLongPress={() => openEmojiDetails(reaction.emoji)}
                 >
-                  <P className={cn("text-sm")}>{reaction.emoji}</P>
+                  <P className="select-none text-sm">{reaction.emoji}</P>
                   <Small
                     className={cn(
-                      "text-xs",
+                      "select-none text-xs",
                       !reaction.isSelected && "text-muted-foreground",
                     )}
                   >
@@ -195,7 +196,7 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
                           onPress={() => onPickEmoji(item)}
                           disabled={pendingEmoji !== null}
                         >
-                          <P>{item.emoji}</P>
+                          <P className="select-none">{item.emoji}</P>
                         </Pressable>
                       ))}
                     </View>
