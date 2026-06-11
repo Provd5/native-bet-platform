@@ -104,7 +104,7 @@ export const ReactionsPicker: FC<ReactionsPickerProps> = ({
   return (
     <View className="mt-2 flex-row items-center justify-between gap-2">
       {aggregatedReactions.length > 0 && (
-        <View className="flex-row flex-wrap gap-1">
+        <View className="w-[calc(100%-2rem)] flex-row flex-wrap gap-1">
           {aggregatedReactions.map((reaction) => {
             return (
               <View key={`Reaction-${reaction.emoji}`}>
