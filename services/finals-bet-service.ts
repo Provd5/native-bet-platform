@@ -11,23 +11,13 @@ import {
   betFinalsSchema,
   betFinalsSchemaType,
 } from "~/lib/validators/bet-schema";
+import { normalizeFinalsBet } from "~/services/finals-bets/finals-bets-compat.utils";
+import { getTeamsDictionary } from "~/services/finals-bets/finals-bets-teams-dictionary";
 
 const COLLECTION_NAME = "finals";
 
 export class FinalsBetsService {
   constructor(private sessionUser: AppState["sessionUser"]) {}
-
-  private isValidFinalsBet = (value: unknown): value is BetFinalsInterface => {
-    if (!value || typeof value !== "object") return false;
-
-    const finalsBet = value as Partial<BetFinalsInterface>;
-
-    return (
-      typeof finalsBet.userId === "string" &&
-      typeof finalsBet.username === "string" &&
-      finalsBet.teamBet instanceof Array
-    );
-  };
 
   private getRef = () => {
     return collection(store, COLLECTION_NAME);
@@ -48,7 +38,11 @@ export class FinalsBetsService {
 
       if (!finalsBet.exists()) return null;
 
-      const finalsBetData = finalsBet.data() as BetFinalsInterface;
+      const teamsDictionary = await getTeamsDictionary();
+      const finalsBetData = normalizeFinalsBet(
+        finalsBet.data(),
+        teamsDictionary,
+      );
 
       return finalsBetData;
     } catch (e) {
@@ -66,9 +60,12 @@ export class FinalsBetsService {
 
       if (finalsBets.empty) return [];
 
+      const teamsDictionary = await getTeamsDictionary();
+
       const finalsArray = finalsBets.docs
         .map((doc) => doc.data())
-        .filter(this.isValidFinalsBet);
+        .map((docData) => normalizeFinalsBet(docData, teamsDictionary))
+        .filter((bet): bet is BetFinalsInterface => bet !== null);
 
       return finalsArray;
     } catch (e) {
